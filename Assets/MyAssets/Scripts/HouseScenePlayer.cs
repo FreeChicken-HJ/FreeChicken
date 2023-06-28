@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
-
+using Cinemachine;
 public class HouseScenePlayer : MonoBehaviour
 {
     [SerializeField] private Transform characterBody;
@@ -22,6 +22,8 @@ public class HouseScenePlayer : MonoBehaviour
     public Image DieImage;
     public TextMeshProUGUI superJump;
 
+    public CinemachineVirtualCamera npc_cam;
+    public CinemachineVirtualCamera mainCam;
     Vector3 moveVec;
     Vector2 moveInput;
 
@@ -58,6 +60,7 @@ public class HouseScenePlayer : MonoBehaviour
 
         rigid = GetComponent<Rigidbody>();
         isJump = false;
+
     }
 
     void Start()
@@ -67,6 +70,7 @@ public class HouseScenePlayer : MonoBehaviour
         nearNPCText.gameObject.SetActive(false);
         DieImage.gameObject.SetActive(false);
         Dialogue.gameObject.SetActive(false);
+       
     }
 
     void Update()
@@ -85,6 +89,7 @@ public class HouseScenePlayer : MonoBehaviour
             if(Input.GetMouseButton(0))
             {
                 nearNPCText.gameObject.SetActive(false);
+                //npc_cam.gameObject.SetActive(true);
                 Dialogue.gameObject.SetActive(true);
             }
         }
@@ -161,7 +166,8 @@ public class HouseScenePlayer : MonoBehaviour
         {
             nearNPCText.gameObject.SetActive(true);
             isContact = true;
-
+            npc_cam.Priority = 10;
+            mainCam.Priority = 1;
         }
 
         if (other.gameObject.tag == "Hide")
@@ -175,6 +181,8 @@ public class HouseScenePlayer : MonoBehaviour
         if (other.gameObject.tag.Equals("NPC"))
         {
             //nearNPCText.gameObject.SetActive(false);
+            npc_cam.Priority = 1;
+            mainCam.Priority = 10;
         }
 
         if (other.gameObject.tag == "Hide")

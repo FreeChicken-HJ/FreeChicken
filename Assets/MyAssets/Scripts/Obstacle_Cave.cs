@@ -366,7 +366,7 @@ public class Obstacle_Cave : MonoBehaviour
                 break;
             case MoveObstacleType.L:
                 isMove = false;
-                
+                deguldegul();
                 break;
             case MoveObstacleType.M:
                 isMove = false;

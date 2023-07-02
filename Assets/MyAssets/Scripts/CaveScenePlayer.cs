@@ -56,7 +56,7 @@ public class CaveScenePlayer : MonoBehaviour
     Obstacle_Cave obstacle;
     //GameManager_Cave manager;
     //FireTest firetest;
-    CaveItem_DebuffPotion portion;
+    CaveItem_DebuffPotion potion;
     //ObstacleTest ObstacleTestobstacleTest;
 
     public bool hasKey;
@@ -75,7 +75,7 @@ public class CaveScenePlayer : MonoBehaviour
     {
         obstacle = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_Cave>();
         DiePs.gameObject.SetActive(false);
-        portion = GameObject.FindGameObjectWithTag("Poison").GetComponent<CaveItem_DebuffPotion>();
+        potion = GameObject.FindGameObjectWithTag("Poison").GetComponent<CaveItem_DebuffPotion>();
         //firetest = GameObject.FindGameObjectWithTag("Fire").GetComponentInChildren<FireTest>();
         //ObstacleTestobstacleTest = GameObject.FindGameObjectWithTag("e").GetComponent<ObstacleTest>();
     }
@@ -84,21 +84,21 @@ public class CaveScenePlayer : MonoBehaviour
     {
 
         time += Time.deltaTime;
-        if (!Dead && !portion.reversalPotion)
+        if (!Dead && !potion.reversalPotion)
         {
             Move();
             Jump();
             GetInput();
         }
 
-        if(portion.reversalPotion)
+        if(potion.reversalPotion)
         {
             ReversalMove();
             Jump();
             
             if (time > 10f)  // 3초동안만 좌우반전
             {
-                portion.reversalPotion = false;
+                potion.reversalPotion = false;
             }
         }
     }
@@ -139,7 +139,7 @@ public class CaveScenePlayer : MonoBehaviour
 
     void ReversalMove() // 방향키 좌우반전
     {
-        portion.reversalPotion = true;
+        potion.reversalPotion = true;
 
         rhAxis = Input.GetAxisRaw("ReversalHorizontal");
         rvAxis = Input.GetAxisRaw("ReversalVertical");
@@ -201,6 +201,11 @@ public class CaveScenePlayer : MonoBehaviour
             isfallingObstacle = true;
 
         }
+
+        if(other.gameObject.tag == "Sense")
+        {
+            obstacle.isSense = true;
+        }
     }
 
     void ShowMoveParticle()
@@ -217,11 +222,11 @@ public class CaveScenePlayer : MonoBehaviour
 
     void EatPoisonParticle()
     {
-        if(portion.reversalPotion)
+        if(potion.reversalPotion)
         {
             PoisonParticle.gameObject.SetActive(true);
         }
-        else if(!portion.reversalPotion)
+        else if(!potion.reversalPotion)
         {
             PoisonParticle.gameObject.SetActive(false);
         }

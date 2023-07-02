@@ -162,6 +162,13 @@ public class AI_Cave : MonoBehaviour
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);
         }
+
+        if (collision.gameObject.tag == "Small_Potion")
+        {
+            Debug.Log("작아지는 물약충돌!");
+            small_potion.SetActive(false);
+            this.gameObject.transform.localScale = Vector3.one;
+        }
     }
 
     void DestroyAI_Cave()
@@ -179,12 +186,12 @@ public class AI_Cave : MonoBehaviour
             Invoke("DestroyAI_Cave", 2f);
         }
 
-        if (other.gameObject.tag=="Small_Potion")
-        {
-            Debug.Log("작아지는 물약충돌!");
-            small_potion.SetActive(false);
-            this.gameObject.transform.localScale = Vector3.one;
-        }
+        //if (other.gameObject.tag=="Small_Potion")
+        //{
+        //    Debug.Log("작아지는 물약충돌!");
+        //    small_potion.SetActive(false);
+        //    this.gameObject.transform.localScale = Vector3.one;
+        //}
     }
 
     //private void ElapseTime()

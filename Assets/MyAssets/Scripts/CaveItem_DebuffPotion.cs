@@ -4,21 +4,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CaveItem_DebuffPortion : MonoBehaviour
+public class CaveItem_DebuffPotion : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI nearPortionItemText;
-    [SerializeField] TextMeshProUGUI pickUpPortionItemText;
+    [SerializeField] TextMeshProUGUI nearPotionItemText;
+    [SerializeField] TextMeshProUGUI pickUpPotionItemText;
 
     bool isPickUp;
-    public bool reversalPortion;
+    public bool reversalPotion;
 
     CaveScenePlayer player;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
-        pickUpPortionItemText.gameObject.SetActive(false);
-        nearPortionItemText.gameObject.SetActive(false);
+        pickUpPotionItemText.gameObject.SetActive(false);
+        nearPotionItemText.gameObject.SetActive(false);
     }
     void Update()
     {
@@ -30,8 +30,8 @@ public class CaveItem_DebuffPortion : MonoBehaviour
         if (other.gameObject.tag.Equals("Player"))
         {
             Debug.Log("Æ÷¼Ç¿¡ °¡±îÀÌ °¬´ß");
-            reversalPortion = false;
-            nearPortionItemText.gameObject.SetActive(true);
+            reversalPotion = false;
+            nearPotionItemText.gameObject.SetActive(true);
             isPickUp = true;
         }
     }
@@ -40,8 +40,8 @@ public class CaveItem_DebuffPortion : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-            reversalPortion = false;
-            nearPortionItemText.gameObject.SetActive(false);
+            reversalPotion = false;
+            nearPotionItemText.gameObject.SetActive(false);
             isPickUp = false;
         }
     }
@@ -50,16 +50,16 @@ public class CaveItem_DebuffPortion : MonoBehaviour
         if (Input.GetButtonDown("Interaction") && isPickUp)
         {
             Debug.Log("Æ÷¼ÇÀ» ¾ò¾ú´ß");
-            reversalPortion = true; 
+            reversalPotion = true; 
             gameObject.SetActive(false);
-            nearPortionItemText.gameObject.SetActive(false);
-            pickUpPortionItemText.gameObject.SetActive(true);
+            nearPotionItemText.gameObject.SetActive(false);
+            pickUpPotionItemText.gameObject.SetActive(true);
             
             Invoke("notshowtext", 1.5f);
         }
     }
     void notshowtext()
     {
-        pickUpPortionItemText.gameObject.SetActive(false);
+        pickUpPotionItemText.gameObject.SetActive(false);
     }
 }

@@ -35,6 +35,8 @@ public class CaveScenePlayer : MonoBehaviour
     public ParticleSystem DiePs;
 
     public float speed;
+    bool isJump;
+    public float jumpPower = 5f;
 
     public float hAxis;
     public float vAxis;
@@ -52,9 +54,9 @@ public class CaveScenePlayer : MonoBehaviour
 
     Animator anim;
     Obstacle_Cave obstacle;
-    GameManager_Cave manager;
-    FireTest firetest;
-    CaveItem_DebuffPortion portion;
+    //GameManager_Cave manager;
+    //FireTest firetest;
+    CaveItem_DebuffPotion portion;
     //ObstacleTest ObstacleTestobstacleTest;
 
     public bool hasKey;
@@ -66,13 +68,14 @@ public class CaveScenePlayer : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
+        isJump = false;
     }
 
     void Start()
     {
         obstacle = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_Cave>();
         DiePs.gameObject.SetActive(false);
-        portion = GameObject.FindGameObjectWithTag("Poison").GetComponent<CaveItem_DebuffPortion>();
+        portion = GameObject.FindGameObjectWithTag("Poison").GetComponent<CaveItem_DebuffPotion>();
         //firetest = GameObject.FindGameObjectWithTag("Fire").GetComponentInChildren<FireTest>();
         //ObstacleTestobstacleTest = GameObject.FindGameObjectWithTag("e").GetComponent<ObstacleTest>();
     }
@@ -81,20 +84,21 @@ public class CaveScenePlayer : MonoBehaviour
     {
 
         time += Time.deltaTime;
-        if (!Dead && !portion.reversalPortion)
+        if (!Dead && !portion.reversalPotion)
         {
             Move();
+            Jump();
             GetInput();
         }
 
-        if(portion.reversalPortion)
+        if(portion.reversalPotion)
         {
             ReversalMove();
-
+            Jump();
             
             if (time > 10f)  // 3초동안만 좌우반전
             {
-                portion.reversalPortion = false;
+                portion.reversalPotion = false;
             }
         }
     }
@@ -124,9 +128,18 @@ public class CaveScenePlayer : MonoBehaviour
         EatPoisonParticle();
     }
 
+    void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && !isJump && !Dead)
+        {
+            isJump = true;
+            rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        }
+    }
+
     void ReversalMove() // 방향키 좌우반전
     {
-        portion.reversalPortion = true;
+        portion.reversalPotion = true;
 
         rhAxis = Input.GetAxisRaw("ReversalHorizontal");
         rvAxis = Input.GetAxisRaw("ReversalVertical");
@@ -148,6 +161,11 @@ public class CaveScenePlayer : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             DieMotion();
+        }
+
+        if (collision.gameObject.tag == "Ground")
+        {
+            isJump = false;
         }
     }
 
@@ -199,11 +217,11 @@ public class CaveScenePlayer : MonoBehaviour
 
     void EatPoisonParticle()
     {
-        if(portion.reversalPortion)
+        if(portion.reversalPotion)
         {
             PoisonParticle.gameObject.SetActive(true);
         }
-        else if(!portion.reversalPortion)
+        else if(!portion.reversalPotion)
         {
             PoisonParticle.gameObject.SetActive(false);
         }

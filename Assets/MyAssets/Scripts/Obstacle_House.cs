@@ -8,7 +8,7 @@ public class Obstacle_House : MonoBehaviour
     public float delayTime = 1f;
     public float repeatTime = 5f;
 
-    public enum MoveObstacleType { A, B, C,D,E,F,G,H};
+    public enum MoveObstacleType { A, B, C,D,E,F,G,H,I,J,K,L,M,N,O,P};
     public MoveObstacleType Type;
 
     HouseScenePlayer player;
@@ -54,6 +54,15 @@ public class Obstacle_House : MonoBehaviour
     public Transform Circletarget;
     public float orbitSpeed;
     Vector3 offSet;
+
+    //Melting
+    bool isMelting;
+    public float meltingTime;
+
+    public bool isPencilSense;
+
+    // slide
+    public bool slide;
 
     void Awake()
     {
@@ -121,6 +130,11 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
+    void ShortUpDown()
+    {
+        transform.Translate(Vector3.up*moveSpeed*Time.deltaTime);
+    }
+
     void rotate()
     {
         transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
@@ -135,10 +149,20 @@ public class Obstacle_House : MonoBehaviour
         transform.Rotate(0, 0, -angle_z / 50);
     }
 
+    void rotate_y()
+    {
+        transform.Rotate(0, rotateSpeed, 0);
+    }
+
     void rotatae_x()
     {
-        transform.Rotate(-angle_z / 50, -angle_z / 50, -angle_z / 50);
+        transform.Rotate(-angle_z / 50, 0, 0);
     }
+
+    void rotate_xyz()
+    {
+        transform.Rotate(-angle_z / 50, -angle_z / 50, -angle_z / 50);
+    }    
 
     void leftRight_x()
     {
@@ -202,6 +226,16 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player" && isPencilSense)
+        {
+            this.gameObject.SetActive(true);
+            //this.gameObject.
+        }
+    }
+
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -214,11 +248,28 @@ public class Obstacle_House : MonoBehaviour
             isDartFollow = true;
         }
 
+        if (collision.gameObject.tag == "Player" && isMelting)
+        {
+            isPlayerFollow = true;
+            isMove = true;
+            Invoke("Melting", meltingTime);
+        }
+
         //if (collision.gameObject.tag == "Wall")
         //{
         //    Debug.Log("ºÎµúÈû");
         //    gameObject.SetActive(false);
         //}
+
+        //if(collision.gameObject.tag == "Player" && slide)
+        //{
+           
+        //}
+    }
+
+    void Melting()
+    {
+        this.gameObject.SetActive(false);
     }
 
     void OnCollisionStay(Collision collision)
@@ -238,6 +289,8 @@ public class Obstacle_House : MonoBehaviour
         {
             isDartFollow = true;
         }
+
+        
     }
 
     void OnCollisionExit(Collision collision)
@@ -351,6 +404,21 @@ public class Obstacle_House : MonoBehaviour
             case MoveObstacleType.H:
                 Circle();
                 break;
+            case MoveObstacleType.I:
+                isMove = true;
+                rotate_y();
+                break;
+            case MoveObstacleType.J:
+                isMelting= true;
+                break;
+            case MoveObstacleType.K:
+                rotate_xyz();
+                break;
+                case MoveObstacleType.L:
+                ShortUpDown();
+                break;
+
+
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EggDrop : MonoBehaviour
 {
     
-    public GameObject prefab;
+    public GameObject[] prefab;
     public BoxCollider area;
     public int cnt = 10;
     GameObject go;
@@ -37,8 +37,10 @@ public class EggDrop : MonoBehaviour
     void Spawn()
     {
         Vector3 pos = GetRandomPos();
-       
-        GameObject go = prefab;
+
+        int selection = Random.Range(0, prefab.Length);
+        GameObject go = prefab[selection];
+        //GameObject go = prefab;
         GameObject instance = Instantiate(go, pos, Quaternion.identity);
         float random = Random.Range(3.5f, 5f);
         Destroy(instance, random);

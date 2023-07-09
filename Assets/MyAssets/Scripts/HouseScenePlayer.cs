@@ -53,6 +53,10 @@ public class HouseScenePlayer : MonoBehaviour
 
     //PlayDart
     public GameObject DartBullet;
+
+    //Chicken
+    public GameObject mesh;
+    public GameObject Chicken;
     
     void Awake()
     {
@@ -65,7 +69,7 @@ public class HouseScenePlayer : MonoBehaviour
 
     void Start()
     {
-        //obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
+        obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
         nearNPCText.gameObject.SetActive(false);
         DieImage.gameObject.SetActive(false);
@@ -146,14 +150,14 @@ public class HouseScenePlayer : MonoBehaviour
         DiePs.gameObject.SetActive(true);
         anim.SetTrigger("isDead");
         DieImage.gameObject.SetActive(true);
-        Invoke("ReLoadScene", 1.5f);
+        //Invoke("ReLoadScene", 2f);
     }
 
-    void ReLoadScene()
-    {
-        SceneManager.LoadScene("HouseScene");
-        //SceneManager.LoadScene("HouseScene2");
-    }
+    //void ReLoadScene()
+    //{
+    //    SceneManager.LoadScene("New Scene");
+    //    //SceneManager.LoadScene("HouseScene2");
+    //}
 
     void OnTriggerEnter(Collider other)
     {
@@ -173,6 +177,40 @@ public class HouseScenePlayer : MonoBehaviour
         if (other.gameObject.tag == "Hide")
         {
             hide = true;
+        }
+
+        if(other.gameObject.tag == "Obstacle")
+        {
+            DieMotion();
+        }
+        if(other.gameObject.tag == "Chicken")
+        {
+            
+            this.mesh.gameObject.SetActive(false);
+            Chicken.gameObject.SetActive(true);
+            Chicken.transform.position = this.transform.position;
+            DieMotion();
+
+
+
+        }
+
+        if (other.gameObject.tag == "SavePoint1")
+        {
+            DieMotion();
+            this.transform.position = new Vector3(5.01999998f, 1.32000005f, 18.3449993f);
+        }
+
+        if (other.gameObject.tag == "SavePoint2")
+        {
+            DieMotion();
+            this.transform.position = new Vector3(40.1230011f, 0.428000003f, 16.7889996f);
+        }
+
+        if(other.gameObject.tag == "SavePoint3")
+        {
+            DieMotion();
+            this.transform.position = new Vector3(75.8610001f, 8.06000042f, 16.1520004f);
         }
     }
 

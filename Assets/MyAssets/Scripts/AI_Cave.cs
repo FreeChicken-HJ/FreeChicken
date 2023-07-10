@@ -11,7 +11,7 @@ public class AI_Cave : MonoBehaviour
     [SerializeField] private string AIName;
     [SerializeField] private float walkSpeed;
 
-    public LayerMask Ground, Player;
+    public LayerMask MoveGround, Player;
     public bool isAttacked;
 
     public Transform target;
@@ -25,6 +25,8 @@ public class AI_Cave : MonoBehaviour
     private bool isWalking;
     private bool isRun;
     private bool isAttack;
+
+    bool isDie;
 
     public bool playerInSight, playerInAttack;
 
@@ -43,7 +45,7 @@ public class AI_Cave : MonoBehaviour
     [SerializeField] private CapsuleCollider capsuleCol;
 
     NavMeshAgent nav;
-    public bool isAllStop;
+    //public bool isAllStop;
 
     void Start()
     {
@@ -55,11 +57,11 @@ public class AI_Cave : MonoBehaviour
 
     void Update()
     {
-        if (!isAllStop)
+        if (/*!isAllStop &&*/ !isDie)
         {
             nav.isStopped = false;
-            playerInSight = Physics.CheckSphere(transform.position, 5f, Player);
-            playerInAttack = Physics.CheckSphere(transform.position, 2f, Player);
+            playerInSight = Physics.CheckSphere(transform.position, 4f, Player);
+            playerInAttack = Physics.CheckSphere(transform.position, 1f, Player);
             if (!playerInSight && !playerInAttack) MoveRandom();
             if (playerInSight && !playerInAttack) Targeting();
             if (playerInSight && playerInAttack) Attack();
@@ -121,7 +123,7 @@ public class AI_Cave : MonoBehaviour
         float randomX = Random.Range(-wayPointRange, wayPointRange);
         pos = new Vector3(transform.position.x * walkSpeed*Time.deltaTime + randomX, transform.position.y, transform.position.z * walkSpeed * Time.deltaTime + randomZ);
 
-        if (Physics.Raycast(pos, -transform.up, 2f, Ground))
+        if (Physics.Raycast(pos, -transform.up, 1f, MoveGround))
         {
             wayPointSet = true;
         }
@@ -157,8 +159,10 @@ public class AI_Cave : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Obstacle")
+        if(collision.gameObject.tag == "Obstacle" &&!isDie)
         {
+            isDie = true;
+           
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);
         }
@@ -179,8 +183,10 @@ public class AI_Cave : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "FootPos")
+        if (other.gameObject.name == "FootPos" && !isDie)
         {
+            isDie = true;
+            
             Debug.Log("ав╬Н╤Т");
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);

@@ -7,40 +7,41 @@ using Cinemachine;
 
 public class FactoryPlayer_2 : MonoBehaviour
 {
-    //public GameObject thisMesh;
+    [Header("Settings")]
     public Animator anim;
     public float speed = 2.5f;
     public float hAxis;
     public float vAxis;
+    public float jumpPower;
     Vector3 moveVec;
     Rigidbody rigid;
+    public GameObject thisRealObj;
 
+    [Header("Bool")]
     public bool isJump;
-    public float jumpPower;
     public bool isSlide;
     public bool isEbutton;
     public bool isDie;
-
-    //public Slider EbuttoSlider;
-
-
+    public bool isStamp;
     public bool isTalk;
-
- 
-    public bool isStopSlide;
-   
+    public bool isStopSlide; 
     public bool isContact;
-
- 
+    
+    [Header("Stats")]
+    public GameObject StampTMP;
     public GameObject DieCanvas;
     public GameObject DieParticle;
-
-    public GameObject scene2LastUI;
     public FactorySceneChangeZone changeZone;
+    
+    [Header("UI")]
+    public GameObject scene2LastUI;
+    public GameObject PickUpUI;
 
+   
+    [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera DieCam;
-
+    public CinemachineVirtualCamera pickUpCam;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -51,9 +52,9 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
    
     void Update()
-    {
+    { 
 
-        if (!isTalk && !isDie && !changeZone.isButton)
+        if (!isTalk && !isDie /*&& !changeZone.isButton*/)
         {
             Move();
             GetInput();
@@ -65,6 +66,16 @@ public class FactoryPlayer_2 : MonoBehaviour
         {
             anim.SetBool("isWalk", false);
         }
+        if (isStamp)
+        {
+            this.gameObject.transform.position = StampTMP.transform.position;
+        }
+    }
+    void PickUP()
+    {
+
+        PickUpUI.SetActive(true);
+        Invoke("ExitCanvas", 2f);
     }
 
     // Update is called once per frame
@@ -119,6 +130,18 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "Sense" && !isStamp)
+        {
+            StampTMP = collision.gameObject;
+            pickUpCam.Priority = 100;
+            mainCam.Priority = 1;
+            isSlide = false;
+            isStamp = true;
+            thisRealObj.gameObject.transform.localScale = new Vector3(2f, 0.5f, 2f);
+
+            Invoke("PickUP", 4f);
+
+        }
 
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox")
         {
@@ -134,16 +157,25 @@ public class FactoryPlayer_2 : MonoBehaviour
             DieCanvas.SetActive(true);
             mainCam.Priority = 1;
             DieCam.Priority = 2;
-            Invoke("ExitCanvas", 2.5f);
+            Invoke("ExitCanvas", 2f);
         }
-
+        
     }
     void ExitCanvas()
     {
-        DieCanvas.gameObject.SetActive(false);
-        isDie = false;
-        DieParticle.SetActive(false);
-        
+        if (isDie)
+        {
+            DieCanvas.gameObject.SetActive(false);
+            isDie = false;
+            DieParticle.SetActive(false);
+        }
+        /*if (isStamp)
+        {
+            PickUpUI.SetActive(false);
+            isStamp = false;
+            //thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
+            //pickUpCam.Priority = -5;
+        }*/
         SceneManager.LoadScene("FactoryScene_2");
 
     }
@@ -165,7 +197,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         if (other.tag == "Slide")
         {
             
-            this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 1f, Space.World);
+            this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 2f, Space.World);
            
             
             // 이동하는 방향 쳐다보게 설정

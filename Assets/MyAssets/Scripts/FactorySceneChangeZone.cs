@@ -2,28 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 public class FactorySceneChangeZone : MonoBehaviour
 {
+    [Header("Stats")]
     public GameObject ChangeConveorZone;
     public GameObject ChangeFinish;
-    public Slider ChangeConveorSlider;
-
+    public GameObject Player;
     public ParticleSystem Particle;
 
     public GameObject zoneL;
     public GameObject zoneR;
     public GameObject zoneG;
+    public float t;
 
+    public GameObject BigEgg;
+    public GameObject Pos;
 
+    [Header("Bool")]
     public bool isButton;
     public bool isL;
     public bool isR;
     public bool isG;
-    public float t;
-
+   
+    public bool isScene_2;
     public bool isChk;
-    
-    // Start is called before the first frame update
+    public bool isEnd;
+   
+    [Header("UI")]
+    public Slider ChangeConveorSlider;
+
+    [Header("Camera")]
+    public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera ChangeCam;
+
+    void Start()
+    {
+        Player = GameObject.FindWithTag("Player");   
+    }
     void Update()
     {
         if (isButton)
@@ -83,6 +99,14 @@ public class FactorySceneChangeZone : MonoBehaviour
                 ChangeConveorZone.gameObject.SetActive(false);
                 ChangeFinish.gameObject.SetActive(true);
                 isButton = false;
+                if (isScene_2)
+                {
+                    Player.GetComponent<FactoryPlayer_2>().isSlide = true;
+                }
+                else
+                {
+                    Player.GetComponent<FactoryPlayer>().isSlide = true;
+                }
                 StartCoroutine(TheEnd());
 
             }
@@ -97,21 +121,30 @@ public class FactorySceneChangeZone : MonoBehaviour
     }
     IEnumerator TheEnd()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
+        ChangeCam.Priority = 1;
+        mainCam.Priority = 3;
         ChangeFinish.gameObject.SetActive(false);
         isChk = false;
+        isEnd = true;
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !isChk)
+        if (other.gameObject.tag == "Player" && !isChk && !isEnd)
         {
             isChk = true;
             ChangeConveorZone.SetActive(true);
             isButton = true;
+            ChangeCam.Priority = 3;
+            mainCam.Priority = 1;
+            Invoke("SpawnBigEgg", 3f);
             //StartCoroutine(turnZone());
         }
     }
-
+    void SpawnBigEgg()
+    {
+        Instantiate(BigEgg, Pos.transform.position, Quaternion.identity);
+    }
 }
 // 반복 while
 //e 누르면 왼쪽 

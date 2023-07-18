@@ -28,6 +28,7 @@ public class Car : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
        
+        
         transform.Translate(Vector3.forward * carSpeed *Time.deltaTime);
         yield return new WaitForSeconds(3f);
         Instantiate(this.gameObject,curPosition, rotation);

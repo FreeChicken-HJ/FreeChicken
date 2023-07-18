@@ -16,6 +16,8 @@ public class FactoryFixUI : MonoBehaviour
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera stopConCam;
 
+    public GameObject fixObj;
+
     float t = 0;
     // Start is called before the first frame update
     void Start()
@@ -65,6 +67,7 @@ public class FactoryFixUI : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         mainCam.Priority = 2;
         stopConCam.Priority = 1;
+        fixObj.SetActive(false);
         //stopConCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }

@@ -32,7 +32,7 @@ public class FactoryMoveObj : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "PickUpPoc")
         {
             Destroy(this.gameObject);
         }

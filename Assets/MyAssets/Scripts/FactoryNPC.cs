@@ -32,7 +32,7 @@ public class FactoryNPC : MonoBehaviour
     }
     void Update()
     {
-        Check();
+        //Check();
         if (Input.GetButton("E") && isEbutton)
         {
            
@@ -46,19 +46,22 @@ public class FactoryNPC : MonoBehaviour
             else
             {
                 isEbutton = false;
-                Destroy(text.gameObject);
                 
                 npcCam.Priority = 2;
                 mainCam.Priority = 1;
+                player.transform.LookAt(npc.transform.position);
                 Dieparticle.SetActive(false);
                 player.isTalk = true;
                 player.hAxis = 0;
                 player.vAxis = 0;
+                //player.transform.LookAt(npc);
                 player.isStopSlide = true;
                 player.isSlide = false;
                 Destroy(this.gameObject);
+                Destroy(text.gameObject);
+
                 Destroy(Ebutton);
-                player.transform.LookAt(npc.transform.position);
+                
                 factoryUI.gameObject.SetActive(true);
                 
             }
@@ -71,24 +74,41 @@ public class FactoryNPC : MonoBehaviour
         }
         
     }
-    public void Check()
+   /* public void Check()
     {
-        if (Physics.Raycast(this.transform.position, this.transform.forward, 3f, LayerMask.GetMask("Player")))
+        if (Physics.Raycast(this.transform.position, this.transform.forward, 2f, LayerMask.GetMask("Player")))
         {
-            isNear = true;
-            isEbutton = true;
-            Ebutton.SetActive(true);
+           
            
         }
-        else if(Physics.Raycast(this.transform.position, this.transform.forward, 4f, LayerMask.GetMask("Player")))
+        
+        *//*else if(Physics.Raycast(this.transform.position, this.transform.forward, 10f, LayerMask.GetMask("Player")))
         {
             isEbutton = false;
             isNear = false;
             Ebutton.SetActive(false);
             
+        }*//*
+
+
+    }*/
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            isNear = true;
+            isEbutton = true;
+            Ebutton.SetActive(true);
         }
-
-
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            isNear = false;
+            isEbutton = false;
+            Ebutton.SetActive(false);
+        }
     }
 
 }

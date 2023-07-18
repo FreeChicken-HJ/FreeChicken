@@ -7,61 +7,85 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 public class FactoryPlayer : MonoBehaviour
 {
+    [Header("Setting")]
     public GameObject thisMesh;
+    public GameObject thisRealObj;
     public Animator anim;
     public float speed = 2.5f;
     public float hAxis;
     public float vAxis;
+    public float jumpPower;
     Vector3 moveVec;
     Rigidbody rigid;
-
+    
+    [Header("Bool")]
     public bool isJump;
-    public float jumpPower;
     public bool isSlide;
     public bool isEbutton;
     public bool isDie;
-
+    public bool isStamp;
 
     //public FactoryUIManager uIManager;
     public bool isTalk;
-
-    public GameObject EggPrefab;
     public bool isEgg;
-    public GameObject turnEggCanvas;
-    public GameObject changeEggCanvas;
-    public GameObject stopSlideCanvas;
     public bool isStopSlide;
 
     public bool isContactStopSlide;
-    
-    public bool isContact;
 
-    
-    public GameObject eggBoxSpawnTriggerBox;
-    public GameObject eggBox;
-    public GameObject eggBoxSpawnPos;
+    public bool isContact;
     public bool isSetEggFinish;
+    public bool isStart;
+    public bool isStopCon;
+    public bool isPickUp;
+
+    public bool isSavePointPos;
+   
+   
+    [Header("UI")]
+    public GameObject turnEggCanvas;
+    public GameObject changeEggCanvas;
+    public GameObject stopSlideCanvas;
     public GameObject tmpBox;
     public TextMeshProUGUI E;
     public TextMeshProUGUI Spacebar;
-
-    public GameObject DieParticle;
     public GameObject DieCanvas;
     public GameObject StartCanvas;
-    public bool isStart;
-    public Vector3 pos;
-
-    
     public GameObject UpstairCanvas;
     public GameObject scene2LastUI;
+    public GameObject PickUpUI;
+    public GameObject SavePointTxt;
 
+
+    [Header("Stats")]
+    public GameObject eggBoxSpawnTriggerBox;
+    public GameObject eggBox;
+    public GameObject eggBoxSpawnPos;
+    public GameObject EggPrefab;
+
+    
+    public GameObject DieParticle;
+    public Vector3 pos;
+
+    public GameObject TMP;
+    public GameObject StampTMP;
+   
     public FactorySceneChangeZone changezone;
 
+    public GameObject existingSlideObj;
+    public GameObject changeSlideObj;
+
+    public GameObject savePointPos_1;
+    public GameObject savePointPos_2;
+
+    [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera stopConCam;
     public CinemachineVirtualCamera managerCam;
     public CinemachineVirtualCamera dieCam;
-    public bool isStopCon;
+    public CinemachineVirtualCamera pickUpCam;
+
+ 
+    
 
     void Awake()
     {
@@ -74,14 +98,14 @@ public class FactoryPlayer : MonoBehaviour
     void Start()
     {
 
-        //StartCanvas.SetActive(true);
+        StartCanvas.SetActive(true);
         
         
     }
     void Update()
     {
         
-        if (!isTalk && !isEgg && !isDie && !isStart && !changezone.isButton)
+        if (!isTalk && !isEgg && !isDie && !isStart /*&& !changezone.isButton*/&&!isPickUp &&!isStamp)
         {
             Move();
             GetInput();
@@ -93,7 +117,7 @@ public class FactoryPlayer : MonoBehaviour
         {
             StartCoroutine("Check");
         }
-        if (isTalk)
+        if (isTalk && isStamp)
         {
             anim.SetBool("isWalk", false);
         }
@@ -101,10 +125,23 @@ public class FactoryPlayer : MonoBehaviour
         {
             anim.SetBool("isWalk", false);
         }
-       
 
+        if (isPickUp)
+        {
+            this.gameObject.transform.position = TMP.transform.position;
+            
+        }
+        if (isStamp)
+        {
+            this.gameObject.transform.position = StampTMP.transform.position;
+        }
     }
- 
+    void PickUP()
+    {
+        
+        PickUpUI.SetActive(true);
+        Invoke("ExitCanvas", 2f);
+    }
     IEnumerator Check()
     {
         yield return new WaitForSeconds(1f);
@@ -172,9 +209,35 @@ public class FactoryPlayer : MonoBehaviour
         }
        
     }
+    /*void MoveWithPoc(Collision collision)
+    {
+        isPickUp = true;
+       
+    }*/
     void OnCollisionEnter(Collision collision)
     {
-        
+        if(collision.gameObject.tag == "Sense" &&!isStamp)
+        {
+            StampTMP = collision.gameObject;
+            pickUpCam.Priority = 100;
+            mainCam.Priority = 1;
+            isSlide = false;
+            isStamp = true;
+            thisRealObj.gameObject.transform.localScale = new Vector3(2f,0.5f,2f);
+
+            Invoke("PickUP", 2.5f);
+
+        }
+        if(collision.gameObject.tag == "PickUpPoc" && !isPickUp)
+        {
+            TMP = collision.gameObject;
+            isPickUp = true;
+            isSlide = false;
+            pickUpCam.Priority = 100;
+            mainCam.Priority = 1;
+            Invoke("PickUP", 2.5f);
+
+        }
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox")
         {
 
@@ -188,7 +251,7 @@ public class FactoryPlayer : MonoBehaviour
         }
         if (collision.gameObject.tag == "ObstacleZone1" || collision.gameObject.tag == "Obstacle")
         {
-            if (!isDie)
+            if (!isDie && !isPickUp)
             {
                 isDie = true;
                 anim.SetTrigger("doDie");
@@ -222,21 +285,45 @@ public class FactoryPlayer : MonoBehaviour
     }
     void ExitCanvas()
     {
-        Pos();
+       
         Debug.Log("자리변경");
-        
-        DieCanvas.gameObject.SetActive(false);
-        DieParticle.SetActive(false);
-        dieCam.Priority = -3;
+        if (isDie)
+        {
+            DieCanvas.gameObject.SetActive(false);
+            
+            DieParticle.SetActive(false);
+            dieCam.Priority = -3;
+            isDie = false;
+            anim.SetBool("isDie", false);
+        }
+        if(isPickUp)
+        {   
+            PickUpUI.SetActive(false);
+            isPickUp = false;
+            pickUpCam.Priority = -5;
+        }
+        if (isStamp)
+        {
+            PickUpUI.SetActive(false);
+            isStamp = false;
+            thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
+            pickUpCam.Priority = -5;
+        }
+       
         mainCam.Priority = 2;
-        isDie = false;
-        
+        Pos();
+
     }
     public void Pos()
     {
-        anim.SetBool("isDie", false);
-        this.gameObject.transform.position = pos;
-
+        if (isSavePointPos)
+        {
+            this.gameObject.transform.position = savePointPos_1.gameObject.transform.position;
+        }
+        else
+        {
+            this.gameObject.transform.position = pos;
+        }
     }
     
     public void OnTriggerEnter(Collider other)
@@ -265,7 +352,7 @@ public class FactoryPlayer : MonoBehaviour
             }
             Spacebar.color = Color.black;
         }
-        if (other.gameObject.tag == "StopSlide")
+        if (other.gameObject.tag == "StopSlide") 
         {
 
             //Debug.Log("대화 종료");
@@ -274,7 +361,10 @@ public class FactoryPlayer : MonoBehaviour
             stopConCam.Priority = 2;
             stopSlideCanvas.gameObject.SetActive(true);
             eggBoxSpawnTriggerBox.SetActive(true);
+            existingSlideObj.SetActive(false);
+            changeSlideObj.SetActive(true);
             
+
 
         }
         if(other.gameObject.tag == "EggBoxPos")
@@ -294,7 +384,23 @@ public class FactoryPlayer : MonoBehaviour
             scene2LastUI.gameObject.SetActive(true);
             Invoke("RoadScene", 5f);
         }
-
+        if(other.gameObject.tag == "SavePoint_1")
+        {
+            isSavePointPos = true;
+            savePointPos_1.SetActive(false);
+            SavePointTxt.SetActive(true);
+            Invoke("DestroySavePointTxt", 2f);
+        }
+        if(other.gameObject.tag == "SavePoint_2")
+        {
+            savePointPos_2.SetActive(false);
+            SavePointTxt.SetActive(true);
+            Invoke("DestroySavePointTxt", 2f);
+        }
+    }
+    void DestroySavePointTxt()
+    {
+        SavePointTxt.SetActive(false);
     }
     void RoadScene()
     {
@@ -349,6 +455,8 @@ public class FactoryPlayer : MonoBehaviour
         }
         if(other.tag == "StopSlide")
         {
+            mainCam.Priority = 2;
+            stopConCam.Priority = 1;
             stopSlideCanvas.gameObject.SetActive(false);
         }
         //speed = 2.5f;

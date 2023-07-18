@@ -21,7 +21,7 @@ public class SlideBelt : MonoBehaviour
     {
         if (player.isSlide)
         {
-            Speed = 0.5f;
+            Speed = 1.2f;
             player.transform.Translate(Vector3.forward * Time.deltaTime * Speed,Space.World);
             
         }

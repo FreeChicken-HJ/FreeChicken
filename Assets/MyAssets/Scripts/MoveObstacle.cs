@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings;
 
 public class MoveObstacle : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class MoveObstacle : MonoBehaviour
     public enum MoveObstacleType { A, B, C, D, E, F ,G,H,I,J,K,L,M};
     public MoveObstacleType Type;
     //PlayerController player;
-    CaveScenePlayer player;
+    GameObject player;
 
     //UD_Floor
     float initPositionY;
@@ -51,11 +51,30 @@ public class MoveObstacle : MonoBehaviour
     //Attack
     public bool isPlayerAttack;
 
+    public float circleR; // 반지름
+    public float deg; // 각도
+    public float objSpeed; // 원운동 속도
+
+    public Transform Circletarget;
+    public float orbitSpeed;
+    Vector3 offSet;
+
+    // ChangeSmallObj
+    public bool isContact;
+    public bool isChk;
+    private Vector3 pos;
+    private Vector3 scale;
+    public ParticleSystem ChangeParticle;
+
+    //Down & Destory Obj
+    public bool isDown;
+    public bool isDownandDestroy;
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player");
         isPlayerFollow = false;
     }
+    
     void Awake()
     {
         if (Type == MoveObstacleType.A) // Up & Down
@@ -70,12 +89,13 @@ public class MoveObstacle : MonoBehaviour
             turningPoint = initPositionX - distance;
 
         }
-
-        if(Type == MoveObstacleType.H)
+       
+        if (Type == MoveObstacleType.H)
         {
             initPositionZ = transform.position.z;
             turningPoint = initPositionZ - distance;
         }
+        
 
         // Case C == Rotate
         // Case D == Big Jump
@@ -103,7 +123,7 @@ public class MoveObstacle : MonoBehaviour
             /*if (isPlayerFollow)
             {
                 player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.deltaTime;
-            }*/
+            }
         }
         else
         {
@@ -129,7 +149,40 @@ public class MoveObstacle : MonoBehaviour
     //{
     //    transform.Rotate(0, 0, -angle_z / 50);
     //}
+    void leftRightZ()
+    {
+        float currentPositionZ = transform.position.z;
 
+        if (currentPositionZ >= initPositionZ + distance)
+        {
+
+            turnSwitch = false;
+        }
+        else if (currentPositionZ <= turningPoint)
+        {
+            //yield return new WaitForSeconds(1.5f);
+            turnSwitch = true;
+        }
+
+        if (turnSwitch)
+        {
+            //yield return new WaitForSeconds(1.5f);
+            transform.position = transform.position + new Vector3(0, 0, 1) * moveSpeed * Time.deltaTime;
+            if (isPlayerFollow)
+            {
+                player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, 1) * moveSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            //yield return new WaitForSeconds(1.5f);
+            transform.position = transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            if (isPlayerFollow)
+            {
+                player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            }
+        }
+    }
     void leftRight()
     {
 
@@ -137,15 +190,18 @@ public class MoveObstacle : MonoBehaviour
 
         if (currentPositionX >= initPositionX + distance)
         {
+            
             turnSwitch = false;
         }
         else if (currentPositionX <= turningPoint)
         {
+            //yield return new WaitForSeconds(1.5f);
             turnSwitch = true;
         }
 
         if (turnSwitch)
         {
+            //yield return new WaitForSeconds(1.5f);
             transform.position = transform.position + new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
             if (isPlayerFollow)
             {
@@ -154,6 +210,7 @@ public class MoveObstacle : MonoBehaviour
         }
         else
         {
+            //yield return new WaitForSeconds(1.5f);
             transform.position = transform.position + new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime;
             if (isPlayerFollow)
             {
@@ -163,36 +220,6 @@ public class MoveObstacle : MonoBehaviour
 
     }
 
-    //void zzz()
-    //{
-    //    float currentPositionZ = transform.position.z;
-
-    //    if(currentPositionZ >= initPositionZ + distance)
-    //    {
-    //        turnSwitch= false;
-    //    }
-    //    else if(currentPositionZ <= turningPoint)
-    //    {
-    //        turnSwitch = true;
-    //    }
-
-    //    if(turnSwitch)
-    //    {
-    //        transform.position = transform.position + new Vector3(0, 0, 1) * moveSpeed * delayTime;
-    //        if(isPlayerFollow)
-    //        {
-    //            player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0,0,1) * moveSpeed * Time.deltaTime;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        transform.position = transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
-    //        if(isPlayerFollow)
-    //        {
-    //            player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
-    //        }
-    //    }
-    //}
 
     void OnTriggerEnter(Collider other) // Case E == Delay & Drop
     {
@@ -214,8 +241,56 @@ public class MoveObstacle : MonoBehaviour
         {
             isPlayerFollow = true;
         }
-    }
+        if (collision.gameObject.tag == "Player" && isContact &&!isChk)
+        {
+            isChk = true;
+            StartCoroutine("SmallObj");
+        }
+        if (collision.gameObject.tag == "Player" && isDownandDestroy)
+        {
+            isDown = true;
+            isDownandDestroy = false;
+           
 
+        }
+    }
+    void DownandDestroy()
+    {
+        if (isPlayerFollow)
+        {
+            player.gameObject.transform.position = player.transform.position + new Vector3(0, -1, 0) * 10f * Time.smoothDeltaTime;
+        }
+        transform.position = transform.position + new Vector3(0, -1, 0) * 10f * Time.smoothDeltaTime;
+       
+        Destroy(this.gameObject, 5f);
+
+    }
+    IEnumerator SmallObj()
+    {
+
+        pos = this.gameObject.transform.position;
+        scale = this.gameObject.transform.localScale;
+        yield return new WaitForSeconds(1f);
+        this.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
+        ChangeParticle.Play();
+        yield return new WaitForSeconds(0.5f);
+        this.gameObject.transform.localScale = new Vector3(1.5f,1.5f , 1.5f);
+        ChangeParticle.Play();
+        this.Type = MoveObstacleType.B;
+
+        initPositionX = transform.position.x;
+        turningPoint = initPositionX - distance;
+        yield return new WaitForSeconds(10f);
+        this.Type = MoveObstacleType.L;
+        //this.moveSpeed = 0f;
+        this.gameObject.transform.position = pos;
+        this.gameObject.transform.localScale = scale;
+        isChk = false;
+
+
+    }
+            //MoveObstacleType.A
+    
     void OnCollisionStay(Collision collision) 
     {
         if(collision.gameObject.tag == "Player" && isBigJump)
@@ -229,6 +304,7 @@ public class MoveObstacle : MonoBehaviour
             isPlayerFollow = true;
 
         }
+       
     }
     void OnCollisionExit(Collision collision)
     {
@@ -240,41 +316,44 @@ public class MoveObstacle : MonoBehaviour
 
     void Swing()
     {
-        isPlayerAttack = true;
+        //isPlayerAttack = true;
         lerpTime += Time.deltaTime * speed;
         transform.rotation = CalculateMovementOfPendulum();
 
 
     }
 
-    void deguldegul()
+    
+    void Orbit()
     {
-        if(player.isSense == true)
+        offSet = transform.position - Circletarget.position;
+
+        transform.position = Circletarget.position + offSet;
+        transform.RotateAround(Circletarget.position,
+                                Vector3.up,
+                                orbitSpeed * Time.deltaTime);
+        offSet = transform.position - Circletarget.position;
+
+        if (isPlayerFollow)
         {
-            transform.Rotate(0, 0, -angle_z / 50);
-            transform.position += new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            player.gameObject.transform.RotateAround(Circletarget.position,
+                                Vector3.up,
+                                orbitSpeed * Time.deltaTime);
         }
     }
 
-    void GetFire() // 수정하기
+    void Circle()
     {
-        if(player.isSense == true)
-        {
-            firePs.Play();
-        }
+        offSet = transform.position - Circletarget.position;
+
+        transform.position = Circletarget.position + offSet;
+        transform.RotateAround(Circletarget.position,
+                                Vector3.back, orbitSpeed * Time.deltaTime);
+
+        offSet = transform.position - Circletarget.position;
     }
 
-    //void Fire()
-    //{
-    //    isPlayerAttack = true;
-    //    InvokeRepeating("RepeatFire", delayTime, repeatTime);
-    //}
-
-    //void RepeatFire()
-    //{
-    //    firePs.Play();
-    //}
-
+    
     Quaternion CalculateMovementOfPendulum()
     {
         return Quaternion.Lerp(Quaternion.Euler(Vector3.forward * angle),
@@ -299,9 +378,9 @@ void Update()
                 break;
             case MoveObstacleType.B:
                 isMove = true;
-                isPlayerAttack = true;
+                //isPlayerAttack = true;
+                //StartCoroutine(leftRight());
                 leftRight();
-
                 break;
             case MoveObstacleType.C:
                 isMove = true;
@@ -323,21 +402,34 @@ void Update()
                 break;
             case MoveObstacleType.H:
                 isMove = true;
-                //zzz();
+                leftRightZ();
                 break;
             case MoveObstacleType.I:
                 isMove = false;
                 //rotate_z();
                 break;
-            case MoveObstacleType.L:
-                isMove = false;
-                deguldegul();
+            case MoveObstacleType.J:
+                isMove = true;
+                Orbit();
+                break;
+            case MoveObstacleType.K:
+                Circle();
+                break;
+            case MoveObstacleType.L: // 밟으면 작아지는 obj
+                isContact = true;
                 break;
             case MoveObstacleType.M:
-                isMove = false;
-                GetFire();
+                isDownandDestroy = true;
+                if (isDown)
+                {
+                    DownandDestroy();
+                    
+                }
                 break;
-        }
+           
 
+        }
+       
     }
+  
 }

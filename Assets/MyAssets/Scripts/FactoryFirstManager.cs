@@ -44,7 +44,7 @@ public class FactoryFirstManager : MonoBehaviour
         isContact = false;
         Vector3 pos = GetRandomPos();
         GameObject instance = Instantiate(particle,pos,Quaternion.identity);
-        if(player.tmpBox.transform.position == pos)
+        if (player.tmpBox.transform.position == pos)
         {
             //GameObject ob = Instantiate(Dieparticle, pos, Quaternion.identity);
             Debug.Log("야야 니 주것댥");
@@ -54,20 +54,21 @@ public class FactoryFirstManager : MonoBehaviour
             managerInCam.Priority = 2;
             managerCam.Priority = 1;
             Invoke("Die",3f);
-            
-        }
+
+    }
         else
         {
-            
+
             Debug.Log("니 살았닭");
             yield return new WaitForSeconds(1.5f);
             talkCanvas2.SetActive(true);
-            Invoke("Trun",3f);
-            isChk = true;
+            Invoke("Trun", 3f);
+
 
         }
-
-        Destroy(instance,3f);
+      
+         //isChk = true;
+       Destroy(instance,3f);
     }
     void Die()
     {
@@ -86,6 +87,7 @@ public class FactoryFirstManager : MonoBehaviour
         mainCam.Priority = 2;
         player.isSetEggFinish = false;
         player.Pos();
+        isChk = false;
     }
     void Trun()
     {
@@ -116,7 +118,7 @@ public class FactoryFirstManager : MonoBehaviour
         {
             Debug.Log("충돌");
             isContact = true;
-            //isChk = true;
+            isChk = true;
             eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0f;
             Debug.Log("속도다운");
             anim.SetBool("isAttack", true);

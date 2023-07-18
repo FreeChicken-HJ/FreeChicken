@@ -7,8 +7,6 @@ public class FactoryNPCAnim : MonoBehaviour
     public Animator animator;
     FactoryPlayer player;
    
-    //public Animator animator;
-    float t = 0;
    
     // Start is called before the first frame update
     void Start()
@@ -24,6 +22,10 @@ public class FactoryNPCAnim : MonoBehaviour
         {
             animator.SetBool("isTalk",true);
             
+        }
+        else if (!player.isTalk)
+        {
+            animator.SetBool("isTalk",false);
         }
     }
 

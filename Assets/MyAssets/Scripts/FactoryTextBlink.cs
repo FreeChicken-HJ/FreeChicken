@@ -6,9 +6,24 @@ using TMPro;
 public class FactoryTextBlink : MonoBehaviour
 {
     public TextMeshProUGUI text;
-   
-    // Start is called before the first frame update
-    void Start()
+    float time;
+    void Update()
+    {
+        if(time < 0.5f)
+        {
+            text.color = new Color(1, 1, 1, 1 -time);
+        }
+        else
+        {
+            text.color = new Color(1, 1, 1, time);
+            if(time > 1f)
+            {
+                time = 0;
+            }
+        }
+        time += Time.deltaTime;
+    }
+    /*void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
 
@@ -27,5 +42,5 @@ public class FactoryTextBlink : MonoBehaviour
             text.text = "»ß¾à!! »ß¾à!!";
             yield return new WaitForSeconds(.5f);
         }
-    }
+    }*/
 }

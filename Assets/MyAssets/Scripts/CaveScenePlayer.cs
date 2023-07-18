@@ -84,14 +84,14 @@ public class CaveScenePlayer : MonoBehaviour
     {
 
         time += Time.deltaTime;
-        if (!Dead && !potion.reversalPotion)
+        if (!Dead/* && !potion.reversalPotion*/)
         {
             Move();
             Jump();
             GetInput();
         }
 
-        if(potion.reversalPotion)
+        /*if(potion.reversalPotion)
         {
             ReversalMove();
             Jump();
@@ -100,7 +100,7 @@ public class CaveScenePlayer : MonoBehaviour
             {
                 potion.reversalPotion = false;
             }
-        }
+        }*/
     }
 
     void GetInput()
@@ -125,7 +125,7 @@ public class CaveScenePlayer : MonoBehaviour
         anim.SetBool("isWalk", wDown);
 
         ShowMoveParticle();
-        EatPoisonParticle();
+        //EatPoisonParticle();
     }
 
     void Jump()
@@ -158,7 +158,7 @@ public class CaveScenePlayer : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "Obstacle" && !Dead)
         {
             DieMotion();
         }
@@ -171,7 +171,7 @@ public class CaveScenePlayer : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        if (other.tag == "Fire")
+        if (other.tag == "Fire" && !Dead)
         {
             DieMotion();
         }

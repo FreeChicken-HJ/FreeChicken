@@ -6,140 +6,123 @@ using TMPro;
 public class FactoryNPC_2 : MonoBehaviour
 {
     public Animator animator;
-    public Slider NpcUI;
-    public GameObject thxUI;
-    public FactoryPlayer_3 player;
-    public bool isEbutton;
-    public GameObject Ebutton;
-    public FactoryTextBlink text;
-    public bool isNear;
-    public GameObject particle;
+    public GameObject player;
+    public GameObject NpcBox;
+    public GameObject ThxUI;
+
    
-    public GameObject npc;
-    float t = 0;
-    public GameObject conImage;
-    public GameObject changeImage;
-    public bool isLastNpc;
-    public GameObject[] exitParticle;
-    public bool isFinish;
-    public GameObject pos;
-    public bool isChk;
+    public bool isFly;
 
-    public GameObject LastUI;
-    public GameObject mainUI;
+    public Slider mainSlider;
+    
+    public GameObject NPCHelpUI;
+    public Slider HelpNPC;
+    public TextMeshProUGUI E;
 
-    void Awake()
-    {
-        
-        Ebutton.SetActive(false);
-        player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer_3>();
-        animator = GetComponent<Animator>();
-        
-    }
+    public bool isShowNPCButton;
+    public bool isFin;
+
+    public bool isSet;
+    public GameObject HelpParticle;
+    public float t;
+
+   
+
     private void Start()
     {
-        if (isLastNpc)
-        {
-            player.isLastNPC = true;
-        }
+        player = GameObject.FindWithTag("Player");
+        animator = GetComponent<Animator>();
     }
-    void Update()
+
+    private void Update()
     {
-        if (player.isTalk)
+        if (isFin)
         {
+            NpcBox.SetActive(false); // 효과추가
+            ThxUI.SetActive(true);
             animator.SetBool("isTalk", true);
+            NPCHelpUI.gameObject.SetActive(false);
 
-        }
-        else if (!player.isTalk)
-        {
-            animator.SetBool("isTalk",false);
-        }
-       
-        if (Input.GetButton("E") && isEbutton)
-        {
-            Debug.Log("E");
-            if (NpcUI.value < 100f)
-            {
-                t += Time.deltaTime;
-                NpcUI.value = Mathf.Lerp(0, 100, t);
-            }
-            else
-            {
-                isEbutton = false;
-                player.isTalk = true;
-                text.gameObject.SetActive(false);
-                thxUI.SetActive(true);
-
-                
-                Destroy(Ebutton);
-                particle.SetActive(false);
-                Invoke("Exit", 2f);
-            }
-        }
-        if (Input.GetButtonUp("E"))
-        {
-            t = 0;
-            NpcUI.value = 0;
-        }
-        if (isLastNpc && isFinish)
-        {
-            if (!isChk)
-            {
-                LastUI.SetActive(true);
-            }
-            mainUI.SetActive(false);
-            Invoke("LastUIExit", 2f);
-            for (int i = 0; i < exitParticle.Length; ++i)
-            {
-                exitParticle[i].gameObject.SetActive(true);
-            }
-           
+            Invoke("Finish", 1.5f);
             
+
         }
-        if (isFinish)
+     
+        if (isFly)
         {
-            this.gameObject.transform.Translate(pos.transform.position * Time.deltaTime * .5f, Space.Self);
-            conImage.SetActive(false);
-            changeImage.SetActive(true);
+            this.gameObject.transform.Translate(Vector3.up * 5f*Time.deltaTime);
+            ThxUI.SetActive(false);
+            Invoke("Destroy", 3f);
+            //Destroy(this.gameObject,5f);
         }
     }
-    void LastUIExit()
+    void Destroy()
     {
-        isChk = true;
-        LastUI.SetActive(false);
+       
+        this.gameObject.SetActive(false);
+    }
+    private void FixedUpdate()
+    {
+        if (isShowNPCButton)
+        {
+            if (Input.GetButton("E") && isShowNPCButton)
+            {
+                E.color = Color.red;
+                if (HelpNPC.value < 100f)
+                {
+                    HelpParticle.SetActive(true);
+                    t += Time.deltaTime;
+                    HelpNPC.value = Mathf.Lerp(0, 100, t);
+                }
+                else
+                {
+                    HelpParticle.SetActive(false);
+                    HelpNPC.value = 0;
+                    E.color = Color.white; // 초기화
+                   
+                    isFin = true;
+                    isShowNPCButton = false;
+                    player.GetComponent<FactoryPlayer_3>().maxValue = player.GetComponent<FactoryPlayer_3>().minValue + 12.5f;
+
+
+                    mainSlider.value += 12.5f;
+                    player.GetComponent<FactoryPlayer_3>().minValue = player.GetComponent<FactoryPlayer_3>().maxValue;
+
+                    Debug.Log(player.GetComponent<FactoryPlayer_3>().minValue);
+                    Debug.Log(player.GetComponent<FactoryPlayer_3>().maxValue);
+
+                }
+
+            }
+            if (Input.GetButtonUp("E"))
+            {
+                E.color = Color.white;
+                t = 0;
+                HelpNPC.value = 0;
+
+            }
+        }
+    }
+    void Finish()
+    {
+        isFly = true;
         
     }
-    void Exit()
-    {
-        player.isTalk = false;
-        thxUI.SetActive(false);
-        text.gameObject.SetActive(false);
-        isFinish = true;
-        
-        
-        Destroy(this.gameObject,3f);
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" &&!isShowNPCButton)
         {
-            text.gameObject.SetActive(true);
-            isNear = true;
-            isEbutton = true;
-            particle.SetActive(true);
-            Ebutton.SetActive(true);
-        }        
+
+            Debug.Log("NPC");
+            NPCHelpUI.gameObject.SetActive(true);
+            isShowNPCButton = true;
+
+
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player" && isEbutton)
-        {
-
-            isEbutton = false;
-            isNear = false;
-            Ebutton.SetActive(false);
-        }
+        NPCHelpUI.gameObject.SetActive(false);
+        isShowNPCButton = false;
     }
 }

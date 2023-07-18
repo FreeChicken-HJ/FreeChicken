@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using Cinemachine;
 public class NPC_Chicken : MonoBehaviour
 {
     //[SerializeField] TextMeshProUGUI nearNPCText;
@@ -11,7 +11,7 @@ public class NPC_Chicken : MonoBehaviour
     [SerializeField] Image ChatNPCImage;
 
     [SerializeField] Image imagetest;
-
+    public CinemachineVirtualCamera npcCam;
     HouseScenePlayer player;
 
     public Camera Talk_AI_Chicken;
@@ -22,8 +22,8 @@ public class NPC_Chicken : MonoBehaviour
     {
         Talk_AI_Chicken.enabled = false;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
+        npcCam.gameObject.SetActive(false);
 
-        
         //nearNPCText.gameObject.SetActive(false);
         //TalkNPCText.gameObject.SetActive(false);
         //ChatNPCImage.gameObject.SetActive(false);
@@ -58,6 +58,7 @@ public class NPC_Chicken : MonoBehaviour
             //nearNPCText.gameObject.SetActive(true);
 
             imagetest.gameObject.SetActive(true);
+            npcCam.gameObject.SetActive(true);
 
             isTalkNPC = true;
         }
@@ -70,6 +71,8 @@ public class NPC_Chicken : MonoBehaviour
             //nearNPCText.gameObject.SetActive(false);
             imagetest.gameObject.SetActive(false);
             isTalkNPC=false;
+            npcCam.gameObject.SetActive(false);
+
         }
     }
 

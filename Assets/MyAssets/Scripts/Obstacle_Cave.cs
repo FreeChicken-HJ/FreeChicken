@@ -10,7 +10,7 @@ public class Obstacle_Cave : MonoBehaviour
     public float delayTime = 1f;
     public float repeatTime = 5f;
 
-    public enum MoveObstacleType { A, B, C, D, E, F, G, H, I, J, K, L, M };
+    public enum MoveObstacleType { A, B, C, D, E, F, G, H, I, J, K, L, M, N};
     public MoveObstacleType Type;
 
     //PlayerController player;
@@ -160,7 +160,7 @@ public class Obstacle_Cave : MonoBehaviour
 
         if (turnSwitch)
         {
-            transform.position = transform.position + new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
+            this.gameObject.transform.position = this.gameObject.transform.position + new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
             if (isPlayerFollow)
             {
                 player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
@@ -168,7 +168,7 @@ public class Obstacle_Cave : MonoBehaviour
         }
         else
         {
-            transform.position = transform.position + new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime;
+            this.gameObject.transform.position = this.gameObject.transform.position + new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime;
             if (isPlayerFollow)
             {
                 player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime;
@@ -176,38 +176,41 @@ public class Obstacle_Cave : MonoBehaviour
         }
 
     }
+    void leftRightZ()
+    {
+        float currentPositionZ = transform.position.z;
 
-    //void zzz()
-    //{
-    //    float currentPositionZ = transform.position.z;
+        if (currentPositionZ >= initPositionZ + distance)
+        {
 
-    //    if(currentPositionZ >= initPositionZ + distance)
-    //    {
-    //        turnSwitch= false;
-    //    }
-    //    else if(currentPositionZ <= turningPoint)
-    //    {
-    //        turnSwitch = true;
-    //    }
+            turnSwitch = false;
+        }
+        else if (currentPositionZ <= turningPoint)
+        {
+            //yield return new WaitForSeconds(1.5f);
+            turnSwitch = true;
+        }
 
-    //    if(turnSwitch)
-    //    {
-    //        transform.position = transform.position + new Vector3(0, 0, 1) * moveSpeed * delayTime;
-    //        if(isPlayerFollow)
-    //        {
-    //            player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0,0,1) * moveSpeed * Time.deltaTime;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        transform.position = transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
-    //        if(isPlayerFollow)
-    //        {
-    //            player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
-    //        }
-    //    }
-    //}
-
+        if (turnSwitch)
+        {
+            //yield return new WaitForSeconds(1.5f);
+            transform.position = transform.position + new Vector3(0, 0, 1) * moveSpeed * Time.deltaTime;
+            if (isPlayerFollow)
+            {
+                player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, 1) * moveSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            //yield return new WaitForSeconds(1.5f);
+            transform.position = transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            if (isPlayerFollow)
+            {
+                player.gameObject.transform.position = player.gameObject.transform.position + new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            }
+        }
+    }
+   
     void OnTriggerEnter(Collider other) // Case E == Delay & Drop
     {
         if (other.gameObject.tag == "Player" && isDropObj)
@@ -356,9 +359,9 @@ public class Obstacle_Cave : MonoBehaviour
                 isPlayerAttack = true;
                 rotate_z();
                 break;
-            case MoveObstacleType.H:
+            case MoveObstacleType.H: 
                 isMove = true;
-                //zzz();
+                leftRightZ();
                 break;
             case MoveObstacleType.I:
                 isMove = false;
@@ -371,6 +374,9 @@ public class Obstacle_Cave : MonoBehaviour
             case MoveObstacleType.M:
                 isMove = false;
                 GetFire();
+                break;
+            case MoveObstacleType.N:
+                
                 break;
         }
 

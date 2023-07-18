@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using Cinemachine;
 
 public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
 {
@@ -115,10 +116,14 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
             isTyping = false;
         }
 
-        if (Input.GetMouseButton(0) && !isTyping)
+        if (Input.GetMouseButton(0) )//&& !isTyping)
         {
-            NextSentence();
-            ChangeImage();
+            if(!isTyping)
+            {
+                NextSentence();
+                ChangeImage();
+            }
+            
             //if (!isTyping)
             //    NextSentence();
         }

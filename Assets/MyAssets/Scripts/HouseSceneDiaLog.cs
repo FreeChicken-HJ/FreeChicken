@@ -6,11 +6,6 @@ public class HouseSceneDiaLog : MonoBehaviour
 {
     public string[] sentences;
     public bool isCnt;
-    //private void OnMouseDown()
-    //{
-    //    if(HouseSceneTalkManager.instance.dialoguegroup.alpha==0)
-    //        HouseSceneTalkManager.instance.OndiaLog(sentences);
-    //}
 
     void Update()
     {

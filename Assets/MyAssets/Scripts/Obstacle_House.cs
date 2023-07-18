@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class Obstacle_House : MonoBehaviour
     public enum MoveObstacleType { A, B, C,D,E,F,G,H,I,J,K,L,M,N,O,P};
     public MoveObstacleType Type;
 
-    HouseScenePlayer player;
+    ///HouseScenePlayer player;
+    GameObject player;
     //Sense_House sense_house;
 
     //UD_Floor
@@ -64,6 +66,12 @@ public class Obstacle_House : MonoBehaviour
     // slide
     public bool slide;
 
+    bool isDown_y;
+    bool isDownandDestroy;
+
+    bool isUp_y;
+    bool isUpandDestroy;
+
     void Awake()
     {
         if (Type == MoveObstacleType.A) // Up & Down
@@ -91,7 +99,7 @@ public class Obstacle_House : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("HouseCharacter").GetComponent<HouseScenePlayer>();
+        player = GameObject.FindGameObjectWithTag("Player");
         isPlayerFollow = false;
         //isDartFollow = false;
         //sense_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Sense_House>();
@@ -130,9 +138,15 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
-    void ShortUpDown()
+    void UpandDestroy()
     {
-        transform.Translate(Vector3.up*moveSpeed*Time.deltaTime);
+        if (isPlayerFollow)
+        {
+            player.gameObject.transform.position = player.transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.smoothDeltaTime;
+        }
+        transform.position = transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.smoothDeltaTime;
+
+        Destroy(this.gameObject, 5f);
     }
 
     void rotate()
@@ -146,7 +160,7 @@ public class Obstacle_House : MonoBehaviour
 
     void rotate_z()
     {
-        transform.Rotate(0, 0, -angle_z / 50);
+        transform.Rotate(0, 0, -angle_z / 50 * rotateSpeed);
     }
 
     void rotate_y()
@@ -156,8 +170,27 @@ public class Obstacle_House : MonoBehaviour
 
     void rotatae_x()
     {
-        transform.Rotate(-angle_z / 50, 0, 0);
+        transform.Rotate(-angle_z / 50 * rotateSpeed, 0, 0);
     }
+
+    void DownandDestroy()
+    {
+        //if(distance == -2)
+        //{
+        //    this.gameObject.SetActive(false);
+        //}
+
+        //transform.Translate(Vector3.down * 5f * Time.deltaTime);
+
+        if(isPlayerFollow)
+        {
+            player.gameObject.transform.position = player.transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.smoothDeltaTime;
+        }
+        transform.position = transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.smoothDeltaTime;
+
+        Destroy(this.gameObject, 5f);
+    }
+
 
     void rotate_xyz()
     {
@@ -255,6 +288,17 @@ public class Obstacle_House : MonoBehaviour
             Invoke("Melting", meltingTime);
         }
 
+        if (collision.gameObject.tag == "Player" && isDownandDestroy)
+        {
+            isDown_y = true;
+        }
+
+        if(collision.gameObject.tag == "Player" && isUpandDestroy)
+        {
+            isUp_y = true;
+        }
+
+
         //if (collision.gameObject.tag == "Wall")
         //{
         //    Debug.Log("ºÎµúÈû");
@@ -263,7 +307,7 @@ public class Obstacle_House : MonoBehaviour
 
         //if(collision.gameObject.tag == "Player" && slide)
         //{
-           
+
         //}
     }
 
@@ -308,7 +352,7 @@ public class Obstacle_House : MonoBehaviour
 
     public void deguldegul()
     {
-        transform.Rotate(0, 0, -angle_z / 50);
+        transform.Rotate(0, 0, -angle_z / 50 * rotateSpeed);
         transform.position += new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
     }
 
@@ -414,11 +458,24 @@ public class Obstacle_House : MonoBehaviour
             case MoveObstacleType.K:
                 rotate_xyz();
                 break;
-                case MoveObstacleType.L:
-                ShortUpDown();
+            case MoveObstacleType.L:
+                isUpandDestroy= true;
+                if(isUp_y)
+                {
+                    UpandDestroy();
+                }
                 break;
-
-
+            case MoveObstacleType.M:
+                //isMove = true;
+                isDownandDestroy = true;
+                if (isDown_y)
+                {
+                    DownandDestroy();
+                    //isDown_y = false;
+                }
+                break;
         }
+
+        
     }
 }

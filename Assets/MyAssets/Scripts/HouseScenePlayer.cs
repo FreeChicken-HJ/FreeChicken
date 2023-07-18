@@ -15,15 +15,16 @@ public class HouseScenePlayer : MonoBehaviour
     public bool isfallingObstacle;
     public bool isSense;
 
-    public bool hide;
     bool isContact;
 
-    public TextMeshProUGUI nearNPCText;
     public Image DieImage;
     public TextMeshProUGUI superJump;
-
-    public CinemachineVirtualCamera npc_cam;
+    public Image NextSceneImage;
+    public Image SavePointImage;
+    
     public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera dieCam;
+
     Vector3 moveVec;
     Vector2 moveInput;
 
@@ -47,34 +48,28 @@ public class HouseScenePlayer : MonoBehaviour
     Animator anim;
 
     Obstacle_House obstacle_house;
-    HouseSceneTalkManager talkeManager;
 
-    public GameObject Dialogue;
+    //SavePoint
+    public GameObject SavePoint1Obj;
+    public GameObject SavePoint2Obj;
+    public GameObject SavePoint3Obj;
 
-    //PlayDart
-    public GameObject DartBullet;
-
-    //Chicken
-    public GameObject mesh;
-    public GameObject Chicken;
+    public bool check_savepoint1;
+    public bool check_savepoint2;
+    public bool check_savepoint3;
     
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
-
         rigid = GetComponent<Rigidbody>();
         isJump = false;
-
     }
 
     void Start()
     {
         obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
-        nearNPCText.gameObject.SetActive(false);
         DieImage.gameObject.SetActive(false);
-        Dialogue.gameObject.SetActive(false);
-       
     }
 
     void Update()
@@ -85,17 +80,6 @@ public class HouseScenePlayer : MonoBehaviour
             GetInput();
             Jump();
             LookAround();
-            ShootDarts();
-        }
-
-        if(isContact)
-        {
-            if(Input.GetMouseButton(0))
-            {
-                nearNPCText.gameObject.SetActive(false);
-                //npc_cam.gameObject.SetActive(true);
-                Dialogue.gameObject.SetActive(true);
-            }
         }
     }
 
@@ -120,15 +104,6 @@ public class HouseScenePlayer : MonoBehaviour
             characterBody.forward = moveVec;
             transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
         }
-
-        //moveVec = new Vector3(hAxis, 0, vAxis).normalized;
-
-        //transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
-
-        //transform.LookAt(transform.position + moveVec); // 회전
-        //float percent = ((wDown) ? 0.3f : 1f) * moveInput.magnitude;
-        //anim.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
-
         anim.SetBool("Run", moveInput != Vector2.zero);
         anim.SetBool("Walk", wDown);
     }
@@ -146,18 +121,19 @@ public class HouseScenePlayer : MonoBehaviour
     void DieMotion()
     {
         Debug.Log("플레이어 사망");
-        Dead = true;
+        //Dead = true;
         DiePs.gameObject.SetActive(true);
-        anim.SetTrigger("isDead");
         DieImage.gameObject.SetActive(true);
-        //Invoke("ReLoadScene", 2f);
+        anim.SetBool("Die", true);
+        dieCam.Priority = 10;
+        mainCam.Priority = 1;
+        Invoke("remove_dieUI", 2f);
     }
 
-    //void ReLoadScene()
-    //{
-    //    SceneManager.LoadScene("New Scene");
-    //    //SceneManager.LoadScene("HouseScene2");
-    //}
+    void NextScene()
+    {
+        SceneManager.LoadScene("HouseScene2");
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -166,74 +142,85 @@ public class HouseScenePlayer : MonoBehaviour
             isfallingObstacle = true;
         }
 
-        if (other.gameObject.tag.Equals("NPC"))
-        {
-            nearNPCText.gameObject.SetActive(true);
-            isContact = true;
-            npc_cam.Priority = 10;
-            mainCam.Priority = 1;
-        }
-
-        if (other.gameObject.tag == "Hide")
-        {
-            hide = true;
-        }
-
-        if(other.gameObject.tag == "Obstacle")
-        {
-            DieMotion();
-        }
-        if(other.gameObject.tag == "Chicken")
-        {
-            
-            this.mesh.gameObject.SetActive(false);
-            Chicken.gameObject.SetActive(true);
-            Chicken.transform.position = this.transform.position;
-            DieMotion();
-
-
-
-        }
-
         if (other.gameObject.tag == "SavePoint1")
         {
-            DieMotion();
-            this.transform.position = new Vector3(5.01999998f, 1.32000005f, 18.3449993f);
+            check_savepoint1 = true;
+            check_savepoint2 = false;
+            check_savepoint3 = false;
+            SavePointImage.gameObject.SetActive(true);
         }
 
         if (other.gameObject.tag == "SavePoint2")
         {
-            DieMotion();
-            this.transform.position = new Vector3(40.1230011f, 0.428000003f, 16.7889996f);
+            check_savepoint2 = true;
+            check_savepoint1 = false;
+            check_savepoint3 = false;
+
         }
 
-        if(other.gameObject.tag == "SavePoint3")
+        if (other.gameObject.tag == "SavePoint3")
         {
-            DieMotion();
-            this.transform.position = new Vector3(75.8610001f, 8.06000042f, 16.1520004f);
+            check_savepoint3 = true;
+            check_savepoint1 = false;
+            check_savepoint2 = false;
+        }
+
+        if (other.gameObject.name == "NextScenePoint")
+        {
+            NextSceneImage.gameObject.SetActive(true);
+            Invoke("NextScene", 3.5f);
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void restart_stage1()
     {
-        if (other.gameObject.tag.Equals("NPC"))
-        {
-            //nearNPCText.gameObject.SetActive(false);
-            npc_cam.Priority = 1;
-            mainCam.Priority = 10;
-        }
-
-        if (other.gameObject.tag == "Hide")
-        {
-            hide = false;
-        }
+        Dead = false;
+        this.transform.position = SavePoint1Obj.transform.position;
     }
 
+    void restart_stage2()
+    {
+        Dead = false;
+        this.transform.position = SavePoint2Obj.transform.position;
+    }
+
+    void restart_stage3()
+    {
+        Dead = false;
+        this.transform.position = SavePoint3Obj.transform.position;
+    }
+
+    void remove_dieUI()
+    {
+        DiePs.gameObject.SetActive(false);
+        DieImage.gameObject.SetActive(false);
+        anim.SetBool("Die", false);
+        dieCam.Priority = 1;
+        mainCam.Priority = 10;
+    }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "Obstacle" && !Dead)
         {
-            DieMotion();
+            Dead = true;
+
+            if(check_savepoint1 && Dead)
+            {
+                DieMotion();
+                Invoke("restart_stage1", 3f);
+            }
+
+            if(check_savepoint2&& Dead)
+            {
+                DieMotion();
+                Invoke("restart_stage2", 3f);
+            }
+
+            if (check_savepoint3 && Dead)
+            {
+                DieMotion();
+                Invoke("restart_stage3", 3f);
+            }
         }
 
         if (collision.gameObject.tag == "Ground")
@@ -243,8 +230,6 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (collision.gameObject.tag == "Slow")
         {
-            Debug.Log("바나나 밟았닭");
-            //rigid.velocity = new Vector3(hAxis * speed * 3f, rigid.velocity.y, vAxis * speed * 3f);
             speed /= 2f;
             Invoke("DoNotSlow", 2f);
         }
@@ -262,15 +247,6 @@ public class HouseScenePlayer : MonoBehaviour
         }
     }
 
-    void OnParticleCollision(GameObject other)
-    {
-        if (other.tag == "Fire")
-        {
-            DieMotion();
-            //Instantiate(chicken);
-        }
-    }
-
     void DonotSuperJump()
     {
         superJump.gameObject.SetActive(false);
@@ -280,17 +256,6 @@ public class HouseScenePlayer : MonoBehaviour
     void DoNotSlow()
     {
         speed *= 2f;
-    }
-
-    void ShootDarts()
-    {
-        
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Vector3 firePos = transform.position + anim.transform.forward + new Vector3(-0.00400000019f, 0.114f, 0.0810000002f);
-            var Egg = Instantiate(DartBullet, firePos, Quaternion.identity).GetComponent<PlayerEgg>();
-            Egg.Fire(anim.transform.forward);
-        }
     }
 
     public void LookAround() // 카메라
@@ -308,10 +273,5 @@ public class HouseScenePlayer : MonoBehaviour
             x = Mathf.Clamp(x, 335f, 361f);
         }
         cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
-    }
-
-    public void NotLookAround()
-    {
-        
     }
 }

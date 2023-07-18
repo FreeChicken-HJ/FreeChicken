@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36baaa8bdcb9d8b49b9199833965d2c3, type: 3}
-  m_Name: Main Camera Blends
+  m_Name: Factory_3 Main Camera Blends
   m_EditorClassIdentifier: 
   m_CustomBlends:
   - m_From: Main
-    m_To: NpcCam
+    m_To: ChangeCam
     m_Blend:
-      m_Style: 1
+      m_Style: 4
       m_Time: 2
       m_CustomCurve:
         serializedVersion: 2
@@ -25,40 +25,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - m_From: Main
-    m_To: StopConCam
-    m_Blend:
-      m_Style: 1
-      m_Time: 2
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - m_From: '**ANY CAMERA**'
-    m_To: Main
-    m_Blend:
-      m_Style: 0
-      m_Time: 2
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - m_From: Main
-    m_To: ChangeEggSpawnCam
-    m_Blend:
-      m_Style: 1
-      m_Time: 2
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - m_From: ChangeEggSpawnCam
-    m_To: ManagerHitandDieCam
+    m_To: CatchCam
     m_Blend:
       m_Style: 1
       m_Time: 2
@@ -79,21 +46,10 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - m_From: Main
-    m_To: PickUpChickCam
+  - m_From: '**ANY CAMERA**'
+    m_To: Main
     m_Blend:
-      m_Style: 1
-      m_Time: 2
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 0
-  - m_From: Main
-    m_To: ChangeCon
-    m_Blend:
-      m_Style: 1
+      m_Style: 0
       m_Time: 2
       m_CustomCurve:
         serializedVersion: 2

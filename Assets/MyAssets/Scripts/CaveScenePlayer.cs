@@ -12,7 +12,7 @@ public class CaveScenePlayer : MonoBehaviour
 {
     //[SerializeField] private Transform characterBody;
     //[SerializeField] private Transform cameraArm;
-
+    [Header("Settings")]
     Vector3 moveVec;
     bool wDown;
     bool Dead;
@@ -21,49 +21,41 @@ public class CaveScenePlayer : MonoBehaviour
 
     //프리닭 움직일때 파티클효과
     public ParticleSystem MoveParticle;
-
     public ParticleSystem PoisonParticle;
-    //bool isMove;
-
-    public bool isSense;
-    public bool isSenseTest;
-    public bool isfallingObstacle;
-
-    //public ParticleSystem jumpPs;
-    //public bool playJumpPs;
-
     public ParticleSystem DiePs;
-
+    //bool isMove;
     public float speed;
-    bool isJump;
     public float jumpPower = 5f;
-
     public float hAxis;
     public float vAxis;
-
     public float rhAxis;
     public float rvAxis;
-
-    bool reversal;
-
     float time;
-
-    //bool isJump;
-    //public float jumpPower = 5f;
-    //public int jumpCount = 2;   // 점프횟수, 2를 3으로 바꾸면 3단 점프
-
     Animator anim;
     Obstacle_Cave obstacle;
     //GameManager_Cave manager;
     //FireTest firetest;
     CaveItem_DebuffPotion potion;
     //ObstacleTest ObstacleTestobstacleTest;
-
-    public bool hasKey;
     public int keyCount;
 
-    bool iDown;
+    [Header("Bool")]
+    public bool isSense;
+    public bool isSenseTest;
+    public bool isfallingObstacle;
+    public bool isMoveUp;
+    bool isJump;
+    bool reversal;
+    //public ParticleSystem jumpPs;
+    //public bool playJumpPs;
+    public bool hasKey;
+    bool iDown;   
+    //bool isJump;
+    //public float jumpPower = 5f;
+    //public int jumpCount = 2;   // 점프횟수, 2를 3으로 바꾸면 3단 점프
 
+ 
+    
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
@@ -101,6 +93,7 @@ public class CaveScenePlayer : MonoBehaviour
                 potion.reversalPotion = false;
             }
         }*/
+       
     }
 
     void GetInput()
@@ -202,12 +195,16 @@ public class CaveScenePlayer : MonoBehaviour
 
         }
 
-        if(other.gameObject.tag == "Sense")
+        /*if(other.gameObject.tag == "Sense" )
         {
             obstacle.isSense = true;
+        }*/
+        if(other.gameObject.tag == "Door" &&!isMoveUp)
+        {
+            other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z); 
         }
     }
-
+    
     void ShowMoveParticle()
     {
         if (moveVec != Vector3.zero)

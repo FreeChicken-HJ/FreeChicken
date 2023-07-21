@@ -11,6 +11,7 @@ public class Obstacle_Cave : MonoBehaviour
     public float repeatTime = 5f;
 
     public enum MoveObstacleType { A, B, C, D, E, F, G, H, I, J, K, L, M, N};
+    // N => Sense È®ÀÎ¿ë 
     public MoveObstacleType Type;
 
     //PlayerController player;
@@ -58,6 +59,12 @@ public class Obstacle_Cave : MonoBehaviour
     public bool isPlayerAttack;
 
     public bool isBallContact;
+    //CubeRotate
+    public Animator objAnimator;
+    public GameObject moveObj;
+    public bool isCube;
+    public bool isBarrel;
+
     void Awake()
     {
         if (Type == MoveObstacleType.A) // Up & Down
@@ -78,7 +85,10 @@ public class Obstacle_Cave : MonoBehaviour
             initPositionZ = transform.position.z;
             turningPoint = initPositionZ - distance;
         }
-
+        if(Type == MoveObstacleType.L) // ´ë±¼´ë±¼
+        {
+            objAnimator = GetComponent<Animator>();
+        }
         // Case C == Rotate
         // Case D == Big Jump
 
@@ -93,6 +103,7 @@ public class Obstacle_Cave : MonoBehaviour
         isPlayerFollow = false;
         isSense= false;
         removeObj = false;
+        
     }
 
     void upDown()
@@ -219,7 +230,7 @@ public class Obstacle_Cave : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, other.transform.position, dropSpeed);
         }
 
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == "Player" && this.Type == MoveObstacleType.N )
         {
             isSense = true;
         }
@@ -275,7 +286,7 @@ public class Obstacle_Cave : MonoBehaviour
     void Swing()
     {
         isPlayerAttack = true;
-        isSense = false;
+        
         lerpTime += Time.deltaTime * swingSpeed;
         transform.rotation = CalculateMovementOfPendulum();
 
@@ -284,19 +295,31 @@ public class Obstacle_Cave : MonoBehaviour
 
     public void deguldegul()
     {
-        if (isSense && !isBallContact)
+
+        if (!removeObj && isCube)
         {
-            obj.gameObject.SetActive(true);
-            obj.transform.Rotate(0, 0, -angle_z / 50);
-            obj.transform.position += new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+            objAnimator.SetBool("isMove", true);
+
+            moveObj.transform.position += new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
+
+        }
+        if (!removeObj && isBarrel)
+        {
+            objAnimator.SetBool("isMove", true);
+
+            moveObj.transform.position += new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
+
+
+        }
+       else if (removeObj)
+        {
 
             
+            objAnimator.SetBool("isMove", false);
+             
+            //moveObj.SetActive(false);
+            //obj.transform.position 
         }
-        if (isBallContact)
-        {
-            obj.SetActive(false);
-        }
-
 
     }
 
@@ -321,20 +344,20 @@ public class Obstacle_Cave : MonoBehaviour
 
     void Update()
     {
-        if (removeObj)
+       /* if (removeObj)
         {
             obj.gameObject.SetActive(false);
-        }
+        }*/
 
         switch (Type)
         {
             
             case MoveObstacleType.A:
                 isMove = true;
-            //isPlayerAttack = true;
-            upDown();
 
-            break; 
+                upDown();
+
+                break;
             case MoveObstacleType.B:
                 isMove = true;
                 isPlayerAttack = true;
@@ -376,7 +399,11 @@ public class Obstacle_Cave : MonoBehaviour
                 GetFire();
                 break;
             case MoveObstacleType.N:
-                
+                if (isSense)
+                {
+                    moveObj.SetActive(true);
+                }
+                //isSense = true;
                 break;
         }
 

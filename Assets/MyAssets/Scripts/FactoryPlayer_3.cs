@@ -22,12 +22,14 @@ public class FactoryPlayer_3 : MonoBehaviour
     public FactorySceneBomb Bomb;
     public GameObject DieParticle;
     public GameObject TMP;
+    public GameObject PotionTMP;
 
     public GameObject NPC;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera changeCam;
     public CinemachineVirtualCamera dieCam;
+    public CinemachineVirtualCamera potionCam;
    
     [Header("Bool")]
     public bool isJump;
@@ -47,6 +49,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public bool isSavePoint_1;
     public bool isSavePoint_2;  
     public bool isSavePoint_3;
+    public bool isPotion;
    
     [Header("UI")]
     public GameObject startUI;
@@ -99,7 +102,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     void Update()
     {
 
-        if (/*!isTalk && */!isDie && !isAttack&& !isTruckGo)
+        if (/*!isTalk && */!isDie && !isAttack&& !isTruckGo && !isPotion)
         {
             Move();
             GetInput();
@@ -242,12 +245,29 @@ public class FactoryPlayer_3 : MonoBehaviour
             isSavePoint_3 = true;
             SavePointObj_3.SetActive(false);
         }
+        if (other.gameObject.tag == "Poison")
+        {
+            isPotion = true;
+            mainCam.Priority = -1;
+            potionCam.Priority = 100;
+            //위로 올라가는 소리 추가 필요 7.21
+            //PotionTMP = this.gameObject.transform.position;
+            Invoke("ResetCam", 3f);
+            
+        }
     }
-    
+    void ResetCam()
+    {
+        this.gameObject.transform.position = PotionTMP.transform.position;
+        
+        potionCam.Priority = -5;
+        mainCam.Priority = 100;
+        isPotion = false;
+    }
     void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox" || collision.gameObject.tag == "Props" || collision.gameObject.tag == "PickUpPoc")
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox" || collision.gameObject.tag == "Props" || collision.gameObject.tag == "PickUpPoc" || collision.gameObject.tag == "Poison")
         {
 
             isJump = false;

@@ -7,7 +7,6 @@ public class CaveSceneDiaLog : MonoBehaviour
     public string[] sentences;
     public bool isCnt;
  
-    // Update is called once per frame
     void Update()
     {
         if (!isCnt)

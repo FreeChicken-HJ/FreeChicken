@@ -21,6 +21,8 @@ public class AI_Cave : MonoBehaviour
     bool wayPointSet;
     public float wayPointRange;
 
+    bool Small_AI;
+
     //private bool isAction;
     private bool isWalking;
     private bool isRun;
@@ -34,9 +36,9 @@ public class AI_Cave : MonoBehaviour
 
     public CaveScenePlayer player;
 
-    [SerializeField] private float walkTime;
-    [SerializeField] private float waitTime;
-    private float currentTime;
+    //[SerializeField] private float walkTime;
+    //[SerializeField] private float waitTime;
+    //private float currentTime;
 
     public GameObject small_potion;
 
@@ -50,7 +52,7 @@ public class AI_Cave : MonoBehaviour
     void Start()
     {
         nav = GetComponent<NavMeshAgent>();
-        currentTime = waitTime;
+        //currentTime = waitTime;
         //isAction = true;
         player = GameObject.Find("CaveCharacter").GetComponent<CaveScenePlayer>();
     }
@@ -145,8 +147,7 @@ public class AI_Cave : MonoBehaviour
     }
 
     void ResetAttack()
-    {
-
+    { 
         isAttacked = false;
     }
 
@@ -170,8 +171,17 @@ public class AI_Cave : MonoBehaviour
         if (collision.gameObject.tag == "Small_Potion")
         {
             Debug.Log("작아지는 물약충돌!");
+            Small_AI = true;
             small_potion.SetActive(false);
             this.gameObject.transform.localScale = Vector3.one;
+        }
+
+        if (collision.gameObject.name == "SmallAI_Die" && Small_AI && !isDie)
+        {
+            isDie = true;
+            Debug.Log("죽어락");
+            anim.SetTrigger("isDead");
+            Invoke("DestroyAI_Cave", 2f);
         }
     }
 

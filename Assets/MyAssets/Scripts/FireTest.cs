@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class FireTest : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class FireTest : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.tag == "Player")
         {
             Debug.Log("불에 가까워짐!");
             particleObj.gameObject.SetActive(true);
@@ -31,13 +32,20 @@ public class FireTest : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if(other.gameObject.tag == "Player")
         {
-            particleObj.gameObject.SetActive(false);
-            //playAura = false;
+            particleObj.gameObject.SetActive(true);
         }
     }
 
+    //void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        particleObj.gameObject.SetActive(false);
+    //        //playAura = false;
+    //    }
+    //}
 }

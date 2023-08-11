@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
+using Cinemachine;
+
 public class CaveSceneTalkManager : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public GameObject nextText;
 
     public Queue<string> sentences;
-    public string currentSentences;
+    private string currentSentences;
     public bool isTyping;
 
     public static CaveSceneTalkManager instance;
@@ -19,6 +22,13 @@ public class CaveSceneTalkManager : MonoBehaviour
     public bool isPlayerImage;
 
     public bool isTalkEnd;
+
+    //public CinemachineVirtualCamera NPC4Cam;
+    //public CinemachineVirtualCamera mainCam;
+
+    //---------------------------------
+
+
     private void Awake()
     {
         instance = this;
@@ -26,12 +36,9 @@ public class CaveSceneTalkManager : MonoBehaviour
 
     void Start()
     {
-
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
-        /*NpcImage.gameObject.SetActive(true);
-        PlayerImage.gameObject.SetActive(false);*/
     }
 
     public void OndiaLog(string[] lines)
@@ -42,10 +49,8 @@ public class CaveSceneTalkManager : MonoBehaviour
         {
             sentences.Enqueue(line);
         }
-
-
-
     }
+
     public void NextSentence()
     {
         if (sentences.Count != 0)
@@ -55,16 +60,17 @@ public class CaveSceneTalkManager : MonoBehaviour
             nextText.SetActive(false);
             StartCoroutine(Typing(currentSentences));
         }
+
         if (sentences.Count == 0)
         {
-
+            //instance.gameObject.SetActive(false);
             Destroy(instance.gameObject);
             isTalkEnd = true;
-            //SceneManager.LoadScene("CityScene");
-
+            //NPC4Cam.Priority = 1;
+            //mainCam.Priority = 10;
         }
-
     }
+
     void ChangeImage()
     {
         if (isNPCImage)
@@ -82,6 +88,7 @@ public class CaveSceneTalkManager : MonoBehaviour
             isPlayerImage = false;
         }
     }
+
     IEnumerator Typing(string line)
     {
         text.text = "";
@@ -89,14 +96,11 @@ public class CaveSceneTalkManager : MonoBehaviour
         {
             text.text += ch;
             yield return new WaitForSeconds(0.05f);
-
-
         }
-
     }
+
     void Update()
     {
-
         if (text.text.Equals(currentSentences))
         {
             nextText.SetActive(true);
@@ -105,13 +109,13 @@ public class CaveSceneTalkManager : MonoBehaviour
 
         if (Input.GetMouseButton(0) && !isTyping)
         {
-            
+            if (!isTyping)
+            {
                 NextSentence();
                 ChangeImage();
-                
-
+            }
         }
-
-
     }
+
+
 }

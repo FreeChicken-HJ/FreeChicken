@@ -6,8 +6,8 @@ using TMPro;
 
 public class CaveInteraction_Door : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI OpenDoorText;
-    [SerializeField] TextMeshProUGUI donotOpenDoorText;
+    public GameObject OpenDoorText;
+    public GameObject donotOpenDoorText;
     bool isOpen;
 
     CaveScenePlayer player;
@@ -16,10 +16,7 @@ public class CaveInteraction_Door : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
-        OpenDoorText.gameObject.SetActive(false);
-        donotOpenDoorText.gameObject.SetActive(false);
         key = GameObject.FindGameObjectWithTag("Key").GetComponent<CaveItem_Key>();
-
     }
 
     void Update()
@@ -29,21 +26,33 @@ public class CaveInteraction_Door : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.tag.Equals("Player") && !player.hasKey)
         {
             Debug.Log("¹®¿¡ °¡±îÀÌ °¬´ß");
-            OpenDoorText.gameObject.SetActive(true);
+            donotOpenDoorText.SetActive(true);
             isOpen = true;
         }
-        
+
+        if(other.gameObject.tag.Equals("Player") && player.hasKey)
+        {
+            Debug.Log("¹®À» ¿­ ¼ö ÀÖ´ß");
+            isOpen = true;
+            OpenDoorText.SetActive(true);
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.tag.Equals("Player") && !player.hasKey)
         {
-            OpenDoorText.gameObject.SetActive(false);
+            donotOpenDoorText.SetActive(false);
             isOpen = false;
+        }
+
+        if(other.gameObject.tag.Equals("Player") && player.hasKey)
+        {
+            isOpen = false;
+            OpenDoorText.SetActive(false);
         }
     }
 
@@ -52,21 +61,23 @@ public class CaveInteraction_Door : MonoBehaviour
         if (Input.GetButtonDown("Interaction") && isOpen && player.hasKey)
         {
 
-            OpenDoorText.gameObject.SetActive(false);
+            OpenDoorText.SetActive(false);
             --player.keyCount;
             Destroy(gameObject);
             Debug.Log("¹®À» ¿­¾ú´ß");
+            
         }
         else if(Input.GetButtonDown("Interaction") && isOpen &&!player.hasKey)
         {
-            donotOpenDoorText.gameObject.SetActive(true);
-            Invoke("test", 1.5f);
+            donotOpenDoorText.SetActive(true);
+            Invoke("DestroyOpenDoorText", 1.5f);
+            //Invoke("test", 1.5f);
 
         }
     }
 
-    void test()
+    void DestroyOpenDoorText()
     {
-        donotOpenDoorText.gameObject.SetActive(false);
+        OpenDoorText.gameObject.SetActive(false);
     }
 }

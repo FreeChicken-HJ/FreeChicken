@@ -10,7 +10,7 @@ public class Obstacle_Cave : MonoBehaviour
     public float delayTime = 1f;
     public float repeatTime = 5f;
 
-    public enum MoveObstacleType { A, B, C, D, E, F, G, H, I, J, K, L, M, N};
+    public enum MoveObstacleType { A, B, C, D, E, F, G, H, I, J, K, L, M, N,O,P,Q};
     // N => Sense È®ÀÎ¿ë 
     public MoveObstacleType Type;
 
@@ -65,6 +65,13 @@ public class Obstacle_Cave : MonoBehaviour
     public bool isCube;
     public bool isBarrel;
 
+    //Orbit
+    public Transform Circletarget;
+    public float orbitSpeed;
+    Vector3 offSet;
+
+    Rigidbody rigid;
+
     void Awake()
     {
         if (Type == MoveObstacleType.A) // Up & Down
@@ -94,6 +101,7 @@ public class Obstacle_Cave : MonoBehaviour
 
         // Case E == Delay & Drop
         // Case F == Swing
+        rigid = GetComponent<Rigidbody>();
 
     }
 
@@ -149,10 +157,16 @@ public class Obstacle_Cave : MonoBehaviour
 
     }
 
+    void rotate_y()
+    {
+        isSense = false;
+        transform.Rotate(0, rotateSpeed, 0);
+    }
+
     void rotate_z()
     {
         isSense = false;
-        transform.Rotate(0, 0, -angle_z / 50);
+        transform.Rotate(0, 0, rotateSpeed);
     }
 
     void leftRight()
@@ -193,7 +207,6 @@ public class Obstacle_Cave : MonoBehaviour
 
         if (currentPositionZ >= initPositionZ + distance)
         {
-
             turnSwitch = false;
         }
         else if (currentPositionZ <= turningPoint)
@@ -258,6 +271,7 @@ public class Obstacle_Cave : MonoBehaviour
             Debug.Log("ºÎµúÈû");
             removeObj = true;
             //obj.gameObject.SetActive(false);
+            
         }
     }
 
@@ -311,12 +325,12 @@ public class Obstacle_Cave : MonoBehaviour
 
 
         }
-       else if (removeObj)
+        else if (removeObj)
         {
 
-            
+
             objAnimator.SetBool("isMove", false);
-             
+
             //moveObj.SetActive(false);
             //obj.transform.position 
         }
@@ -342,6 +356,45 @@ public class Obstacle_Cave : MonoBehaviour
         return (Mathf.Sin(lerpTime) + 1) * .5f;
     }
 
+    void Accel()
+    {
+        rigid.AddForce(Vector3.right * moveSpeed, ForceMode.Acceleration);
+    }
+
+    void Accel_z()
+    {
+        rigid.AddForce(new Vector3(0, 0, -1) * moveSpeed, ForceMode.Acceleration);
+    }
+
+    void Orbit()
+    {
+        offSet = transform.position - Circletarget.position;
+
+        transform.position = Circletarget.position + offSet;
+        transform.RotateAround(Circletarget.position,
+                                Vector3.up,
+                                orbitSpeed * Time.deltaTime);
+        offSet = transform.position - Circletarget.position;
+
+        if (isPlayerFollow)
+        {
+            player.gameObject.transform.RotateAround(Circletarget.position,
+                                Vector3.up,
+                                orbitSpeed * Time.deltaTime);
+        }
+    }
+
+    void Circle()
+    {
+        offSet = transform.position - Circletarget.position;
+
+        transform.position = Circletarget.position + offSet;
+        transform.RotateAround(Circletarget.position,
+                                Vector3.back, orbitSpeed * Time.deltaTime);
+
+        offSet = transform.position - Circletarget.position;
+    }
+
     void Update()
     {
        /* if (removeObj)
@@ -353,19 +406,16 @@ public class Obstacle_Cave : MonoBehaviour
         {
             
             case MoveObstacleType.A:
-                isMove = true;
-
+                isMove = false;
                 upDown();
-
                 break;
             case MoveObstacleType.B:
-                isMove = true;
+                isMove = false;
                 isPlayerAttack = true;
                 leftRight();
-
                 break;
             case MoveObstacleType.C:
-                isMove = true;
+                isMove = false;
                 rotate();
                 break;
             case MoveObstacleType.D:
@@ -376,17 +426,20 @@ public class Obstacle_Cave : MonoBehaviour
                 break;
             case MoveObstacleType.F:
                 isPlayerAttack = true;
+                isMove = false;
                 Swing();
                 break;
             case MoveObstacleType.G:
                 isPlayerAttack = true;
-                rotate_z();
+                rotate_y();
                 break;
-            case MoveObstacleType.H: 
-                isMove = true;
+            case MoveObstacleType.H:
+                isPlayerFollow = false;
+                isMove = false;
                 leftRightZ();
                 break;
             case MoveObstacleType.I:
+                isPlayerFollow = false;
                 isMove = false;
                 rotate_z();
                 break;
@@ -404,6 +457,16 @@ public class Obstacle_Cave : MonoBehaviour
                     moveObj.SetActive(true);
                 }
                 //isSense = true;
+                break;
+            case MoveObstacleType.O:
+                Accel();
+                break;
+            case MoveObstacleType.P:
+                Orbit();
+                isMove = false;
+                break;
+            case MoveObstacleType.Q:
+                Accel_z();
                 break;
         }
 

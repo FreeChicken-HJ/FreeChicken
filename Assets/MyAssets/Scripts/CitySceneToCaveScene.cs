@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 public class CitySceneToCaveScene : MonoBehaviour
 {
     
@@ -12,13 +13,14 @@ public class CitySceneToCaveScene : MonoBehaviour
     public bool isContact;
     public bool isMove;
 
-    public CinemachineVirtualCamera mainCam;
+    //public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera endCam;
+    public AudioSource CarSound;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("CityCharacter").GetComponent<CityScenePlayer>();
+        player = GameObject.FindWithTag("Player").GetComponent<CityScenePlayer>();
         
     }
 
@@ -27,20 +29,27 @@ public class CitySceneToCaveScene : MonoBehaviour
     {
         if (player.isLast)
         {
-            this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 4f, Space.World);
+            //this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 4f, Space.World);
             if (isContact)
             {
-                mainCam.Priority = 1;
+                //mainCam.Priority = 1;
                 endCam.Priority = 2;
+                CarSound.Play();
                 player.gameObject.transform.position = pos.transform.position;
-                player.anim.SetBool("isRun",false);
-
+                player.anim_2.SetBool("isRun",false);
+                this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 4f, Space.World);
+                //isContact = false;
+                Invoke("LoadCaveScene", 3f);
+                
                 // cave로 옮겨가기
             }
         }
 
     }
-  
+    void LoadCaveScene()
+    {
+        SceneManager.LoadScene("CaveScene");
+    }
    
     private void OnTriggerEnter(Collider other)
     {

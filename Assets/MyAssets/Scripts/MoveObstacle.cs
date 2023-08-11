@@ -273,6 +273,7 @@ public class MoveObstacle : MonoBehaviour
         yield return new WaitForSeconds(1f);
         this.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
         ChangeParticle.Play();
+        
         yield return new WaitForSeconds(0.5f);
         this.gameObject.transform.localScale = new Vector3(1.5f,1.5f , 1.5f);
         ChangeParticle.Play();

@@ -49,13 +49,16 @@ public class CaveScenePlayer : MonoBehaviour
     //public ParticleSystem jumpPs;
     //public bool playJumpPs;
     public bool hasKey;
-    bool iDown;   
+    bool iDown;
     //bool isJump;
     //public float jumpPower = 5f;
     //public int jumpCount = 2;   // 점프횟수, 2를 3으로 바꾸면 3단 점프
 
- 
-    
+
+    public GameObject NPC_1;
+    public GameObject NPC_2;
+    public GameObject NPC_3;
+    public GameObject NPC_4;
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
@@ -202,6 +205,17 @@ public class CaveScenePlayer : MonoBehaviour
         if(other.gameObject.tag == "Door" &&!isMoveUp)
         {
             other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z); 
+        }
+        if(other.gameObject.tag == "NPC_1")
+        {
+            NPC_1.SetActive(true);
+            NPC_2.SetActive(false);
+
+        }
+        if(other.gameObject.tag == "NPC_2")
+        {
+            NPC_1.SetActive(false);
+            NPC_2.SetActive(true);
         }
     }
     

@@ -42,12 +42,19 @@ public class FactoryPlayer_2 : MonoBehaviour
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera DieCam;
     public CinemachineVirtualCamera pickUpCam;
+
+    [Header("Audio")]
+    public AudioSource jumpAudio;
+    public AudioSource BGM;
+    public AudioSource dieAudio;
+    public AudioSource changeConAudio;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         isTalk = false;
         changeZone = GameObject.Find("ChangeConveyorZone").GetComponent<FactorySceneChangeZone>();
+        BGM.Play();
         //fixUI = gameObject.GetComponent<FactoryFixUI>();
     }
    
@@ -75,6 +82,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     {
 
         PickUpUI.SetActive(true);
+        dieAudio.Play();
         Invoke("ExitCanvas", 2f);
     }
 
@@ -120,6 +128,7 @@ public class FactoryPlayer_2 : MonoBehaviour
             if (!isJump)
             {
                 isJump = true;
+                jumpAudio.Play();
                 anim.SetTrigger("doJump");
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
@@ -153,6 +162,7 @@ public class FactoryPlayer_2 : MonoBehaviour
             isDie = true;
             DieParticle.SetActive(true);
             anim.SetTrigger("doDie");
+            dieAudio.Play();
             anim.SetBool("isDie", true);
             DieCanvas.SetActive(true);
             mainCam.Priority = 1;

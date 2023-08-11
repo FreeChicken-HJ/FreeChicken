@@ -3,33 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Cinemachine;
 public class FactoryNPC_1 : MonoBehaviour
 {
     public Slider NpcUI;
-    public GameObject factoryUI;
-    public FactoryPlayer player;
+    
+    public FactoryPlayer_3 player;
     public bool isEbutton;
     public GameObject Ebutton;
-    public FactoryTextBlink text;
-    public bool isNear;
-    public GameObject npccam;
-    public GameObject maincam;
-    public GameObject npc;
+    public TextMeshProUGUI E;
 
+    public bool isNear;
+    
+    public CinemachineVirtualCamera npccam;
+    public CinemachineVirtualCamera maincam;
+    
+    public GameObject npc;
+    public GameObject Video;
+
+    public AudioSource BGM;
+    public AudioSource Memory;
     //public Animator animator;
     float t = 0;
     void Start()
     {
         Ebutton.SetActive(false);
-        player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
+        player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer_3>();
        
     }
     void Update()
     {
-        Check();
+        
         if (Input.GetButton("E") && isEbutton)
         {
             Debug.Log("E");
+            E.color = Color.red;
             if (NpcUI.value <100f)
             {
                 t += Time.deltaTime;
@@ -38,44 +46,54 @@ public class FactoryNPC_1 : MonoBehaviour
             else
             {
                 isEbutton = false;
-                Destroy(text.gameObject);
-                
-                npccam.gameObject.SetActive(true);
-                maincam.gameObject.SetActive(false);
+                Video.SetActive(true);
+
+                E.color = Color.white;
                 player.isTalk = true;
-                player.isSlide = false;
-                Destroy(this.gameObject);
                 Destroy(Ebutton);
-                player.transform.LookAt(npc.transform.position);
-                factoryUI.gameObject.SetActive(true);
+                BGM.Stop();
+                Memory.Play();
+                Invoke("ReStart", 14f);
                 
             }
         }
         if (Input.GetButtonUp("E"))
         {
             t = 0;
+            E.color = Color.white;
             NpcUI.value = 0;
         }
         
     }
-    public void Check()
+    void ReStart()
     {
-        if (Physics.Raycast(this.transform.position, this.transform.forward, 2f, LayerMask.GetMask("Player")))
+        Video.SetActive(false);
+        maincam.Priority = 2;
+        npccam.Priority = -5;
+        Destroy(this.gameObject);
+        BGM.Play();
+        Memory.Stop();
+        player.isTalk = false;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
         {
-            isNear = true;
-            isEbutton = true;
+            npccam.Priority = 10;
+            maincam.Priority = 1;
             Ebutton.SetActive(true);
-           
+            isEbutton = true;
         }
-        else if(Physics.Raycast(this.transform.position, this.transform.forward, 4f, LayerMask.GetMask("Player")))
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
         {
-            isEbutton = false;
-            isNear = false;
+            npccam.Priority = 1;
+            maincam.Priority = 10;
             Ebutton.SetActive(false);
-            
+            isEbutton = false;
         }
-
-
     }
 
 }

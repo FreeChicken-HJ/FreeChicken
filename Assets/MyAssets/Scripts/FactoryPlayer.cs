@@ -39,7 +39,8 @@ public class FactoryPlayer : MonoBehaviour
     public bool isPickUp;
 
     public bool isSavePointPos;
-   
+
+    public bool isPlaying = false;
    
     [Header("UI")]
     public GameObject turnEggCanvas;
@@ -49,7 +50,6 @@ public class FactoryPlayer : MonoBehaviour
     public TextMeshProUGUI E;
     public TextMeshProUGUI Spacebar;
     public GameObject DieCanvas;
-    public GameObject StartCanvas;
     public GameObject UpstairCanvas;
     public GameObject scene2LastUI;
     public GameObject PickUpUI;
@@ -84,24 +84,28 @@ public class FactoryPlayer : MonoBehaviour
     public CinemachineVirtualCamera dieCam;
     public CinemachineVirtualCamera pickUpCam;
 
- 
-    
 
+
+    [Header("Audio")]
+    public AudioSource runAudio;
+    public AudioSource dieAudio;
+    public AudioSource jumpAudio;
+    public AudioSource savePointAudio;
+    public AudioSource eggChangeZoneAudio;
+    public AudioSource mainAudio;
+    public AudioSource secoundmainAudio; 
+    public AudioSource heartBeatAudio;
+    public AudioSource fixAudio;
     void Awake()
     {
+        mainAudio.Play();
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         isTalk = false;
         changezone =  GameObject.Find("ChangeConveyorZone").GetComponent<FactorySceneChangeZone>();
         //fixUI = gameObject.GetComponent<FactoryFixUI>();
     }
-    void Start()
-    {
-
-        StartCanvas.SetActive(true);
-        
-        
-    }
+   
     void Update()
     {
         
@@ -134,11 +138,16 @@ public class FactoryPlayer : MonoBehaviour
         if (isStamp)
         {
             this.gameObject.transform.position = StampTMP.transform.position;
+            
         }
     }
     void PickUP()
     {
-        
+        if (!isPlaying)
+        {
+            isPlaying = true;
+            dieAudio.Play();
+        }
         PickUpUI.SetActive(true);
         Invoke("ExitCanvas", 2f);
     }
@@ -166,8 +175,7 @@ public class FactoryPlayer : MonoBehaviour
     {
         
         hAxis = Input.GetAxisRaw("Horizontal");
-        vAxis = Input.GetAxisRaw("Vertical");
-       
+        vAxis = Input.GetAxisRaw("Vertical");      
     }
 
     void Move()
@@ -180,11 +188,16 @@ public class FactoryPlayer : MonoBehaviour
             transform.position += moveVec * speed * Time.deltaTime * 1f;
             anim.SetBool("isWalk", true);
 
+            runAudio.Play();
+
+            
+
 
         }
         else if (hAxis == 0 && vAxis == 0)
         {
             anim.SetBool("isWalk", false);
+            runAudio.Stop();
         }
 
 
@@ -200,12 +213,12 @@ public class FactoryPlayer : MonoBehaviour
         {
             if (!isJump)
             {
+                jumpAudio.Play();
                 isJump = true;
                 anim.SetTrigger("doJump");
-                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-
+                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);  
+                
             }
-
         }
        
     }
@@ -261,6 +274,8 @@ public class FactoryPlayer : MonoBehaviour
                 DieCanvas.SetActive(true);
                 dieCam.Priority = 2;
                 mainCam.Priority = 1;
+
+                dieAudio.Play();
                 
                 if (isSetEggFinish)
                 {
@@ -328,28 +343,41 @@ public class FactoryPlayer : MonoBehaviour
     
     public void OnTriggerEnter(Collider other)
     {
-        
-        if (other.gameObject.tag == "PointZone" && !isSetEggFinish)
+       
+        if(other.gameObject.tag == "Rock")//eggchangezone
         {
-            turnEggCanvas.gameObject.SetActive(true);
-            if (Input.GetButton("E") && !isSetEggFinish){
-                Debug.Log("E");
-                Spacebar.color = Color.red;
-                Vector3 pos = other.gameObject.transform.position;
-
-                tmpBox = other.gameObject;
-                thisMesh.SetActive(false);
-                EggPrefab.gameObject.SetActive(true);
-                EggPrefab.transform.position = pos;
-                turnEggCanvas.gameObject.SetActive(false);
-                
-                changeEggCanvas.gameObject.SetActive(true);
-                //StartCoroutine("Check");
-                isEgg = true;
-                
-                StartCoroutine(Egg());
+            mainAudio.Stop();
+            eggChangeZoneAudio.Play();
+        }
+        if (other.gameObject.tag == "PointZone"&& !isSetEggFinish)
+        {
+           
+          
                
-            }
+                
+                
+                turnEggCanvas.gameObject.SetActive(true);
+                
+                if (Input.GetButton("E") && !isSetEggFinish)
+                {
+                    Debug.Log("E");
+                    Spacebar.color = Color.red;
+                    Vector3 pos = other.gameObject.transform.position;
+
+                    tmpBox = other.gameObject;
+                    thisMesh.SetActive(false);
+                    EggPrefab.gameObject.SetActive(true);
+                    EggPrefab.transform.position = pos;
+                    turnEggCanvas.gameObject.SetActive(false);
+
+                    changeEggCanvas.gameObject.SetActive(true);
+                    //StartCoroutine("Check");
+                    isEgg = true;
+
+                    StartCoroutine(Egg());
+
+                }
+            
             Spacebar.color = Color.black;
         }
         if (other.gameObject.tag == "StopSlide") 
@@ -357,6 +385,7 @@ public class FactoryPlayer : MonoBehaviour
 
             //Debug.Log("대화 종료");
             //stopSlideCanvas.gameObject.SetActive(true);
+            fixAudio.Stop();
             mainCam.Priority = 1;
             stopConCam.Priority = 2;
             stopSlideCanvas.gameObject.SetActive(true);
@@ -387,12 +416,14 @@ public class FactoryPlayer : MonoBehaviour
         if(other.gameObject.tag == "SavePoint_1")
         {
             isSavePointPos = true;
+            savePointAudio.Play();
             savePointPos_1.SetActive(false);
             SavePointTxt.SetActive(true);
             Invoke("DestroySavePointTxt", 2f);
         }
         if(other.gameObject.tag == "SavePoint_2")
         {
+            savePointAudio.Play();
             savePointPos_2.SetActive(false);
             SavePointTxt.SetActive(true);
             Invoke("DestroySavePointTxt", 2f);
@@ -415,7 +446,8 @@ public class FactoryPlayer : MonoBehaviour
             Debug.Log("알로 변신 했고 3초 지났음");
             
             isSetEggFinish = true;
-
+            eggChangeZoneAudio.Stop();
+            heartBeatAudio.Play();
             turnEggCanvas.SetActive(false);
             changeEggCanvas.SetActive(false);
         }

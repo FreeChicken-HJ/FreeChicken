@@ -9,13 +9,15 @@ public class CitySceneSpawn : MonoBehaviour
     public float zDistance;
     int areaIndex = 0;
     int spawnAreaCntStart = 2;
-    public CityScenePlayer playerTransform;
+    public CityScenePlayer currentPlayer;
+    //public CityScenePlayer lastPlayer;
 
     //public int cityCnt;
 
     public bool isStop;
     public bool isFinish;
     // Start is called before the first frame update
+    public Material[] newSkyBox;
     void Awake()
     {
         for(int i = 0; i < spawnAreaCntStart; i++)
@@ -32,11 +34,12 @@ public class CitySceneSpawn : MonoBehaviour
     }
     void Start()
     {
-        playerTransform = GameObject.Find("CityCharacter").GetComponent<CityScenePlayer>();
+        currentPlayer = GameObject.FindWithTag("Player").GetComponent<CityScenePlayer>();
+        
     }
     private void Update()
     {
-        if (areaIndex == 3 && !isFinish)
+        if (areaIndex == 6 && !isFinish)
         {
             isStop = true;
             SpawnLastMap();
@@ -48,20 +51,22 @@ public class CitySceneSpawn : MonoBehaviour
         GameObject clone = null;
         if (isRandom == false)
         {
+           
             clone = Instantiate(areaPrefabs[0]);
-           /* cityCnt++;
-            Debug.Log(cityCnt);*/
+          
         }
         else
         {
             int ranRange = Random.Range(0, areaPrefabs.Length);
             clone = Instantiate(areaPrefabs[ranRange]);
-           /* cityCnt++;
-            Debug.Log(cityCnt);*/
+            int ranSkyRange = Random.Range(0,newSkyBox.Length);
+            RenderSettings.skybox = newSkyBox[ranSkyRange];
+          
         }
         
-        clone.transform.position = new Vector3(0,0, areaIndex * zDistance);
-        clone.GetComponent<CityArea>().Setup(this,playerTransform);
+        clone.transform.position = new Vector3(clone.transform.position.x, clone.transform.position.y, areaIndex * zDistance);
+        clone.GetComponent<CityArea>().Setup(this,currentPlayer);
+        
         areaIndex++;
         Debug.Log(areaIndex);
 
@@ -71,8 +76,8 @@ public class CitySceneSpawn : MonoBehaviour
         isFinish = true;
         GameObject clone = null;
         clone = Instantiate(lastMap);
+        
         clone.transform.position = new Vector3(0, 0, areaIndex * zDistance);
-        //clone.GetComponent<CityArea>().Setup(this, playerTransform);
-
+        
     }
 }

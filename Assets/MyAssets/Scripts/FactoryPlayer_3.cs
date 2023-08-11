@@ -23,6 +23,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject DieParticle;
     public GameObject TMP;
     public GameObject PotionTMP;
+    public GameObject PotionTMP_2;
 
     public GameObject NPC;
     [Header("Camera")]
@@ -30,6 +31,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public CinemachineVirtualCamera changeCam;
     public CinemachineVirtualCamera dieCam;
     public CinemachineVirtualCamera potionCam;
+    public CinemachineVirtualCamera potionCam_2;
    
     [Header("Bool")]
     public bool isJump;
@@ -40,8 +42,8 @@ public class FactoryPlayer_3 : MonoBehaviour
     public bool isStopSlide;
     public bool isContact;
     public bool isAttack;
-    public bool isTruckGo; 
-    
+    public bool isTruckGo;
+    public bool isTalk;
     public bool isPickUp;
 
     public bool isSavePointChk;
@@ -78,6 +80,15 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject SavePointObj_2;
     public GameObject SavePointObj_3;
 
+    public GameObject SavePosUI;
+
+    [Header("Audio")]
+    public AudioSource jumpAudio;
+    public AudioSource dieAudio;
+    public AudioSource SaveAudio;
+    public AudioSource truckLeaveAudio;
+    public AudioSource BGM;
+    
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -90,6 +101,7 @@ public class FactoryPlayer_3 : MonoBehaviour
         startUI.SetActive(true);
         mainUI.SetActive(false); // 치킨으로 성장하는 퍼센트
         Invoke("NewStart", 2f);
+        BGM.Play();
     }
     void NewStart()
     {
@@ -102,7 +114,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     void Update()
     {
 
-        if (/*!isTalk && */!isDie && !isAttack&& !isTruckGo && !isPotion)
+        if (!isTalk && !isDie && !isAttack&& !isTruckGo && !isPotion)
         {
             Move();
             GetInput();
@@ -141,7 +153,7 @@ public class FactoryPlayer_3 : MonoBehaviour
                     changeCam.Priority = 5;
                     mainCam.Priority = -5;
                     Debug.Log("트럭출동");
-                    
+                    truckLeaveAudio.Play();
                     // 검은 화면 3초
                     // 다음씬으로 이어지게
                     isEbutton = false;
@@ -201,7 +213,9 @@ public class FactoryPlayer_3 : MonoBehaviour
         {
             if (!isJump)
             {
+
                 isJump = true;
+                jumpAudio.Play();
                 anim.SetTrigger("doJump");
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
@@ -228,6 +242,9 @@ public class FactoryPlayer_3 : MonoBehaviour
             isSavePoint_2 = false;
             isSavePoint_3 = false;
             SavePointObj_1.SetActive(false);
+            SaveAudio.Play();
+            SavePosUI.SetActive(true);
+            Invoke("ResetUI", 3f);
         }
        if(other.gameObject.tag == "SavePoint_2")
         {
@@ -235,7 +252,10 @@ public class FactoryPlayer_3 : MonoBehaviour
             isSavePoint_1 = false;
             isSavePoint_2 = true;
             isSavePoint_3 = false;
+            SaveAudio.Play();
             SavePointObj_2.SetActive(false);
+            SavePosUI.SetActive(true);
+            Invoke("ResetUI", 3f);
         }
        if(other.gameObject.tag == "SavePoint_3")
         {
@@ -243,7 +263,10 @@ public class FactoryPlayer_3 : MonoBehaviour
             isSavePoint_1 = false;
             isSavePoint_2 = false;
             isSavePoint_3 = true;
+            SaveAudio.Play();
             SavePointObj_3.SetActive(false);
+            SavePosUI.SetActive(true);
+            Invoke("ResetUI", 3f);
         }
         if (other.gameObject.tag == "Poison")
         {
@@ -252,15 +275,34 @@ public class FactoryPlayer_3 : MonoBehaviour
             potionCam.Priority = 100;
             //위로 올라가는 소리 추가 필요 7.21
             //PotionTMP = this.gameObject.transform.position;
-            Invoke("ResetCam", 3f);
+            Invoke("ResetCam", 2f);
             
         }
+        if(other.gameObject.tag == "Item")
+        {
+            isPotion = true;
+            mainCam.Priority = -1;
+            potionCam_2.Priority = 100;
+            Invoke("ResetCam_1", 2f);
+        }
+    }
+    void ResetUI()
+    {
+        SavePosUI.SetActive(false);
     }
     void ResetCam()
     {
         this.gameObject.transform.position = PotionTMP.transform.position;
         
         potionCam.Priority = -5;
+        mainCam.Priority = 100;
+        isPotion = false;
+    }
+    void ResetCam_1()
+    {
+        this.gameObject.transform.position = PotionTMP_2.transform.position;
+
+        potionCam_2.Priority = -5;
         mainCam.Priority = 100;
         isPotion = false;
     }
@@ -272,13 +314,14 @@ public class FactoryPlayer_3 : MonoBehaviour
 
             isJump = false;
         }
-        if (collision.gameObject.tag == "ObstacleZone3"|| collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "ObstacleZone3"|| collision.gameObject.tag == "Obstacle"&&!isDie)
         {
             isDie = true;
             anim.SetTrigger("doDie");
             anim.SetBool("isDie",true);
             mainCam.Priority = 1;
             dieCam.Priority = 2;
+            dieAudio.Play();
             changeCam.Priority = -1;
             DieParticle.SetActive(true);
             DieCanvas.SetActive(true);

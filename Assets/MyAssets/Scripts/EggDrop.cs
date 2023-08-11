@@ -44,6 +44,7 @@ public class EggDrop : MonoBehaviour
         GameObject instance = Instantiate(go, pos, Quaternion.identity);
         float random = Random.Range(3.5f, 5f);
         Destroy(instance, random);
+       
     }
 
     Vector3 GetRandomPos()
@@ -63,6 +64,7 @@ public class EggDrop : MonoBehaviour
     {
         if(other.tag == "Player")
         {
+            Debug.Log("¶³¾îÁ®¶û");
             isEggFalltrue = true;
             //slideBelt.Speed = 0.3f;
 

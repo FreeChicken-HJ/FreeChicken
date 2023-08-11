@@ -10,6 +10,7 @@ public class FactorySceneChangeZone : MonoBehaviour
     public GameObject ChangeFinish;
     public GameObject Player;
     public ParticleSystem Particle;
+    public AudioSource ParticleSound;
 
     public GameObject zoneL;
     public GameObject zoneR;
@@ -52,6 +53,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && !isL && !isG && !isR)
         {
             Particle.Play();
+            
             zoneR.gameObject.SetActive(false);
             zoneL.gameObject.SetActive(true);
             isL = true;
@@ -95,7 +97,7 @@ public class FactorySceneChangeZone : MonoBehaviour
             else // 다 채워지면
             {
 
-
+                ParticleSound.Play();
                 ChangeConveorZone.gameObject.SetActive(false);
                 ChangeFinish.gameObject.SetActive(true);
                 isButton = false;
@@ -121,7 +123,7 @@ public class FactorySceneChangeZone : MonoBehaviour
     }
     IEnumerator TheEnd()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         ChangeCam.Priority = 1;
         mainCam.Priority = 3;
         ChangeFinish.gameObject.SetActive(false);
@@ -144,6 +146,7 @@ public class FactorySceneChangeZone : MonoBehaviour
     void SpawnBigEgg()
     {
         Instantiate(BigEgg, Pos.transform.position, Quaternion.identity);
+       
     }
 }
 // 반복 while

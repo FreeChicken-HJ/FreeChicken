@@ -20,4 +20,11 @@ public class FactoryHelpTxt : MonoBehaviour
             Debug.Log("Ãæµ¹");
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            txt.SetActive(false);
+        }
+    }
 }

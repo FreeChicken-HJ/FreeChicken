@@ -5,11 +5,12 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 public class CityScenePlayer : MonoBehaviour
 {
-   
+    public GameObject LastZonePlayer;
+    public GameObject CurrentZonePlayer;
     Rigidbody rigid;
-    public Animator anim;
-    //MoveObstacle obstacle;
-   
+    public Animator anim_1;
+    public Animator anim_2;
+  
     public bool isStart;
     
     public ParticleSystem jumpPs;
@@ -28,21 +29,38 @@ public class CityScenePlayer : MonoBehaviour
     public bool isLast;
     public bool isAllStop;
     public GameObject TalkUI;
-    
-   
 
+    public GameObject Cam;
+    public CinemachineVirtualCamera startCam;
+    public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera dieCam;
+    public CinemachineVirtualCamera jumpCam;
+
+    public AudioSource startAudio;
+    public AudioSource BGM;
+    public AudioSource DieAudio;
+    public AudioSource JumpAudio;
+    
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
+        startAudio.Play();
         rigid = GetComponent<Rigidbody>();
         DiePs.gameObject.SetActive(false);
         particleAttack = false;
-        isStart = true;
-        
-       
-    }
+        isAllStop = true;
 
+        Invoke("NewStart", 3f);
+    }
+    void NewStart()
+    {
+        startAudio.Stop();
+        BGM.Play();
+        isAllStop = false;
+        isStart = true;
+        startCam.Priority = -1;
+        mainCam.Priority = 1;
+    }
     void Update()
     {
        
@@ -53,8 +71,10 @@ public class CityScenePlayer : MonoBehaviour
         }
         if (isAllStop)
         {
-            anim.SetBool("isRun", false);
+
+            anim_1.SetBool("isRun", false);
         }
+        
     }
     void FixedUpdate()
     {
@@ -63,30 +83,50 @@ public class CityScenePlayer : MonoBehaviour
             GetInput();
             Move();
         }
+        if (this.transform.position.y < -5f &&!isAllStop &&!isDie)
+        {
+            isAllStop = true;
+            TagisObj();
+        }
         
     }
     void GetInput()
     {
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
+        
     }
     void Move()
     {
-        
+
+        //Move(direction * Time.deltaTime);
+
         Vector3 position = transform.position;
         position.x += hAxis * Time.smoothDeltaTime * Speed;
         if (!isLast)
         {
-            position.z += Time.smoothDeltaTime * Speed;
+            position.z += Time.smoothDeltaTime * Speed ;
         }
         else if (isLast)
         {
-            position.z += vAxis *Time.smoothDeltaTime * Speed;
+            if (vAxis != 0 || hAxis !=0)
+            {
+                anim_2.SetBool("isRun", true);
+                position.z += vAxis * Time.smoothDeltaTime * Speed;
+            }
+            else if(vAxis == 0)
+            {
+                anim_2.SetBool("isRun", false);
+            }
         }
         transform.position = position;
-        anim.SetTrigger("doRun");
-        anim.SetBool("isRun", true);
+        //GetInput();
+        //anim.SetTrigger("doRun");
+        //rigid.AddForce(direction * Time.deltaTime * Speed);
+        //transform.position += direction * Time.deltaTime;
+        anim_1.SetBool("isRun", true);
         
+
     }
     void Jump()
     {
@@ -95,15 +135,34 @@ public class CityScenePlayer : MonoBehaviour
         {
             if (!isJump)
             {
+                //Cam.SetActive(false);
+                //jumpCam.SetActive(true);
+                
+                if (!isLast)
+                {
+                    jumpCam.Priority = 100;
+                    anim_1.SetTrigger("doJump");
+                    Invoke("ReSetJumpCam", 1f);
+                }
+                //anim.SetBool("isJump", true);
                 isJump = true;
-                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                JumpAudio.Play();
+                rigid.AddForce( Vector3.up* jumpPower, ForceMode.Impulse);
+               
                 jumpPs.Play();
+               
             }
 
         }
        
     }
-    
+    void ReSetJumpCam()
+    {
+        //Cam.SetActive(true);
+        //jumpCam.SetActive(false);
+        jumpCam.Priority = -1;
+        //anim.SetBool("isJump", false);
+    }
     void OnCollisionEnter(Collision collision)
     {
 
@@ -116,7 +175,15 @@ public class CityScenePlayer : MonoBehaviour
         {
             TagisObj();
         }
+        
 
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.name == "Swings")
+        {
+            rigid.velocity += transform.forward * 3.5f;
+        }
     }
     void OnParticleCollision(GameObject other)
     {
@@ -156,6 +223,8 @@ public class CityScenePlayer : MonoBehaviour
         if(other.tag == "LastZone")
         {
             isAllStop = true;
+            BGM.Stop();
+            
             TalkUI.gameObject.SetActive(true);
             Invoke("Exit", 2f);
         }
@@ -165,7 +234,10 @@ public class CityScenePlayer : MonoBehaviour
     {
         TalkUI.gameObject.SetActive(false);
         isAllStop = false;
+
         isLast = true;
+        LastZonePlayer.SetActive(true);
+        CurrentZonePlayer.SetActive(false);
         jumpPower = 15f;
         Debug.Log(jumpPower);
 
@@ -189,14 +261,18 @@ public class CityScenePlayer : MonoBehaviour
     }
     void TagisObj()
     {
-        isDie = true;
-        //this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
-        DiePs.gameObject.SetActive(true);
-       
-        anim.SetTrigger("doDie");
-        anim.SetBool("isRun",false);
-
-        Invoke("ReLoadScene", 1.5f);
+        if (!isDie)
+        {
+            isDie = true;
+            DieAudio.Play();
+            //this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+            DiePs.gameObject.SetActive(true);
+            dieCam.Priority = 100;
+            anim_1.SetTrigger("doDie");
+            anim_1.SetBool("isRun", false);
+            rigid.isKinematic = true;
+            Invoke("ReLoadScene", 1f);
+        }
     }
     void ReLoadScene()
     {

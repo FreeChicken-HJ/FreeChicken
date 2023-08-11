@@ -14,7 +14,7 @@ public class DropFruits : MonoBehaviour
     {
         area = GetComponent<BoxCollider>();
        
-        player = GameObject.Find("CityCharacter").GetComponent<CityScenePlayer>();
+        player = GameObject.Find("Citychicken").GetComponent<CityScenePlayer>();
     }
 
     // Update is called once per frame

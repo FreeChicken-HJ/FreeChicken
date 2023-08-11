@@ -22,6 +22,11 @@ public class FactoryFirstManager : MonoBehaviour
     public GameObject eggBoxSpawnPos;
     public GameObject eggBox;
     public bool isChk;
+
+    public AudioSource hitAudio;
+    public AudioSource mainAudio_1;
+    public AudioSource mainAudio_2;
+    public AudioSource heartAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +77,7 @@ public class FactoryFirstManager : MonoBehaviour
     }
     void Die()
     {
+
         talkCanvas1.SetActive(false);
         player.EggPrefab.SetActive(false);
         player.thisMesh.SetActive(true);
@@ -85,8 +91,12 @@ public class FactoryFirstManager : MonoBehaviour
         eggBox.GetComponent<FactoryMoveEggBox>().isChk = false;
         managerInCam.Priority = 1;
         mainCam.Priority = 2;
+        heartAudio.Stop();
+        mainAudio_1.Play();
+
         player.isSetEggFinish = false;
         player.Pos();
+        anim.SetBool("isAttack", false);
         isChk = false;
     }
     void Trun()
@@ -102,6 +112,7 @@ public class FactoryFirstManager : MonoBehaviour
         Debug.Log("속도 업");
         anim.SetBool("isAttack",false);
         player.isStopSlide = false;
+        mainAudio_2.Play();
 
     }
     Vector3 GetRandomPos()
@@ -122,6 +133,7 @@ public class FactoryFirstManager : MonoBehaviour
             eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0f;
             Debug.Log("속도다운");
             anim.SetBool("isAttack", true);
+            hitAudio.Play();
         }
         
     }

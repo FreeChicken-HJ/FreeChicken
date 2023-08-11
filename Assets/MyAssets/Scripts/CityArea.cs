@@ -8,16 +8,19 @@ public class CityArea : MonoBehaviour
     public CitySceneSpawn citySceneSpawn;
     public CityScenePlayer playerTransform;
     public bool isSpawn;
+
     // Start is called before the first frame update
     public void Setup(CitySceneSpawn citySceneSpawn, CityScenePlayer playerTransform)
     {
         this.citySceneSpawn = citySceneSpawn;
         this.playerTransform = playerTransform;
     }
+
     void Start()
     {
-        playerTransform = GameObject.Find("CityCharacter").GetComponent<CityScenePlayer>();
-        
+        playerTransform = GameObject.FindWithTag("Player").GetComponent<CityScenePlayer>();
+
+
     }
     // Update is called once per frame
     void Update()

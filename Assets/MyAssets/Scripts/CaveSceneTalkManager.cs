@@ -58,7 +58,7 @@ public class CaveSceneTalkManager : MonoBehaviour
         if (sentences.Count == 0)
         {
 
-            instance.gameObject.SetActive(false);
+            Destroy(instance.gameObject);
             isTalkEnd = true;
             //SceneManager.LoadScene("CityScene");
 

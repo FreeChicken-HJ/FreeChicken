@@ -26,8 +26,8 @@ public class FactoryNPC_2 : MonoBehaviour
     public GameObject HelpParticle;
     public float t;
 
-   
-
+    public AudioSource NpcSaveAudio;
+    public AudioSource NpcFlyAudio;
     private void Start()
     {
         player = GameObject.FindWithTag("Player");
@@ -42,6 +42,7 @@ public class FactoryNPC_2 : MonoBehaviour
             ThxUI.SetActive(true);
             animator.SetBool("isTalk", true);
             NPCHelpUI.gameObject.SetActive(false);
+            NpcFlyAudio.Play();
 
             Invoke("Finish", 1.5f);
             
@@ -79,7 +80,7 @@ public class FactoryNPC_2 : MonoBehaviour
                     HelpParticle.SetActive(false);
                     HelpNPC.value = 0;
                     E.color = Color.white; // √ ±‚»≠
-                   
+                    NpcSaveAudio.Play();
                     isFin = true;
                     isShowNPCButton = false;
                     player.GetComponent<FactoryPlayer_3>().maxValue = player.GetComponent<FactoryPlayer_3>().minValue + 12.5f;
@@ -106,7 +107,7 @@ public class FactoryNPC_2 : MonoBehaviour
     void Finish()
     {
         isFly = true;
-        
+      
     }
     private void OnTriggerEnter(Collider other)
     {

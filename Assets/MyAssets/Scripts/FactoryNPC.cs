@@ -13,7 +13,8 @@ public class FactoryNPC : MonoBehaviour
     public GameObject Ebutton;
     public TextMeshProUGUI E;
 
-    public GameObject Dieparticle;
+    public GameObject Video;
+    
     public FactoryTextBlink text;
     public bool isNear;
   
@@ -21,13 +22,16 @@ public class FactoryNPC : MonoBehaviour
     public CinemachineVirtualCamera npcCam;
     public GameObject npc;
 
+    public AudioSource BGM;
+    public AudioSource MelodyBox;
     //public Animator animator;
     public float t;
     void Start()
     {
         
         Ebutton.SetActive(false);
-        player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
+        player = GameObject.FindWithTag("Player").GetComponent<FactoryPlayer>();
+      
         t = 0;
     }
     void Update()
@@ -45,25 +49,17 @@ public class FactoryNPC : MonoBehaviour
             }
             else
             {
+                Video.SetActive(true);
+                BGM.Stop();
+                MelodyBox.Play();
                 isEbutton = false;
-                
-                npcCam.Priority = 2;
-                mainCam.Priority = 1;
-                player.transform.LookAt(npc.transform.position);
-                Dieparticle.SetActive(false);
-                player.isTalk = true;
-                player.hAxis = 0;
-                player.vAxis = 0;
-                //player.transform.LookAt(npc);
+               
                 player.isStopSlide = true;
                 player.isSlide = false;
-                Destroy(this.gameObject);
-                Destroy(text.gameObject);
+                player.isTalk = true;
+                Invoke("ReStart", 6.5f);
+                
 
-                Destroy(Ebutton);
-                
-                factoryUI.gameObject.SetActive(true);
-                
             }
         }
         if (Input.GetButtonUp("E"))
@@ -74,24 +70,19 @@ public class FactoryNPC : MonoBehaviour
         }
         
     }
-   /* public void Check()
+   void ReStart()
     {
-        if (Physics.Raycast(this.transform.position, this.transform.forward, 2f, LayerMask.GetMask("Player")))
-        {
-           
-           
-        }
-        
-        *//*else if(Physics.Raycast(this.transform.position, this.transform.forward, 10f, LayerMask.GetMask("Player")))
-        {
-            isEbutton = false;
-            isNear = false;
-            Ebutton.SetActive(false);
-            
-        }*//*
+        Video.SetActive(false);
+       
 
+        Destroy(this.gameObject);
+        Destroy(text.gameObject);
 
-    }*/
+        Destroy(Ebutton);
+        BGM.Play();
+        MelodyBox.Stop();
+        factoryUI.gameObject.SetActive(true); 
+    }
     public void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
@@ -99,6 +90,8 @@ public class FactoryNPC : MonoBehaviour
             isNear = true;
             isEbutton = true;
             Ebutton.SetActive(true);
+            mainCam.Priority = 1;
+            npcCam.Priority=2;
         }
     }
     public void OnTriggerExit(Collider other)
@@ -108,6 +101,8 @@ public class FactoryNPC : MonoBehaviour
             isNear = false;
             isEbutton = false;
             Ebutton.SetActive(false);
+            mainCam.Priority = 2;
+            npcCam.Priority = 1;
         }
     }
 

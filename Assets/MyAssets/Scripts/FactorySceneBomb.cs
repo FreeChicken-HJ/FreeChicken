@@ -28,22 +28,18 @@ public class FactorySceneBomb : MonoBehaviour
 
     void Update()
     {
-        //nav.SetDestination(player.position);
+        /*//nav.SetDestination(player.position);
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= range)
         {
-            transform.LookAt(player);
-            if (!isChk)
-            {
-                ContactUI.SetActive(true);
-                isChk = true;
-            }
-            anim.SetBool("isWalk", true);
-            nav.SetDestination(player.position);
+            
             //transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
 
+        }*/
+        if (isAttack)
+        {
+            nav.SetDestination(player.position);
         }
-
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -64,10 +60,26 @@ public class FactorySceneBomb : MonoBehaviour
             this.gameObject.SetActive(false);
         }
     }
-   /* private void OnCollisionEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-       
-    }*/
+        if(other.tag == "Player")
+        {
+            ContactUI.SetActive(true);
+            transform.LookAt(player);
+
+            anim.SetBool("isWalk", true);
+           
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            ContactUI.SetActive(false);
+            anim.SetBool("isWalk",false);
+            nav.isStopped = true;   
+        }
+    }
     void DelayDestroy()
     {
         ContactUI.SetActive(false);
@@ -76,10 +88,9 @@ public class FactorySceneBomb : MonoBehaviour
         factoryplayer.AttackCnt++;
         factoryplayer.attackParticle.gameObject.SetActive(true);
         factoryplayer.attackParticle.Play();
-        //nav.ResetPath();
+        
         Destroy(this.gameObject,2f);
-        //nav.isStopped = true;
-      
+        
 
     }
 }

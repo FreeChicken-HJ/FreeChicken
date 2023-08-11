@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CityMoveObj : MonoBehaviour
 {
-    public enum MoveObstacleType { A, B,C};
+    public enum MoveObstacleType { A, B,C,D};
     public MoveObstacleType Type;
     CityScenePlayer player;
     float initPositionY;
@@ -14,6 +14,10 @@ public class CityMoveObj : MonoBehaviour
 
     public bool turnSwitch;
     public float moveSpeed;
+    
+    public float angle = 0;
+    private float lerpTime = 0;
+    public float swingSpeed;
 
     //MovePlatform
     public bool isMove;
@@ -24,7 +28,7 @@ public class CityMoveObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("CityCharacter").GetComponent<CityScenePlayer>();
+        player = GameObject.FindWithTag("Player").GetComponent<CityScenePlayer>();
         
     }
     void Awake()
@@ -35,6 +39,24 @@ public class CityMoveObj : MonoBehaviour
             turningPoint = initPositionX - distance;
 
         }
+    }
+    void Swing()
+    {
+        
+        lerpTime += Time.deltaTime * swingSpeed;
+        transform.rotation = CalculateMovementOfPendulum();
+
+
+    }
+    Quaternion CalculateMovementOfPendulum()
+    {
+        return Quaternion.Lerp(Quaternion.Euler(Vector3.forward * angle),
+            Quaternion.Euler(Vector3.back * angle), GetLerpTParam());
+    }
+
+    float GetLerpTParam()
+    {
+        return (Mathf.Sin(lerpTime) + 1) * .5f;
     }
     public void hurdleUp()
     {
@@ -98,15 +120,19 @@ public class CityMoveObj : MonoBehaviour
 
                 break;
             case MoveObstacleType.C:
-                if (player.ishurdleUp == true )
+                if (player.ishurdleUp == true)
                 {
                     hurdleUp();
                 }
-                else if (player.ishurdleUp == false )
+                else if (player.ishurdleUp == false)
                 {
                     hurdleDown();
                 }
                 break;
+            case MoveObstacleType.D:
+                Swing();
+                break;
+
         }
         
     }

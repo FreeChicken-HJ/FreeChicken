@@ -32,7 +32,7 @@ public class FactoryMoveEggBox : MonoBehaviour
     void Check()
     {
 
-        Speed = 0.1f;
+        Speed = 0.25f;
 
         mainCam.Priority = 1;
         moveCam.Priority = 2;

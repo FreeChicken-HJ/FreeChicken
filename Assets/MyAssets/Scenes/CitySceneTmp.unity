@@ -801,6 +801,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityMap1
       objectReference: {fileID: 0}
+    - target: {fileID: 3157357746441745156, guid: b77b2c98db492be46b7994564a23e9fa, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 3157357746441745158, guid: b77b2c98db492be46b7994564a23e9fa, type: 3}
       propertyPath: m_RootOrder
       value: 0

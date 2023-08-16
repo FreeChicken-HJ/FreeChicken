@@ -21,27 +21,34 @@ public class PushButtonDoor_Cave : MonoBehaviour
     //¾Æºü¶û Çùµ¿
     public GameObject Daddy;
     public bool goDaddy;
-    Vector3 target = new Vector3(140f, -1.47000027f, 45.8227806f);
+    public GameObject target;
+   /* GameObject Pos1;
+    GameObject Pos2;
+    GameObject Pos3;*/
     public GameObject DaddyFinish;
+    public bool isLast;
 
     Animator anim;
-
+    public GameObject KissZone;
     void Start()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = Daddy.GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (isPush && !doorSet)
+        if (isPush)
         {
-            Pushing();
             MoveDaddy();
-
-            if (Door1.transform.position.y >= 5f)
+            if (!doorSet)
             {
-                doorSet = true;
-                goDaddy= true;
+                
+                Pushing();
+                if (Door1.transform.position.y >= 5f)
+                {
+                    doorSet = true;
+                    goDaddy = true;
+                }
             }
         }
 
@@ -54,8 +61,17 @@ public class PushButtonDoor_Cave : MonoBehaviour
             {
                 doorSet = true;
                 goDaddy = false;
+               
             }
         }
+        if (Daddy.transform.position.x >= target.transform.position.x && isLast && Player.transform.position.x >= target.transform.position.x)
+        {
+            isLast = false;
+            DaddyFinish.SetActive(true);
+            Daddy.SetActive(false);
+            Invoke("ButtonFinish", 2f);
+        }
+        
     }
     
     void Pushing()
@@ -71,30 +87,29 @@ public class PushButtonDoor_Cave : MonoBehaviour
 
     void MoveDaddy()
     {
-        goDaddy = true;
+        //goDaddy = true;
         //Vector3 move = new Vector3(0f, 0f, 1f) * Time.deltaTime * 3f;
         //Daddy.transform.Translate(move);
-        Daddy.transform.position = Vector3.MoveTowards(Daddy.transform.position, target, 0.02f);
-        //anim.SetBool("isRun", true);
-
-        if (Daddy.transform.position == target)
+        if (goDaddy)
         {
-            DaddyFinish.SetActive(true);
-            Invoke("ButtonFinish", 2f);
+            anim.SetBool("isRun", true);
+            Daddy.transform.position = Vector3.MoveTowards(Daddy.transform.position, target.transform.position, Time.deltaTime * 2);
+            
+
+            
         }
     }
 
     void ButtonFinish()
     {
         DaddyFinish.SetActive(false);
-        Daddy.SetActive(false);
+        //Daddy.SetActive(true);
+        //Daddy.transform.position = KissZone.transform.position;
+        Daddy.transform.position = new Vector3(Daddy.transform.position.x + 12f, Daddy.transform.position.y, Daddy.transform.position.z-1.2f);
+        anim.SetTrigger("Kiss");
+        
     }
-
-    void StopDaddy()
-    {
-        anim.SetBool("isRun", false);
-    }
-
+   
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
@@ -102,6 +117,7 @@ public class PushButtonDoor_Cave : MonoBehaviour
             Debug.Log("¹öÆ° ´­·µ»ï");
             isPush = true;
             doorSet = false;
+            goDaddy = true;
         }
     }
 
@@ -113,6 +129,7 @@ public class PushButtonDoor_Cave : MonoBehaviour
             isPush = false;
             doorSet = false;
             goDaddy = false;
+            anim.SetBool("isRun", false);
         }
     }
 }

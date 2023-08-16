@@ -11,7 +11,7 @@ public class AI_Cave : MonoBehaviour
     [SerializeField] private string AIName;
     [SerializeField] private float walkSpeed;
 
-    public LayerMask MoveGround, Player;
+    public LayerMask Ground, Player;
     public bool isAttacked;
 
     public Transform target;
@@ -21,7 +21,8 @@ public class AI_Cave : MonoBehaviour
     bool wayPointSet;
     public float wayPointRange;
 
-    bool Small_AI;
+    public bool Small_AI;
+    public bool Big_AI;
 
     //private bool isAction;
     private bool isWalking;
@@ -41,35 +42,46 @@ public class AI_Cave : MonoBehaviour
     //private float currentTime;
 
     public GameObject small_potion;
-
+    public GameObject mesh;
+    public GameObject key;
     [SerializeField] private Animator anim;
     [SerializeField] Rigidbody rigid;
     [SerializeField] private CapsuleCollider capsuleCol;
 
     NavMeshAgent nav;
+  
     //public bool isAllStop;
-
+    // 컸을때는 obstacle & 따라가기
+    // 작아지면 랜덤이동 & 죽기
     void Start()
     {
         nav = GetComponent<NavMeshAgent>();
         //currentTime = waitTime;
         //isAction = true;
         player = GameObject.Find("CaveCharacter").GetComponent<CaveScenePlayer>();
+        Big_AI = true;
     }
 
     void Update()
     {
-        if (/*!isAllStop &&*/ !isDie)
+        if (/*!isAllStop &&*/ !isDie )
         {
             nav.isStopped = false;
             playerInSight = Physics.CheckSphere(transform.position, 4f, Player);
             playerInAttack = Physics.CheckSphere(transform.position, 1f, Player);
-            if (!playerInSight && !playerInAttack) MoveRandom();
-            if (playerInSight && !playerInAttack) Targeting();
-            if (playerInSight && playerInAttack) Attack();
+            if (Small_AI && !Big_AI && !playerInAttack) MoveRandom();
+            if (!Small_AI && Big_AI &&playerInSight && !playerInAttack) Targeting();
+            //if (playerInSight && playerInAttack) Attack();
         }
 
-
+        if (Small_AI && !Big_AI)
+        {
+            this.gameObject.tag = "Slide";
+        }
+        if (Big_AI && !Small_AI)
+        {
+            this.gameObject.tag = "Obstacle";
+        }
         if (!isWalking && !isRun && isAttack)
         {
 
@@ -90,6 +102,11 @@ public class AI_Cave : MonoBehaviour
             anim.SetBool("isAttack", false);
 
         }
+        if (player.Dead)
+        {
+            isWalking = true;
+            isRun = false;
+        }
     }
 
     void Targeting() // 캐릭터 발견 & 따라가기 
@@ -103,9 +120,9 @@ public class AI_Cave : MonoBehaviour
     void MoveRandom() //랜덤이동 하다가 
     {
         isAttack = false;
-        isRun = false;
-        isWalking = true;
-        if (!wayPointSet) SearchWalkPoint();
+        isRun = true;
+        isWalking = false;
+        /*if (!wayPointSet) SearchWalkPoint();
         if (wayPointSet)
         {
 
@@ -116,20 +133,56 @@ public class AI_Cave : MonoBehaviour
         if (distanceToWalkPoint.magnitude < 1f)
         {
             wayPointSet = false;
+        }*/
+        if (nav.remainingDistance <= nav.stoppingDistance)
+        {
+            // 장애물에 막혀서 목표에 도달하지 못한 경우
+            if (!nav.pathPending && nav.pathStatus == NavMeshPathStatus.PathPartial)
+            {
+                Vector3 newTarget = FindNewTarget(); // 새로운 목표 위치를 결정하는 함수
+                if (newTarget != Vector3.zero)
+                {
+                    nav.SetDestination(newTarget);
+                }
+            }
+            else if (!nav.pathPending && nav.remainingDistance <= nav.stoppingDistance)
+            {
+
+                Vector3 newTarget = FindNewTarget();
+                nav.SetDestination(newTarget);
+            }
+
+
         }
     }
-
     void SearchWalkPoint()
     {
-        float randomZ = Random.Range(-wayPointRange, wayPointRange);
-        float randomX = Random.Range(-wayPointRange, wayPointRange);
-        pos = new Vector3(transform.position.x * walkSpeed*Time.deltaTime + randomX, transform.position.y, transform.position.z * walkSpeed * Time.deltaTime + randomZ);
+        /* float randomZ = Random.Range(-wayPointRange, wayPointRange);
+         float randomX = Random.Range(-wayPointRange, wayPointRange);
+         pos = new Vector3(transform.position.x * walkSpeed*Time.deltaTime + randomX, transform.position.y, transform.position.z * walkSpeed * Time.deltaTime + randomZ);
 
-        if (Physics.Raycast(pos, -transform.up, 1f, MoveGround))
-        {
-            wayPointSet = true;
-        }
+         if (Physics.Raycast(pos, transform.up, .5f, Ground))
+         {
+             wayPointSet = true;
+         }*/
+      
     }
+
+
+
+    // 장애물에 막혔을 때 새로운 목표 위치를 결정하는 함수
+    private Vector3 FindNewTarget()
+    {
+        // 새로운 목표 위치를 결정하는 로직을 구현하고 해당 위치를 반환
+        // 예: 랜덤한 위치 선택, 이전 목표 위치에서 조금씩 이동, 등등...
+
+        // 임시로 랜덤한 위치를 반환하도록 함
+        return new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f));
+    }
+
+
+
+    
 
     void Attack()
     {
@@ -138,12 +191,12 @@ public class AI_Cave : MonoBehaviour
         isRun = false;
         isAttack = true;
 
-        if (!isAttacked)
+       /* if (!isAttacked)
         {
 
             isAttacked = true;
             Invoke("ResetAttack", timeBetweenAttacks);
-        }
+        }*/
     }
 
     void ResetAttack()
@@ -160,40 +213,43 @@ public class AI_Cave : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Obstacle" &&!isDie)
+       /* if(collision.gameObject.tag == "Player" &&!isDie )
         {
             isDie = true;
            
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);
-        }
+        }*/
 
-        if (collision.gameObject.tag == "Small_Potion")
+        if (collision.gameObject.tag == "Small_Potion" && !Small_AI && Big_AI)
         {
             Debug.Log("작아지는 물약충돌!");
             Small_AI = true;
+            Big_AI = false;
             small_potion.SetActive(false);
-            this.gameObject.transform.localScale = Vector3.one;
+            this.gameObject.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
         }
 
-        if (collision.gameObject.name == "SmallAI_Die" && Small_AI && !isDie)
+        /*if (Small_AI && !isDie)
         {
             isDie = true;
             Debug.Log("죽어락");
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);
-        }
+        }*/
     }
 
     void DestroyAI_Cave()
     {
-        this.gameObject.SetActive(false);
+        mesh.SetActive(false);
+        key.SetActive(true);
+        //this.gameObject.SetActive(false);
     }
 
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "FootPos" && !isDie)
+        if (other.gameObject.name == "FootPos" && !isDie && Small_AI && !Big_AI)
         {
             isDie = true;
             

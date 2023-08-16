@@ -16,7 +16,10 @@ public class CaveInteraction_Door : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
-        key = GameObject.FindGameObjectWithTag("Key").GetComponent<CaveItem_Key>();
+        if (key != null)
+        {
+            key = GameObject.FindGameObjectWithTag("Key").GetComponent<CaveItem_Key>();
+        }
     }
 
     void Update()

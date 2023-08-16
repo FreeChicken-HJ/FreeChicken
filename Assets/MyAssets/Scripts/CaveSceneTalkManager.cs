@@ -20,7 +20,7 @@ public class CaveSceneTalkManager : MonoBehaviour
     public GameObject PlayerImage;
     public bool isNPCImage;
     public bool isPlayerImage;
-
+    CaveScenePlayer Player;
     public bool isTalkEnd;
 
     //public CinemachineVirtualCamera NPC4Cam;
@@ -39,6 +39,8 @@ public class CaveSceneTalkManager : MonoBehaviour
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
+        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
+        Player.isTalk = true;
     }
 
     public void OndiaLog(string[] lines)
@@ -65,7 +67,7 @@ public class CaveSceneTalkManager : MonoBehaviour
         {
             //instance.gameObject.SetActive(false);
             Destroy(instance.gameObject);
-            isTalkEnd = true;
+            Player.isTalk = false;
             //NPC4Cam.Priority = 1;
             //mainCam.Priority = 10;
         }
@@ -95,7 +97,7 @@ public class CaveSceneTalkManager : MonoBehaviour
         foreach (char ch in line.ToCharArray())
         {
             text.text += ch;
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.02f);
         }
     }
 

@@ -17,7 +17,8 @@ public class CaveScenePlayer : MonoBehaviour
     Vector3 moveVec;
     bool wDown;
     bool Dash;
-    bool Dead;
+    public bool Dead;
+    
     public bool isMove;
 
     Rigidbody rigid;
@@ -26,6 +27,8 @@ public class CaveScenePlayer : MonoBehaviour
     public ParticleSystem MoveParticle;
     public ParticleSystem PoisonParticle;
     public ParticleSystem DiePs;
+
+    //private ParticleSystem fire;
     //bool isMove;
     public float speed;
     public float jumpPower = 5f;
@@ -39,7 +42,7 @@ public class CaveScenePlayer : MonoBehaviour
     Obstacle_Cave obstacle;
     //GameManager_Cave manager;
     //FireTest firetest;
-    CaveItem_DebuffPotion potion;
+    //CaveItem_DebuffPotion potion;
     //ObstacleTest ObstacleTestobstacleTest;
     public int keyCount;
 
@@ -58,11 +61,17 @@ public class CaveScenePlayer : MonoBehaviour
     //public float jumpPower = 5f;
     //public int jumpCount = 2;   // 점프횟수, 2를 3으로 바꾸면 3단 점프
 
+    public bool isReversal;
     public bool Talk_NPC1;
     public bool Talk_NPC2;
     public bool Talk_NPC3;
     public bool Talk_NPC4;
     public bool Talk_NPC5;
+
+    public bool isChk;
+    public bool isAnimChk;
+    public bool isFollow;
+    public bool isFinal;
 
     [Header("Camera")]
     //Cinemachine Camera
@@ -76,16 +85,20 @@ public class CaveScenePlayer : MonoBehaviour
     public CinemachineVirtualCamera MomCam;
     public CinemachineVirtualCamera mainCam2;
     public CinemachineVirtualCamera FinalCam;
+    public CinemachineVirtualCamera DadDieCam;
 
+ 
+
+    [Header("UI")]  
     CaveSceneTalkManager talkManager;
-
-    //Dialogue
     public GameObject image1;
     public GameObject image2;
     public GameObject image3;
     public GameObject image4;
     public GameObject image5;
-
+    public bool isTalk;
+    public GameObject StopPleaseUI;
+    [Header("SavePoint")]
     //SavePoint
     public GameObject SavePointImage;
     public GameObject SavePoint0Obj;
@@ -98,11 +111,25 @@ public class CaveScenePlayer : MonoBehaviour
     public bool check_savepoint2;
     public bool check_savepoint3;
     public bool check_savepoint4;
-
+    public AudioSource saveSound;
     // MomDown
     public GameObject Mom;
+    public GameObject FollowMom;
     Animator MomDownAnim;
     bool isMomContact;
+
+    [Header("Dad")]
+    public GameObject Dad;
+    public GameObject DadDieUI;
+    public AudioSource BombSound;
+    public GameObject BombParticle;
+    public GameObject ReStartZone;
+    public GameObject DadReStartZone;
+    public GameObject KissZone;
+    Animator DadAnim;
+
+    Animator NpcDad;
+    public GameObject KissParticle;
 
     void Awake()
     {
@@ -110,40 +137,61 @@ public class CaveScenePlayer : MonoBehaviour
         MomDownAnim = Mom.GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
-        Dead = false;
+        DadAnim = Dad.GetComponent<Animator>();
+
+
     }
 
     void Start()
     {
         obstacle = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_Cave>();
         DiePs.gameObject.SetActive(false);
-        //potion = GameObject.FindGameObjectWithTag("Poison").GetComponent<CaveItem_DebuffPotion>();
-        FirstCam.Priority = 999;
-        Dead = false;
+       
+        
     }
 
     void Update()
     {
         time += Time.deltaTime;
-        if (!Dead/* && !potion.reversalPotion*/)
+        if (!Dead &&!isReversal&&!isTalk)
         {
             Move();
             Jump();
             GetInput();
         }
 
-        //if (potion.reversalPotion)
-        //{
-        //    ReversalMove();
-        //    Jump();
+        if (isTalk)
+        {
+            anim.SetBool("isRun", false);
+        }
+        if (isReversal)
+        {
+            ReversalMove();
+            Jump();
 
-        //    if (time > 10f)  // 3초동안만 좌우반전
-        //    {
-        //        potion.reversalPotion = false;
-        //    }
-        //}
+            if (time > 15f)  // 3초동안만 좌우반전
+            {
+                isReversal = false;
+            }
+        }
+        if(isMomContact && Mom.gameObject.transform.position.x <= KissZone.transform.position.x && !isAnimChk)
+        {
+            
+            //isMomContact = false;
+            isAnimChk = true;
+            Dad.SetActive(true);
+            KissMovement();
+
+        }
+        
     }
-
+    void KissMovement()
+    {
+        KissParticle.SetActive(true);
+        MomDownAnim.SetTrigger("Kiss");
+        DadAnim.SetTrigger("Kiss");
+        
+    }
     void GetInput()
     {
         hAxis = Input.GetAxisRaw("Horizontal");
@@ -158,7 +206,7 @@ public class CaveScenePlayer : MonoBehaviour
         //potion.reversalPotion = false;
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
-
+        
         transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
         transform.position += moveVec * speed * (Dash ? 2.5f : 1f) * Time.deltaTime; 
 
@@ -170,6 +218,7 @@ public class CaveScenePlayer : MonoBehaviour
 
         ShowMoveParticle();
         PoisonParticle.gameObject.SetActive(false);
+       
     }
 
     void Jump()
@@ -184,7 +233,7 @@ public class CaveScenePlayer : MonoBehaviour
 
     void ReversalMove() // 방향키 좌우반전
     {
-        //potion.reversalPotion = true;
+       //potion.reversalPotion = true;
 
         rhAxis = Input.GetAxisRaw("ReversalHorizontal");
         rvAxis = Input.GetAxisRaw("ReversalVertical");
@@ -207,6 +256,7 @@ public class CaveScenePlayer : MonoBehaviour
         //{
         //    DieMotion();
         //}
+    
 
         if (collision.gameObject.tag == "Ground")
         {
@@ -215,14 +265,10 @@ public class CaveScenePlayer : MonoBehaviour
 
         if (collision.gameObject.tag == "Obstacle" && !Dead)
         {
-            Dead = true;
+            
             DeadCount.count += 1;
 
-            if (check_savepoint0 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage0", 3f);
-            }
+           
 
             if (check_savepoint1 /*&& Dead*/)
             {
@@ -230,62 +276,83 @@ public class CaveScenePlayer : MonoBehaviour
                 Invoke("restart_stage1", 3f);
             }
 
-            if (check_savepoint2/* && Dead*/)
+            else if (check_savepoint2/* && Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage2", 3f);
             }
 
-            if (check_savepoint3 /*&& Dead*/)
+            else if (check_savepoint3 /*&& Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage3", 3f);
             }
 
-            if(check_savepoint4 /*&& Dead*/)
+            else if (check_savepoint4 /*&& Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage4", 3f);
             }
+            else
+            {
+                /*if (check_savepoint0 *//*&& Dead*//*)
+                {
+                    DieMotion();
+                    Invoke("restart_stage0", 3f);
+                }*/
+
+                DieMotion();
+                Invoke("restart_stage0", 3f);
+
+            }
         }
     }
-
+    
     void OnParticleCollision(GameObject other)
     {
         if (other.tag == "Fire" && !Dead)
         {
-            Dead = true;
-            DeadCount.count += 1;
+            //Dead = true;
+            other.gameObject.SetActive(false);
+            //fire.Stop();
+                DeadCount.count += 1;
 
-            if (check_savepoint0 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage0", 3f);
-            }
+                /* if (check_savepoint0 *//*&& Dead*//*)
+                 {
+                     DieMotion();
+                     Invoke("restart_stage0", 3f);
+                 }*/
 
-            if (check_savepoint1 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage1", 3f);
-            }
+                if (check_savepoint1 /*&& Dead*/)
+                {
+                    DieMotion();
+                    Invoke("restart_stage1", 3f);
+                }
 
-            if (check_savepoint2 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage2", 3f);
-            }
+                else if (check_savepoint2 /*&& Dead*/)
+                {
+                    DieMotion();
+                    Invoke("restart_stage2", 3f);
+                }
 
-            if (check_savepoint3 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage3", 3f);
-            }
+                else if (check_savepoint3 /*&& Dead*/)
+                {
+                    DieMotion();
+                    Invoke("restart_stage3", 3f);
+                }
 
-            if (check_savepoint4 /*&& Dead*/)
-            {
-                DieMotion();
-                Invoke("restart_stage4", 3f);
-            }
+                else if (check_savepoint4 /*&& Dead*/)
+                {
+                    DieMotion();
+                    Invoke("restart_stage4", 3f);
+                }
+                else if (check_savepoint0)
+                {
+                    DieMotion();
+                    Invoke("restart_stage0", 3f);
+                }
+
+            
         }
     }
 
@@ -303,7 +370,7 @@ public class CaveScenePlayer : MonoBehaviour
             isfallingObstacle = true;
 
         }
-
+        
         if (other.gameObject.tag == "Door" && !isMoveUp)
         {
             other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z);
@@ -391,10 +458,12 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 0;
         }
 
-        if(other.gameObject.tag == "TogetherSenseOut")
+        if(other.gameObject.tag == "TogetherSenseOut" && !isChk)
         {
             TogetherCam.Priority = 0;
             mainCam.Priority = 10;
+            isChk = true;
+            Invoke("DeadCheck", 3f);
         }
 
         if(other.gameObject.tag == "SenseOut")
@@ -403,10 +472,15 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 10;
         }
 
-        if (other.gameObject.name == "FinalStart")
+        if (other.gameObject.name == "FinalStart"&& !isFinal)
         {
             mainCam.Priority = 0;
-            FinalCam.Priority = 10;
+            FinalCam.Priority = 100;
+            isFinal = true;
+            FollowMom.SetActive(true);
+            Mom.SetActive(false);
+
+            KissParticle.SetActive(false);
         }
 
         if (other.gameObject.name == "StartMainCam")
@@ -436,6 +510,7 @@ public class CaveScenePlayer : MonoBehaviour
             check_savepoint2 = false;
             check_savepoint3 = false;
             check_savepoint4 = false;
+            
             StartCoroutine("GetSavePointImage");
             Invoke("Destroy_SavePointObj1", 1.5f);
             Invoke("Destroy_SavePointImage", 2f);
@@ -448,7 +523,7 @@ public class CaveScenePlayer : MonoBehaviour
             check_savepoint1 = false;
             check_savepoint3 = false;
             check_savepoint4 = false;
-            SavePointImage.gameObject.SetActive(true);
+            StartCoroutine("GetSavePointImage");
             Invoke("Destroy_SavePointObj2", 1.5f);
             Invoke("Destroy_SavePointImage", 2f);
         }
@@ -460,7 +535,7 @@ public class CaveScenePlayer : MonoBehaviour
             check_savepoint1 = false;
             check_savepoint2 = false;
             check_savepoint4 = false;
-            SavePointImage.gameObject.SetActive(true);
+            StartCoroutine("GetSavePointImage");
             Invoke("Destroy_SavePointObj3", 1.5f);
             Invoke("Destroy_SavePointImage", 2f);
         }
@@ -472,12 +547,31 @@ public class CaveScenePlayer : MonoBehaviour
             check_savepoint1 = false;
             check_savepoint2 = false;
             check_savepoint3 = false;
-            SavePointImage.gameObject.SetActive(true);
+            StartCoroutine("GetSavePointImage");
             Invoke("Destroy_SavePointObj4", 1.5f);
             Invoke("Destroy_SavePointImage", 2f);
         }
+        if (other.gameObject.CompareTag("Poison") &&!isReversal)
+        {
+            isReversal = true;
+            other.gameObject.SetActive(false);
+            // PoisonSound.Play();
+          
+        }
+        if(other.gameObject.CompareTag("Item") &&!isFollow)
+        {
+            StopPleaseUI.SetActive(true);
+            Invoke("StopPleaseUIEnd", 3f);
+        }
     }
+    void StopPleaseUIEnd()
+    {
+        StopPleaseUI.SetActive(false);
 
+        isFollow = true;
+       
+
+    }
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "NPC1")
@@ -487,12 +581,15 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 10;
         }
 
-        if (other.gameObject.tag == "NPC2")
+        if (other.gameObject.tag == "NPC2" && !isTalk)
         {
             TalkToDaddy2Cam.Priority = 1;
             mainCam.Priority = 10;
             GameObject Daddy2 = GameObject.Find("Daddy");
-            Daddy2.SetActive(false);
+            NpcDad = Daddy2.GetComponent<Animator>();
+            NpcDad.SetTrigger("DadDown");
+            StartCoroutine(NpcDadDestroy(Daddy2));
+           
         }
 
         if (other.gameObject.tag == "NPC3")
@@ -507,18 +604,49 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 10;
         }
 
-        if (other.gameObject.tag == "NPC5" && !isMomContact)
+        if (other.gameObject.tag == "NPC5" && !isMomContact &&!isTalk)
         {
 
             //GameObject Mommy = GameObject.Find("Mom");
             MomDownAnim.SetTrigger("Down");
+           
             isMomContact = true;
             MomCam.Priority = 1;
             mainCam2.Priority = 10;
             //Mom.SetActive(false);
+            
         }
     }
+    IEnumerator NpcDadDestroy(GameObject obj)
+    {
+        yield return new WaitForSeconds(1.7f);
+        obj.SetActive(false);
+    }
+    void DeadCheck()
+    {
+        if (Dad.activeSelf == true)
+        {
+            DadDieCam.Priority = 10;
+            mainCam.Priority = 0;
+            DadDieUI.SetActive(true);
+            BombSound.Play();
+            BombParticle.SetActive(true);
+            
+            Invoke("ReStartLastZone", 3f);
 
+        }
+        
+        
+    }
+    void ReStartLastZone()
+    {
+        DadDieUI.SetActive(false);
+        DadDieCam.Priority = 0;
+        mainCam.Priority = 10;
+        isChk = false;
+        this.gameObject.transform.position = ReStartZone.transform.position;
+        Dad.gameObject.transform.position = DadReStartZone.transform.position;
+    }
     void ShowMoveParticle()
     {
         if (moveVec != Vector3.zero)
@@ -534,6 +662,7 @@ public class CaveScenePlayer : MonoBehaviour
     IEnumerator GetSavePointImage()
     {
         SavePointImage.gameObject.SetActive(true);
+        saveSound.Play();
         yield break;
     }
 
@@ -570,6 +699,7 @@ public class CaveScenePlayer : MonoBehaviour
         FirstCam.Priority = 999;
         this.transform.position = SavePoint0Obj.transform.position;
         Dead = false;
+        
     }
     void restart_stage1()
     {
@@ -598,16 +728,28 @@ public class CaveScenePlayer : MonoBehaviour
     void remove_dieUI()
     {
         DiePs.gameObject.SetActive(false);
+        anim.SetBool("isDead",false);
+       /* anim.SetBool("isDead", false);
+        anim.SetBool("isWalk",false);
+        anim.SetBool("isRun", false);*/
+        //Dead = false;
     }
 
     void DieMotion()
     {
-        Debug.Log("플레이어 사망");
-        //Dead = true;
-        DiePs.gameObject.SetActive(true);
-        anim.SetTrigger("isDead");
-        
-        Invoke("remove_dieUI", 2f);
+        if (!Dead )
+        {
+            
+            Debug.Log("플레이어 사망");
+         
+            Dead = true;
+            DiePs.gameObject.SetActive(true);
+            anim.SetTrigger("doDead");
+            //anim.SetBool("isDead", false);
+            anim.SetBool("isDead", true);
+            //anim.SetBool("isRun", false);
+            Invoke("remove_dieUI", 3f);
+        }
     }
 }
 

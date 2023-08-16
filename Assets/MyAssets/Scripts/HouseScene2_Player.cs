@@ -15,14 +15,8 @@ public class HouseScene2_Player : MonoBehaviour
     public GameObject player;
     public bool isfallingObstacle;
 
-    bool isContact;
 
-    //public TextMeshProUGUI nearNPCText;
     public Image DieImage2;
-    public TextMeshProUGUI superJump;
-
-    public CinemachineVirtualCamera npc_cam;
-    public CinemachineVirtualCamera mainCam;
 
     Vector3 moveVec;
     Vector2 moveInput;
@@ -35,7 +29,6 @@ public class HouseScene2_Player : MonoBehaviour
     public float JumpPower;
 
     bool Dead;
-    //bool eatPortion;
 
     public float hAxis;
     public float vAxis;
@@ -46,10 +39,30 @@ public class HouseScene2_Player : MonoBehaviour
 
     Animator anim;
 
-    Obstacle_House obstacle_house;
-    HouseSceneTalkManager talkeManager;
+    [Header("Camera")]
+    public CinemachineVirtualCamera npc_cam;
+    public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera unicycleCam;
 
+    [Header("Audio")]
+    //public AudioSource runAudio;
+    //public AudioSource dieAudio;
+    //public AudioSource jumpAudio;
+    //public AudioSource savePointAudio;
+    //public AudioSource eggChangeZoneAudio;
+    //public AudioSource mainAudio;
+    //public AudioSource secoundmainAudio;
+    //public AudioSource heartBeatAudio;
+    //public AudioSource fixAudio;
+
+
+    // Dialogue
+    [Header("Dialogue")]
     public GameObject Dialogue;
+    public GameObject NPC;
+    public bool isTalk;
+    public bool TalkEnd;
+
 
     void Awake()
     {
@@ -60,9 +73,7 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Start()
     {
-        obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
-        //nearNPCText.gameObject.SetActive(false);
         DieImage2.gameObject.SetActive(false);
     }
 
@@ -70,19 +81,12 @@ public class HouseScene2_Player : MonoBehaviour
     {
         if (!Dead)
         {
-            Move();
-            GetInput();
-            Jump();
-            LookAround();
-        }
-
-        if (isContact)
-        {
-            if (Input.GetMouseButton(0))
+            if (!isTalk)
             {
-                //nearNPCText.gameObject.SetActive(false);
-                npc_cam.gameObject.SetActive(true);
-                Dialogue.gameObject.SetActive(true);
+                Move();
+                GetInput();
+                Jump();
+                LookAround();
             }
         }
     }
@@ -124,7 +128,6 @@ public class HouseScene2_Player : MonoBehaviour
 
     void DieMotion()
     {
-        Debug.Log("플레이어 사망");
         //Dead = true;
         DiePs.gameObject.SetActive(true);
         anim.SetBool("Die", true);
@@ -139,33 +142,45 @@ public class HouseScene2_Player : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "DropBox")
+        if (other.CompareTag("DropBox"))
         {
             isfallingObstacle = true;
         }
 
-        if (other.gameObject.tag.Equals("NPC"))
+        if (other.gameObject.CompareTag("NPC") && !isTalk && !TalkEnd)
         {
-            //nearNPCText.gameObject.SetActive(true);
-            isContact = true;
+            Dialogue.SetActive(true);
             npc_cam.Priority = 10;
+            mainCam.Priority = 1;
+        }
+
+        if(other.gameObject.name == "Unicycle_Sense")
+        {
+            unicycleCam.Priority = 10;
             mainCam.Priority = 1;
         }
     }
 
+
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag.Equals("NPC"))
+        if (other.gameObject.CompareTag("NPC"))
         {
-            //nearNPCText.gameObject.SetActive(false);
             npc_cam.Priority = 1;
+            mainCam.Priority = 10;
+            TalkEnd= true;
+        }
+
+        if (other.gameObject.name == "Unicycle_Sense")
+        {
+            unicycleCam.Priority = 1;
             mainCam.Priority = 10;
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "House2_Obstacle" && !Dead)
+        if (collision.gameObject.CompareTag("House2_Obstacle") && !Dead)
         {
             Dead = true;
             DieMotion();
@@ -173,39 +188,10 @@ public class HouseScene2_Player : MonoBehaviour
             Invoke("ReLoadScene", 3.5f);
         }
 
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.CompareTag("Ground")) 
         {
             isJump = false;
         }
-
-        if (collision.gameObject.tag == "Slow")
-        {
-            speed /= 2f;
-            Invoke("DoNotSlow", 2f);
-        }
-
-        if (collision.gameObject.tag == "SuperJump")
-        {
-            superJump.gameObject.SetActive(true);
-            jumpPower *= 1.2f;
-            Invoke("DonotSuperJump", 2f);
-        }
-
-        if (collision.gameObject.tag == "AI_Person_House")
-        {
-            DieMotion();
-        }
-    }
-
-    void DonotSuperJump()
-    {
-        superJump.gameObject.SetActive(false);
-        jumpPower /= 1.2f;
-    }
-
-    void DoNotSlow()
-    {
-        speed *= 2f;
     }
 
     public void LookAround() // 카메라

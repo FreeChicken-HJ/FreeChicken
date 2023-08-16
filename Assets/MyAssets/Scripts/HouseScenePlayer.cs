@@ -14,16 +14,12 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject player;
     public bool isfallingObstacle;
     public bool isSense;
+    public bool isDoorOpen = false;
+    public bool isReadyDoorOpen = false;
 
-    bool isContact;
-
-    public Image DieImage;
-    public TextMeshProUGUI superJump;
+    public GameObject startDoor;
+    public GameObject DieImage;
     public Image NextSceneImage;
-    public Image SavePointImage;
-    
-    public CinemachineVirtualCamera mainCam;
-    public CinemachineVirtualCamera dieCam;
 
     Vector3 moveVec;
     Vector2 moveInput;
@@ -36,7 +32,6 @@ public class HouseScenePlayer : MonoBehaviour
     public float JumpPower;
 
     bool Dead;
-    //bool eatPortion;
 
     public float hAxis;
     public float vAxis;
@@ -49,18 +44,41 @@ public class HouseScenePlayer : MonoBehaviour
 
     Obstacle_House obstacle_house;
 
+    //Dialogue
+    [Header("Dialogue")]
+    public GameObject startCanvas;
+    public bool isTalk;
+    public bool TalkEnd;
+
     //SavePoint
+    [Header("SavePoint")]
+    public GameObject SavePointImage;
     public GameObject SavePoint1Obj;
     public GameObject SavePoint2Obj;
     public GameObject SavePoint3Obj;
-
     public bool check_savepoint1;
     public bool check_savepoint2;
     public bool check_savepoint3;
-    
+
+    [Header("Camera")]
+    public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera StartCam;
+
+    [Header("Audio")]
+    public AudioSource runAudio;
+    public AudioSource dieAudio;
+    public AudioSource jumpAudio;
+    public AudioSource savePointAudio;
+    public AudioSource bellAudio;
+    //public AudioSource mainAudio;
+
+    [Header("UI")]
+    public GameObject OpenDoor_text;
+
     void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
+        //mainAudio.Play();
+        anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
     }
@@ -69,17 +87,33 @@ public class HouseScenePlayer : MonoBehaviour
     {
         obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
-        DieImage.gameObject.SetActive(false);
+        StartCam.Priority = 10;
+        //DieImage.gameObject.SetActive(false);
+        //SavePointImage.SetActive(false);
     }
 
     void Update()
     {
         if (!Dead)
         {
-            Move();
-            GetInput();
-            Jump();
-            LookAround();
+            if(!isTalk)
+            {
+                Move();
+                GetInput();
+                Jump();
+                LookAround();
+            }
+        }
+
+        if (Input.GetButtonDown("E") && isReadyDoorOpen)
+        {
+            startDoor.SetActive(false);
+            isDoorOpen = true;
+
+            if (isDoorOpen)
+            {
+                OpenDoor_text.SetActive(false);
+            }
         }
     }
 
@@ -103,30 +137,33 @@ public class HouseScenePlayer : MonoBehaviour
 
             characterBody.forward = moveVec;
             transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
+            runAudio.Play();
         }
+
         anim.SetBool("Run", moveInput != Vector2.zero);
         anim.SetBool("Walk", wDown);
+
+        
     }
 
     void Jump()
     {
         if (Input.GetButtonDown("Jump") && !isJump && !Dead)
         {
+            jumpAudio.Play();
             isJump = true;
             rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-            JumpPs.Play();
+            JumpPs.Play(); 
         }
     }
 
     void DieMotion()
     {
-        Debug.Log("플레이어 사망");
         //Dead = true;
-        DiePs.gameObject.SetActive(true);
         DieImage.gameObject.SetActive(true);
-        anim.SetBool("Die", true);
-        dieCam.Priority = 10;
-        mainCam.Priority = 1;
+        DiePs.Play();
+        dieAudio.Play();
+        anim.SetTrigger("isDead");
         Invoke("remove_dieUI", 2f);
     }
 
@@ -137,32 +174,65 @@ public class HouseScenePlayer : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "DropBox")
+        if (other.CompareTag("DropBox"))
         {
             isfallingObstacle = true;
         }
 
-        if (other.gameObject.tag == "SavePoint1")
+        if(other.CompareTag("Sense") && !isTalk && !TalkEnd)
+        {
+            startCanvas.SetActive(true);
+        }
+
+        if (other.gameObject.name == "Bell")
+        {
+            bellAudio.Play();
+            isReadyDoorOpen = true;
+            isDoorOpen = false;
+        }
+
+        if(other.gameObject.CompareTag("Door") && !isDoorOpen)
+        {
+            OpenDoor_text.SetActive(true);
+        }
+
+        if(other.gameObject.name == "InHouseSense")
+        {
+            mainCam.Priority = 10;
+            StartCam.Priority = 1;
+        }
+
+        if (other.gameObject.CompareTag("SavePoint1"))
         {
             check_savepoint1 = true;
             check_savepoint2 = false;
             check_savepoint3 = false;
             SavePointImage.gameObject.SetActive(true);
+            savePointAudio.Play();
+            Invoke("Destroy_SavePointObj1", 1.5f);
+            Invoke("Destroy_SavePointImage", 2f);
         }
 
-        if (other.gameObject.tag == "SavePoint2")
+        if (other.gameObject.CompareTag("SavePoint2")) 
         {
             check_savepoint2 = true;
             check_savepoint1 = false;
             check_savepoint3 = false;
-
+            SavePointImage.gameObject.SetActive(true);
+            savePointAudio.Play();
+            Invoke("Destroy_SavePointImage", 2f);
+            Invoke("Destroy_SavePointObj2", 1.5f);
         }
 
-        if (other.gameObject.tag == "SavePoint3")
+        if (other.gameObject.CompareTag("SavePoint3"))
         {
             check_savepoint3 = true;
             check_savepoint1 = false;
             check_savepoint2 = false;
+            SavePointImage.gameObject.SetActive(true);
+            savePointAudio.Play();
+            Invoke("Destroy_SavePointImage", 2f);
+            Invoke("Destroy_SavePointObj3", 1.5f);
         }
 
         if (other.gameObject.name == "NextScenePoint")
@@ -170,8 +240,73 @@ public class HouseScenePlayer : MonoBehaviour
             NextSceneImage.gameObject.SetActive(true);
             Invoke("NextScene", 3.5f);
         }
+
+        if (other.gameObject.CompareTag("Obstacle") && !Dead)
+        {
+            Dead = true;
+            DeadCount.count += 1;
+
+            if (check_savepoint1 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage1", 3f);
+            }
+
+            if (check_savepoint2 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage2", 3f);
+            }
+
+            if (check_savepoint3 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage3", 3f);
+            }
+        }
     }
 
+    void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Sense"))
+        {
+            TalkEnd = true;
+        }
+
+        if(other.gameObject.CompareTag("Door"))
+        {
+            OpenDoor_text.SetActive(false);
+        }
+    }
+
+    IEnumerator GetSavePointImage()
+    {
+        SavePointImage.gameObject.SetActive(true);
+        yield break;
+    }
+
+    void Destroy_SavePointImage()
+    {
+        SavePointImage.gameObject.SetActive(false);
+    }
+
+    //------------Destroy_SavePointObj-----------------------------------------
+    void Destroy_SavePointObj1()
+    {
+        SavePoint1Obj.gameObject.SetActive(false);
+    }
+
+    void Destroy_SavePointObj2()
+    {
+        SavePoint2Obj.gameObject.SetActive(false);
+    }
+
+    void Destroy_SavePointObj3()
+    {
+        SavePoint3Obj.gameObject.SetActive(false);
+    }
+
+    //------------restart_stage-----------------------------------------
     void restart_stage1()
     {
         Dead = false;
@@ -192,70 +327,66 @@ public class HouseScenePlayer : MonoBehaviour
 
     void remove_dieUI()
     {
-        DiePs.gameObject.SetActive(false);
         DieImage.gameObject.SetActive(false);
-        anim.SetBool("Die", false);
-        dieCam.Priority = 1;
-        mainCam.Priority = 10;
     }
+
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Obstacle" && !Dead)
+        if (collision.gameObject.CompareTag("Obstacle") && !Dead)
         {
             Dead = true;
+            DeadCount.count += 1;
 
-            if(check_savepoint1 && Dead)
+            if (check_savepoint1 /*&& Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage1", 3f);
             }
 
-            if(check_savepoint2&& Dead)
+            if (check_savepoint2 /*&& Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage2", 3f);
             }
 
-            if (check_savepoint3 && Dead)
+            if (check_savepoint3 /*&& Dead*/)
             {
                 DieMotion();
                 Invoke("restart_stage3", 3f);
             }
         }
 
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isJump = false;
         }
-
-        if (collision.gameObject.tag == "Slow")
-        {
-            speed /= 2f;
-            Invoke("DoNotSlow", 2f);
-        }
-
-        if (collision.gameObject.tag == "SuperJump")
-        {
-            superJump.gameObject.SetActive(true);
-            jumpPower *= 1.2f;
-            Invoke("DonotSuperJump", 2f);
-        }
-
-        if (collision.gameObject.tag == "AI_Person_House")
-        {
-            DieMotion();
-        }
     }
 
-    void DonotSuperJump()
+    void OnParticleCollision(GameObject other)
     {
-        superJump.gameObject.SetActive(false);
-        jumpPower /= 1.2f;
-    }
+        if (other.CompareTag("Fire") && !Dead)
+        {
+            Dead = true;
+            DeadCount.count += 1;
 
-    void DoNotSlow()
-    {
-        speed *= 2f;
+            if (check_savepoint1 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage1", 3f);
+            }
+
+            if (check_savepoint2 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage2", 3f);
+            }
+
+            if (check_savepoint3 /*&& Dead*/)
+            {
+                DieMotion();
+                Invoke("restart_stage3", 3f);
+            }
+        }
     }
 
     public void LookAround() // 카메라

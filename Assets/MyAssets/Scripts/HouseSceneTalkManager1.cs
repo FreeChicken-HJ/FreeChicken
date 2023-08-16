@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using Cinemachine;
 
-public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
+public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
 {
     public TextMeshProUGUI text;
     public GameObject nextText;
@@ -15,15 +15,14 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
     private string currentSentences;
     public bool isTyping;
 
-    public static HouseSceneTalkManager instance;
+    public static HouseSceneTalkManager1 instance;
     public GameObject NpcImage;
     public GameObject PlayerImage;
     public bool isNPCImage;
     public bool isPlayerImage;
     public bool isTalkEnd;
 
-    HouseScene2_Player player;
-    HouseScenePlayer player1;
+    HouseScenePlayer player;
 
     private void Awake()
     {
@@ -35,10 +34,8 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScene2_Player>();
-        player1 = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
         player.isTalk = true;
-        player1.isTalk = true;
     }
 
     public void OndiaLog(string[] lines)
@@ -87,8 +84,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
 
             }
             //isTalkEnd = true;
-            player.isTalk=false;
-            player1.isTalk = false;
+            player.isTalk = false;
         }
     }
 

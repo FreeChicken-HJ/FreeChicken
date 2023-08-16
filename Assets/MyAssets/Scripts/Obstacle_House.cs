@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -9,12 +11,10 @@ public class Obstacle_House : MonoBehaviour
     public float delayTime = 1f;
     public float repeatTime = 5f;
 
-    public enum MoveObstacleType { A, B, C,D,E,F,G,H,I,J,K,L,M,N,O,P};
+    public enum MoveObstacleType { A, B, C,D,E,F,G,H,I,K};
     public MoveObstacleType Type;
 
-    ///HouseScenePlayer player;
-    GameObject player;
-    //Sense_House sense_house;
+    HouseScenePlayer player;
 
     //UD_Floor
     float initPositionY;
@@ -22,6 +22,7 @@ public class Obstacle_House : MonoBehaviour
     float initPositionZ;
     public float distance;
     public float turningPoint;
+
     //UD_Floor & LR_Floor
     public bool turnSwitch;
     public float moveSpeed;
@@ -30,19 +31,14 @@ public class Obstacle_House : MonoBehaviour
     public bool isMove;
     public bool isPlayerFollow;
 
-    //Dart
-    public bool isDartFollow = true;
-
     //RT_Floor
     public float rotateSpeed;
     public int angle_z = 50;
 
-    //Big Jump
-    public bool isBigJump;
-    public float BigJumpPower;
     //Drop
     public float dropSpeed;
     public bool isDropObj;
+
     //Swing
     public float angle = 0;
     private float lerpTime = 0;
@@ -52,25 +48,9 @@ public class Obstacle_House : MonoBehaviour
     public float circleR; // 반지름
     public float deg; // 각도
     public float objSpeed; // 원운동 속도
-
     public Transform Circletarget;
     public float orbitSpeed;
     Vector3 offSet;
-
-    //Melting
-    bool isMelting;
-    public float meltingTime;
-
-    public bool isPencilSense;
-
-    // slide
-    public bool slide;
-
-    bool isDown_y;
-    bool isDownandDestroy;
-
-    bool isUp_y;
-    bool isUpandDestroy;
 
     void Awake()
     {
@@ -89,22 +69,13 @@ public class Obstacle_House : MonoBehaviour
             initPositionZ = transform.position.z;
             turningPoint = initPositionZ - distance;
         }
-
-        //if (Type == MoveObstacleType.H)
-        //{
-        //    initPositionZ = transform.position.z;
-        //    turningPoint = initPositionZ - distance;
-        //}
     }
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
         isPlayerFollow = false;
-        //isDartFollow = false;
-        //sense_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Sense_House>();
-
-        //offSet = transform.position - Circletarget.position;
+        this.gameObject.SetActive(true);
     }
 
     void upDown()
@@ -138,26 +109,6 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
-    void UpandDestroy()
-    {
-        if (isPlayerFollow)
-        {
-            player.gameObject.transform.position = player.transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.smoothDeltaTime;
-        }
-        transform.position = transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.smoothDeltaTime;
-
-        Destroy(this.gameObject, 5f);
-    }
-
-    void rotate()
-    {
-        transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
-        if (isPlayerFollow)
-        {
-            player.gameObject.transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
-        }
-    }
-
     void rotate_z()
     {
         transform.Rotate(0, 0, -angle_z / 50 * rotateSpeed);
@@ -175,13 +126,6 @@ public class Obstacle_House : MonoBehaviour
 
     void DownandDestroy()
     {
-        //if(distance == -2)
-        //{
-        //    this.gameObject.SetActive(false);
-        //}
-
-        //transform.Translate(Vector3.down * 5f * Time.deltaTime);
-
         if(isPlayerFollow)
         {
             player.gameObject.transform.position = player.transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.smoothDeltaTime;
@@ -259,94 +203,28 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Player" && isPencilSense)
-        {
-            this.gameObject.SetActive(true);
-            //this.gameObject.
-        }
-    }
-
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             isPlayerFollow = true;
         }
-
-        if(collision.gameObject.tag == "Note")
-        {
-            isDartFollow = true;
-        }
-
-        if (collision.gameObject.tag == "Player" && isMelting)
-        {
-            isPlayerFollow = true;
-            isMove = true;
-            Invoke("Melting", meltingTime);
-        }
-
-        if (collision.gameObject.tag == "Player" && isDownandDestroy)
-        {
-            isDown_y = true;
-        }
-
-        if(collision.gameObject.tag == "Player" && isUpandDestroy)
-        {
-            isUp_y = true;
-        }
-
-
-        //if (collision.gameObject.tag == "Wall")
-        //{
-        //    Debug.Log("부딪힘");
-        //    gameObject.SetActive(false);
-        //}
-
-        //if(collision.gameObject.tag == "Player" && slide)
-        //{
-
-        //}
-    }
-
-    void Melting()
-    {
-        this.gameObject.SetActive(false);
     }
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" && isBigJump)
-        {
-            collision.rigidbody.AddForce(Vector3.forward * BigJumpPower, ForceMode.Impulse);
-
-            isBigJump = false;
-        }
-        if (collision.gameObject.tag == "Player" && isMove)
+        if (collision.gameObject.CompareTag("Player") && isMove)
         {
             isPlayerFollow = true;
         }
-
-        if(collision.gameObject.tag == "Note")
-        {
-            isDartFollow = true;
-        }
-
-        
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             isPlayerFollow = false;
-        }
-
-        if(collision.gameObject.tag == "Note")
-        {
-            isDartFollow = false;
         }
     }
 
@@ -355,24 +233,6 @@ public class Obstacle_House : MonoBehaviour
         transform.Rotate(0, 0, -angle_z / 50 * rotateSpeed);
         transform.position += new Vector3(0, 0, -1) * moveSpeed * Time.deltaTime;
     }
-
-    //void Circle()
-    //{
-    //    deg += Time.deltaTime * objSpeed;
-    //    if (deg < 360)
-    //    {
-    //        var rad = Mathf.Deg2Rad * (deg);
-    //        var x = circleR * Mathf.Sin(rad);
-    //        var y = circleR * Mathf.Cos(rad);
-    //        var z = circleR * Mathf.Tan(rad);
-    //        transform.position = transform.position + new Vector3(x, y,z);
-    //        transform.rotation = Quaternion.Euler(0, 0, deg * -1); //가운데를 바라보게 각도 조절
-    //    }
-    //    else
-    //    {
-    //        deg = 0;
-    //    }
-    //}
 
     void Orbit()
     {
@@ -452,30 +312,9 @@ public class Obstacle_House : MonoBehaviour
                 isMove = true;
                 rotate_y();
                 break;
-            case MoveObstacleType.J:
-                isMelting= true;
-                break;
             case MoveObstacleType.K:
                 rotate_xyz();
                 break;
-            case MoveObstacleType.L:
-                isUpandDestroy= true;
-                if(isUp_y)
-                {
-                    UpandDestroy();
-                }
-                break;
-            case MoveObstacleType.M:
-                //isMove = true;
-                isDownandDestroy = true;
-                if (isDown_y)
-                {
-                    DownandDestroy();
-                    //isDown_y = false;
-                }
-                break;
         }
-
-        
     }
 }

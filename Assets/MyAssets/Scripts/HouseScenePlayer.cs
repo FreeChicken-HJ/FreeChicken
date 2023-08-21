@@ -16,6 +16,7 @@ public class HouseScenePlayer : MonoBehaviour
     public bool isSense;
     public bool isDoorOpen = false;
     public bool isReadyDoorOpen = false;
+    public bool pushBell = false;
 
     public GameObject startDoor;
     public GameObject DieImage;
@@ -65,19 +66,21 @@ public class HouseScenePlayer : MonoBehaviour
     public CinemachineVirtualCamera StartCam;
 
     [Header("Audio")]
+    public AudioSource mainAudio;
     public AudioSource runAudio;
     public AudioSource dieAudio;
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
     public AudioSource bellAudio;
-    //public AudioSource mainAudio;
 
     [Header("UI")]
+    public GameObject NearDoor_text;
     public GameObject OpenDoor_text;
+    public GameObject PushBell_text;
 
     void Awake()
     {
-        //mainAudio.Play();
+        mainAudio.Play();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
@@ -105,6 +108,12 @@ public class HouseScenePlayer : MonoBehaviour
             }
         }
 
+        if (Input.GetButtonDown("E") && pushBell)
+        {
+            bellAudio.Play();
+            isReadyDoorOpen = true;
+        }
+
         if (Input.GetButtonDown("E") && isReadyDoorOpen)
         {
             startDoor.SetActive(false);
@@ -112,6 +121,7 @@ public class HouseScenePlayer : MonoBehaviour
 
             if (isDoorOpen)
             {
+                NearDoor_text.SetActive(false);
                 OpenDoor_text.SetActive(false);
             }
         }
@@ -184,14 +194,21 @@ public class HouseScenePlayer : MonoBehaviour
             startCanvas.SetActive(true);
         }
 
-        if (other.gameObject.name == "Bell")
+        if (other.CompareTag("PushButton") && !pushBell)
         {
-            bellAudio.Play();
+            //bellAudio.Play();
+            PushBell_text.SetActive(true);
             isReadyDoorOpen = true;
             isDoorOpen = false;
+            pushBell = true;
         }
 
-        if(other.gameObject.CompareTag("Door") && !isDoorOpen)
+        if(other.gameObject.CompareTag("Door") && !isDoorOpen && !isReadyDoorOpen)
+        {
+            NearDoor_text.SetActive(true);
+        }
+
+        if(other.gameObject.CompareTag("Door") && isReadyDoorOpen)
         {
             OpenDoor_text.SetActive(true);
         }
@@ -275,7 +292,14 @@ public class HouseScenePlayer : MonoBehaviour
 
         if(other.gameObject.CompareTag("Door"))
         {
+            NearDoor_text.SetActive(false);
             OpenDoor_text.SetActive(false);
+        }
+
+        if (other.CompareTag("PushButton"))
+        {
+            PushBell_text.SetActive(false);
+
         }
     }
 

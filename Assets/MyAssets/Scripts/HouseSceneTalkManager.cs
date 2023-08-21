@@ -23,7 +23,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
     public bool isTalkEnd;
 
     HouseScene2_Player player;
-    HouseScenePlayer player1;
+    //HouseScenePlayer player1;
 
     private void Awake()
     {
@@ -36,9 +36,9 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
         isTalkEnd = false;
         isPlayerImage = true;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScene2_Player>();
-        player1 = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
+        //player1 = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
         player.isTalk = true;
-        player1.isTalk = true;
+        //player1.isTalk = true;
     }
 
     public void OndiaLog(string[] lines)
@@ -88,7 +88,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
             }
             //isTalkEnd = true;
             player.isTalk=false;
-            player1.isTalk = false;
+            //player1.isTalk = false;
         }
     }
 

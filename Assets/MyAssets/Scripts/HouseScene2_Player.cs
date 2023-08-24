@@ -32,7 +32,7 @@ public class HouseScene2_Player : MonoBehaviour
 
     public float hAxis;
     public float vAxis;
-    public float jumpPower = 5f;
+    //public float jumpPower = 5f;
 
     public ParticleSystem DiePs;
     public ParticleSystem JumpPs;
@@ -45,27 +45,30 @@ public class HouseScene2_Player : MonoBehaviour
     public CinemachineVirtualCamera unicycleCam;
 
     [Header("Audio")]
-    //public AudioSource runAudio;
-    //public AudioSource dieAudio;
-    //public AudioSource jumpAudio;
-    //public AudioSource savePointAudio;
-    //public AudioSource eggChangeZoneAudio;
-    //public AudioSource mainAudio;
-    //public AudioSource secoundmainAudio;
-    //public AudioSource heartBeatAudio;
-    //public AudioSource fixAudio;
+    public AudioSource mainAudio;
+    public AudioSource runAudio;
+    public AudioSource dieAudio;
+    public AudioSource jumpAudio;
+    public AudioSource savePointAudio;
 
-
-    // Dialogue
     [Header("Dialogue")]
-    public GameObject Dialogue;
+    public GameObject NPCDialogue;
     public GameObject NPC;
-    public bool isTalk;
-    public bool TalkEnd;
+    public GameObject UnicycleDialogue;
+    public bool isTalk1;
+    public bool TalkEnd1;
+    public bool isTalk2;
+    public bool TalkEnd2;
+
+    //test
+    public GameObject EvolutionPlayer;
+    public GameObject EvolutionSense;
+
 
 
     void Awake()
     {
+        mainAudio.Play();
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
@@ -81,7 +84,7 @@ public class HouseScene2_Player : MonoBehaviour
     {
         if (!Dead)
         {
-            if (!isTalk)
+            if (!isTalk1 || !isTalk2)
             {
                 Move();
                 GetInput();
@@ -111,6 +114,7 @@ public class HouseScene2_Player : MonoBehaviour
 
             characterBody.forward = moveVec;
             transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
+            runAudio.Play();
         }
         anim.SetBool("Run", moveInput != Vector2.zero);
         anim.SetBool("Walk", wDown);
@@ -120,8 +124,9 @@ public class HouseScene2_Player : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && !isJump && !Dead)
         {
+            jumpAudio.Play();
             isJump = true;
-            rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            rigid.AddForce(Vector3.up * JumpPower, ForceMode.Impulse);
             JumpPs.Play();
         }
     }
@@ -131,6 +136,7 @@ public class HouseScene2_Player : MonoBehaviour
         //Dead = true;
         DiePs.gameObject.SetActive(true);
         anim.SetBool("Die", true);
+        dieAudio.Play();
     }
 
     void ReLoadScene()
@@ -147,17 +153,27 @@ public class HouseScene2_Player : MonoBehaviour
             isfallingObstacle = true;
         }
 
-        if (other.gameObject.CompareTag("NPC") && !isTalk && !TalkEnd)
+        if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1)
         {
-            Dialogue.SetActive(true);
+            NPCDialogue.SetActive(true);
             npc_cam.Priority = 10;
             mainCam.Priority = 1;
         }
 
-        if(other.gameObject.name == "Unicycle_Sense")
+        if(other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
         {
+            UnicycleDialogue.SetActive(true);
             unicycleCam.Priority = 10;
             mainCam.Priority = 1;
+        }
+
+        if(other.gameObject.name == "EvolutionSense1")
+        {
+            Debug.Log("없어져라");
+            //this.gameObject.SetActive(false);
+            Destroy(this.gameObject);
+            EvolutionPlayer.SetActive(true);
+            EvolutionSense.SetActive(false);
         }
     }
 
@@ -168,13 +184,14 @@ public class HouseScene2_Player : MonoBehaviour
         {
             npc_cam.Priority = 1;
             mainCam.Priority = 10;
-            TalkEnd= true;
+            TalkEnd1= true;
         }
 
         if (other.gameObject.name == "Unicycle_Sense")
         {
             unicycleCam.Priority = 1;
             mainCam.Priority = 10;
+            TalkEnd2 = true;
         }
     }
 

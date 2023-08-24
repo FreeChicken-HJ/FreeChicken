@@ -111,7 +111,11 @@ public class CaveScenePlayer : MonoBehaviour
     public bool check_savepoint2;
     public bool check_savepoint3;
     public bool check_savepoint4;
+
+    [Header("Audio")]
     public AudioSource saveSound;
+    public AudioSource mainSound;
+
     // MomDown
     public GameObject Mom;
     public GameObject FollowMom;
@@ -138,7 +142,7 @@ public class CaveScenePlayer : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         isJump = false;
         DadAnim = Dad.GetComponent<Animator>();
-
+        mainSound.Play();
 
     }
 
@@ -146,8 +150,7 @@ public class CaveScenePlayer : MonoBehaviour
     {
         obstacle = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_Cave>();
         DiePs.gameObject.SetActive(false);
-       
-        
+        //FirstCam.Priority =999;
     }
 
     void Update()
@@ -317,13 +320,13 @@ public class CaveScenePlayer : MonoBehaviour
             //fire.Stop();
                 DeadCount.count += 1;
 
-                /* if (check_savepoint0 *//*&& Dead*//*)
-                 {
-                     DieMotion();
-                     Invoke("restart_stage0", 3f);
-                 }*/
+            //if (check_savepoint0 /**//*&& Dead*//**/)
+            //     {
+            //    DieMotion();
+            //    Invoke("restart_stage0", 3f);
+            //}
 
-                if (check_savepoint1 /*&& Dead*/)
+            if (check_savepoint1 /*&& Dead*/)
                 {
                     DieMotion();
                     Invoke("restart_stage1", 3f);
@@ -351,8 +354,6 @@ public class CaveScenePlayer : MonoBehaviour
                     DieMotion();
                     Invoke("restart_stage0", 3f);
                 }
-
-            
         }
     }
 

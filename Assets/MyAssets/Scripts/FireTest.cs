@@ -40,12 +40,12 @@ public class FireTest : MonoBehaviour
         }
     }
 
-    //void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        particleObj.gameObject.SetActive(false);
-    //        //playAura = false;
-    //    }
-    //}
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            particleObj.gameObject.SetActive(false);
+            //playAura = false;
+        }
+    }
 }

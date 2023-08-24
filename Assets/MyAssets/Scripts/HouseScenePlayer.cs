@@ -90,7 +90,7 @@ public class HouseScenePlayer : MonoBehaviour
     {
         obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
-        StartCam.Priority = 10;
+        //StartCam.Priority = 10;
         //DieImage.gameObject.SetActive(false);
         //SavePointImage.SetActive(false);
     }

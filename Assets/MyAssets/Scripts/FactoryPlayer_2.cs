@@ -17,6 +17,8 @@ public class FactoryPlayer_2 : MonoBehaviour
     Rigidbody rigid;
     public GameObject thisRealObj;
 
+    
+
     [Header("Bool")]
     public bool isJump;
     public bool isSlide;
@@ -32,12 +34,13 @@ public class FactoryPlayer_2 : MonoBehaviour
     public GameObject DieCanvas;
     public GameObject DieParticle;
     public FactorySceneChangeZone changeZone;
-    
+    public ParticleSystem jumpParticle;
+    public GameObject pickUpParticle;
+
     [Header("UI")]
     public GameObject scene2LastUI;
-    public GameObject PickUpUI;
-
-   
+    public GameObject LoadingUI;
+  
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera DieCam;
@@ -81,7 +84,8 @@ public class FactoryPlayer_2 : MonoBehaviour
     void PickUP()
     {
 
-        PickUpUI.SetActive(true);
+        DieCanvas.SetActive(true);
+
         dieAudio.Play();
         Invoke("ExitCanvas", 2f);
     }
@@ -129,6 +133,7 @@ public class FactoryPlayer_2 : MonoBehaviour
             {
                 isJump = true;
                 jumpAudio.Play();
+                jumpParticle.Play();
                 anim.SetTrigger("doJump");
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 
@@ -147,8 +152,8 @@ public class FactoryPlayer_2 : MonoBehaviour
             isSlide = false;
             isStamp = true;
             thisRealObj.gameObject.transform.localScale = new Vector3(2f, 0.5f, 2f);
-
-            Invoke("PickUP", 4f);
+            pickUpParticle.SetActive(true);
+            Invoke("PickUP", 2.5f);
 
         }
 
@@ -167,25 +172,14 @@ public class FactoryPlayer_2 : MonoBehaviour
             DieCanvas.SetActive(true);
             mainCam.Priority = 1;
             DieCam.Priority = 2;
-            Invoke("ExitCanvas", 2f);
+            Invoke("ExitCanvas", 1.5f);
         }
         
     }
     void ExitCanvas()
     {
-        if (isDie)
-        {
-            DieCanvas.gameObject.SetActive(false);
-            isDie = false;
-            DieParticle.SetActive(false);
-        }
-        /*if (isStamp)
-        {
-            PickUpUI.SetActive(false);
-            isStamp = false;
-            //thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
-            //pickUpCam.Priority = -5;
-        }*/
+        DeadCount.count++;
+      
         SceneManager.LoadScene("FactoryScene_2");
 
     }
@@ -193,13 +187,23 @@ public class FactoryPlayer_2 : MonoBehaviour
     {
         if (other.gameObject.name == "Rail")
         {
-            scene2LastUI.gameObject.SetActive(true);
-            Invoke("RoadScene", 5f);
+            //scene2LastUI.gameObject.SetActive(true);
+            Invoke("RoadScene", 2f);
         }
     }
     void RoadScene()
     {
-        scene2LastUI.gameObject.SetActive(false);
+        Debug.Log("제발떠라");
+        LoadingUI.SetActive(true);
+        //scene2LastUI.gameObject.SetActive(false);
+        BGM.Stop();
+        Invoke("FinalSceneLoad", 2f);
+        
+       
+    }
+    void FinalSceneLoad()
+    {
+        
         SceneManager.LoadScene("FactoryScene_3");
     }
     void OnTriggerStay(Collider other)

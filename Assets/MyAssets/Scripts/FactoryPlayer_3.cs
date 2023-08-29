@@ -19,13 +19,16 @@ public class FactoryPlayer_3 : MonoBehaviour
     Rigidbody rigid;
     
     public ParticleSystem attackParticle;
-    public FactorySceneBomb Bomb;
+    public ParticleSystem jumpParticle;
+    
     public GameObject DieParticle;
-    public GameObject TMP;
+    
     public GameObject PotionTMP;
     public GameObject PotionTMP_2;
 
     public GameObject NPC;
+    
+    //public GameState gameState;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera changeCam;
@@ -49,8 +52,8 @@ public class FactoryPlayer_3 : MonoBehaviour
     public bool isSavePointChk;
 
     public bool isSavePoint_1;
-    public bool isSavePoint_2;  
-    public bool isSavePoint_3;
+    
+    public bool isSavePoint_2;
     public bool isPotion;
    
     [Header("UI")]
@@ -67,7 +70,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject LastUI;
     public GameObject truckPos;
     public GameObject Truck;
-
+    public TextMeshProUGUI EButton;
     
     public float minValue;
     public float maxValue;
@@ -77,7 +80,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject Pos3;
 
     public GameObject SavePointObj_1;
-    public GameObject SavePointObj_2;
+    
     public GameObject SavePointObj_3;
 
     public GameObject SavePosUI;
@@ -88,29 +91,23 @@ public class FactoryPlayer_3 : MonoBehaviour
     public AudioSource SaveAudio;
     public AudioSource truckLeaveAudio;
     public AudioSource BGM;
-    
+    public AudioSource PipeMagicSound;
+
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         
         NPC = GameObject.FindWithTag("NPC");
+       
     }
     void Start()
     {
-        startUI.SetActive(true);
-        mainUI.SetActive(false); // 치킨으로 성장하는 퍼센트
-        Invoke("NewStart", 2f);
+        
         BGM.Play();
     }
-    void NewStart()
-    {
-        startUI.SetActive(false);
-        mainUI.SetActive(true);
-        mainCam.Priority = 3;
-        changeCam.Priority = 1;
-        dieCam.Priority = 2;
-    }
+ 
     void Update()
     {
 
@@ -128,11 +125,17 @@ public class FactoryPlayer_3 : MonoBehaviour
             Truck.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 4f);
             this.gameObject.transform.position = truckPos.transform.position;
             LastUI.SetActive(true);
-            //SceneManager.LoadScene() // 가정집
+            Invoke("Finish", 3f);
+            
         }
         
     }
-   
+    void Finish()
+    {
+        GameSave.isHouse = true;
+        PlayerPrefs.SetInt("GoHouse", GameSave.isHouse? 1:0);
+        SceneManager.LoadScene("Enter2DScene"); 
+    }
     private void FixedUpdate()
     {
         if (isEbutton)
@@ -144,6 +147,7 @@ public class FactoryPlayer_3 : MonoBehaviour
                 {
                     t += Time.deltaTime;
                     OnTruck.value = Mathf.Lerp(0, 100, t);
+                    EButton.color = Color.red;
                 }
                 else
                 {
@@ -152,12 +156,10 @@ public class FactoryPlayer_3 : MonoBehaviour
                     ExitUI.gameObject.SetActive(false);
                     changeCam.Priority = 5;
                     mainCam.Priority = -5;
-                    Debug.Log("트럭출동");
+                    
                     truckLeaveAudio.Play();
-                    // 검은 화면 3초
-                    // 다음씬으로 이어지게
                     isEbutton = false;
-                    //.LoadScene("CityScene");
+                    
                     isTruckGo = true;
                 }
                 
@@ -167,12 +169,13 @@ public class FactoryPlayer_3 : MonoBehaviour
             {
                 t = 0;
                 OnTruck.value = 0;
+                EButton.color = Color.white;
             }
         }
        
         
     }
-    // Update is called once per frame
+
     public void GetInput()
     {
 
@@ -204,7 +207,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void Turn()
     {
-        transform.LookAt(transform.position + moveVec); // LookAt(): 지정된 벡터를 향해서 회전시켜주는 함수
+        transform.LookAt(transform.position + moveVec); 
     }
     public void Jump()
     {
@@ -215,6 +218,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             {
 
                 isJump = true;
+                jumpParticle.Play();
                 jumpAudio.Play();
                 anim.SetTrigger("doJump");
                 rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
@@ -226,7 +230,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Exit" /*&& isLastNPC*/) // 마지막 npc 구해야만 트럭 UI 뜨게 설정
+        if (other.gameObject.tag == "Exit") 
         {
             Debug.Log("출구");
             ExitUI.gameObject.SetActive(true);
@@ -239,30 +243,20 @@ public class FactoryPlayer_3 : MonoBehaviour
         {
             isSavePointChk = true;
             isSavePoint_1 = true;
+           
             isSavePoint_2 = false;
-            isSavePoint_3 = false;
             SavePointObj_1.SetActive(false);
             SaveAudio.Play();
             SavePosUI.SetActive(true);
             Invoke("ResetUI", 3f);
         }
+   
        if(other.gameObject.tag == "SavePoint_2")
         {
             isSavePointChk = true;
             isSavePoint_1 = false;
+            
             isSavePoint_2 = true;
-            isSavePoint_3 = false;
-            SaveAudio.Play();
-            SavePointObj_2.SetActive(false);
-            SavePosUI.SetActive(true);
-            Invoke("ResetUI", 3f);
-        }
-       if(other.gameObject.tag == "SavePoint_3")
-        {
-            isSavePointChk = true;
-            isSavePoint_1 = false;
-            isSavePoint_2 = false;
-            isSavePoint_3 = true;
             SaveAudio.Play();
             SavePointObj_3.SetActive(false);
             SavePosUI.SetActive(true);
@@ -273,8 +267,9 @@ public class FactoryPlayer_3 : MonoBehaviour
             isPotion = true;
             mainCam.Priority = -1;
             potionCam.Priority = 100;
-            //위로 올라가는 소리 추가 필요 7.21
-            //PotionTMP = this.gameObject.transform.position;
+            PipeMagicSound.Play();
+            
+           
             Invoke("ResetCam", 2f);
             
         }
@@ -283,6 +278,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             isPotion = true;
             mainCam.Priority = -1;
             potionCam_2.Priority = 100;
+            PipeMagicSound.Play();
             Invoke("ResetCam_1", 2f);
         }
     }
@@ -297,6 +293,7 @@ public class FactoryPlayer_3 : MonoBehaviour
         potionCam.Priority = -5;
         mainCam.Priority = 100;
         isPotion = false;
+        PipeMagicSound.Stop();
     }
     void ResetCam_1()
     {
@@ -305,6 +302,7 @@ public class FactoryPlayer_3 : MonoBehaviour
         potionCam_2.Priority = -5;
         mainCam.Priority = 100;
         isPotion = false;
+        PipeMagicSound.Stop();
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -316,6 +314,7 @@ public class FactoryPlayer_3 : MonoBehaviour
         }
         if (collision.gameObject.tag == "ObstacleZone3"|| collision.gameObject.tag == "Obstacle"&&!isDie)
         {
+            
             isDie = true;
             anim.SetTrigger("doDie");
             anim.SetBool("isDie",true);
@@ -338,23 +337,9 @@ public class FactoryPlayer_3 : MonoBehaviour
         if (collision.gameObject.tag == "Floor")
         {
             UpstairUI.gameObject.SetActive(true);
-            Invoke("UpstairExit", 2f);
+            Invoke("UpstairExit", 1f);
         }
-        if (collision.gameObject.tag == "PickUpPoc" && !isPickUp)
-        {
-            TMP = collision.gameObject;
-            isPickUp = true;
-
-
-            //transform.Translate()
-            //
-
-            
-            /*pickUpCam.Priority = 100;
-            mainCam.Priority = 1;
-            Invoke("PickUP", 4f);*/
-
-        }
+        
     }
    
     void UpstairExit()
@@ -364,7 +349,7 @@ public class FactoryPlayer_3 : MonoBehaviour
 
     void ExitCanvas()
     {
-
+        DeadCount.count++;
         DieCanvas.gameObject.SetActive(false);
         isDie = false;
        
@@ -374,6 +359,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void ReSpawnCanvas()
     {
+        DeadCount.count++;
         DieCanvas.gameObject.SetActive(false);
         isDie = false;
 
@@ -386,11 +372,8 @@ public class FactoryPlayer_3 : MonoBehaviour
         {
             this.gameObject.transform.position = Pos1.transform.position;
         }
+        
         if (isSavePoint_2)
-        {
-            this.gameObject.transform.position = Pos2.transform.position;
-        }
-        if (isSavePoint_3)
         {
             this.gameObject.transform.position = Pos3.transform.position;
         }

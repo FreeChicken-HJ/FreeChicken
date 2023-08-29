@@ -6038,7 +6038,6 @@ GameObject:
   - component: {fileID: -5754084199372789682}
   - component: {fileID: -7511558181221131132}
   - component: {fileID: 3824120590605915205}
-  - component: {fileID: 8385156250169814860}
   m_Layer: 0
   m_Name: SM_Archway_01
   m_TagString: Untagged
@@ -6130,30 +6129,9 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -9141345092993118680, guid: 1f151b5ab17f5d947ae6b47a6d4fd3ce, type: 3}
---- !u!114 &8385156250169814860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149155446097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26deed5f9d6d48146ba5b37056231e86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 0
-  distance: 0
-  turningPoint: 0
-  turnSwitch: 0
-  moveSpeed: 0
-  angle: 0
-  swingSpeed: 0
-  isMove: 0
-  rotateSpeed: 100
 --- !u!1 &948503559837023304
 GameObject:
   m_ObjectHideFlags: 0
@@ -11172,7 +11150,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4873348126958792947}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.58, y: -100.66972, z: 102.45137}
+  m_LocalPosition: {x: 20.58, y: -100.66972, z: 95.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23098,7 +23076,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8209510929500907345}
   m_LocalRotation: {x: -0.25157136, y: -0, z: -0, w: 0.96783876}
-  m_LocalPosition: {x: 0, y: 0.76, z: 10.3}
+  m_LocalPosition: {x: 0, y: 0.46, z: 4.53}
   m_LocalScale: {x: 3.5, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []

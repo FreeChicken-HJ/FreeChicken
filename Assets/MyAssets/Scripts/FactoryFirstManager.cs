@@ -27,11 +27,17 @@ public class FactoryFirstManager : MonoBehaviour
     public AudioSource mainAudio_1;
     public AudioSource mainAudio_2;
     public AudioSource heartAudio;
+
+    public GameObject attackBox;
+    public GameObject Wall;
+    //Renderer attackBoxRender;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
+        //attackBox = GameObject.Find("ChangeEggDestroy").GetComponent<Factory_WallColorChange>();
+        //attackBoxRender = attackBox.GetComponent<Renderer>();
         //playeregg = GameObject.Find("PlayerEgg").GetComponent<PlayerChangeEgg>();
     }
 
@@ -51,23 +57,22 @@ public class FactoryFirstManager : MonoBehaviour
         GameObject instance = Instantiate(particle,pos,Quaternion.identity);
         if (player.tmpBox.transform.position == pos)
         {
-            //GameObject ob = Instantiate(Dieparticle, pos, Quaternion.identity);
-            Debug.Log("야야 니 주것댥");
-            yield return new WaitForSeconds(3f);
-            //Destroy(ob);
+           
+            yield return new WaitForSeconds(2f);
+          
             talkCanvas1.SetActive(true);
             managerInCam.Priority = 2;
             managerCam.Priority = 1;
-            Invoke("Die",3f);
+            Invoke("Die",2f);
 
     }
         else
         {
 
-            Debug.Log("니 살았닭");
+            
             yield return new WaitForSeconds(1.5f);
             talkCanvas2.SetActive(true);
-            Invoke("Trun", 3f);
+            Invoke("Turn", 3f);
 
 
         }
@@ -84,8 +89,8 @@ public class FactoryFirstManager : MonoBehaviour
         player.isEgg = false;
         Vector3 pos = eggBoxSpawnPos.transform.position;
         Quaternion rotate = new Quaternion(-0.0188433286f, -0.706855774f, -0.706855536f, 0.0188433584f);
-
-        //eggBox.SetActive(true);
+        Wall.SetActive(true);
+       
         eggBox.transform.position = pos;
         eggBox.transform.rotation = rotate;
         eggBox.GetComponent<FactoryMoveEggBox>().isChk = false;
@@ -93,13 +98,14 @@ public class FactoryFirstManager : MonoBehaviour
         mainCam.Priority = 2;
         heartAudio.Stop();
         mainAudio_1.Play();
-
+        DeadCount.count++;
         player.isSetEggFinish = false;
+        player.isClick = false;
         player.Pos();
         anim.SetBool("isAttack", false);
         isChk = false;
     }
-    void Trun()
+    void Turn()
     {
         talkCanvas2.SetActive(false);
         managerCam.Priority = 1;
@@ -117,10 +123,10 @@ public class FactoryFirstManager : MonoBehaviour
     }
     Vector3 GetRandomPos()
     {
-       
-        box = Random.Range(0, boxPos.Length);
-        
-        Vector3 pos = boxPos[box].transform.position;
+
+        //box = Random.Range(0, boxPos.Length);
+        Vector3 pos = attackBox.transform.position;
+        //Vector3 pos = boxPos[box].transform.position;
         return pos;
     }
     void OnTriggerEnter(Collider other)
@@ -133,8 +139,12 @@ public class FactoryFirstManager : MonoBehaviour
             eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0f;
             Debug.Log("속도다운");
             anim.SetBool("isAttack", true);
-            hitAudio.Play();
+            Invoke("PlayHitSound", .5f);
         }
         
+    }
+    void PlayHitSound()
+    {
+        hitAudio.Play();
     }
 }

@@ -23,6 +23,7 @@ public class FactoryUIManager : MonoBehaviour
     public GameObject npc;
     public bool isTalkPoint2;
 
+    public AudioSource TalkSound;
     private void Awake()
     {
         instance = this;
@@ -56,19 +57,21 @@ public class FactoryUIManager : MonoBehaviour
         {
             currentSentences = sentences.Dequeue();
             isTyping = true;
+            TalkSound.Play();
             nextText.SetActive(false);
             StartCoroutine(Typing(currentSentences));
         }
         if (sentences.Count == 0)
         {
-           
-                instance.gameObject.SetActive(false);
+            
+            instance.gameObject.SetActive(false);
                 player.isTalk = false;
                 isTalkEnd = true;
+               
                 player.isStopSlide = false;
                 npccam.Priority = 1;
                 maincam.Priority = 2;
-                npc.SetActive(false);
+                //npc.SetActive(false);
             
            
         }
@@ -99,6 +102,7 @@ public class FactoryUIManager : MonoBehaviour
         {
             if (!isTyping)
                 NextSentence();
+                
         }
       
        

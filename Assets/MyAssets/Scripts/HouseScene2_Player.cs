@@ -64,8 +64,7 @@ public class HouseScene2_Player : MonoBehaviour
     public GameObject EvolutionPlayer;
     public GameObject EvolutionSense;
 
-
-
+    
     void Awake()
     {
         mainAudio.Play();

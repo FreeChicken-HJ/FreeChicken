@@ -39,11 +39,11 @@ public class CitySceneSpawn : MonoBehaviour
     }
     private void Update()
     {
-        if (areaIndex == 6 && !isFinish)
+        if (areaIndex == 5 && !isFinish)
         {
             isStop = true;
             SpawnLastMap();
-            //Debug.Log("∞‘¿” ≥°");
+           
         }
     }
     public void SpawnArea(bool isRandom = true)

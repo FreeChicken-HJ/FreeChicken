@@ -37,7 +37,7 @@ public class FactorySceneLeaveTruk : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("충돌");
+           
             isTouch = true;
             particle.SetActive(true);
 
@@ -46,16 +46,13 @@ public class FactorySceneLeaveTruk : MonoBehaviour
     }
     void ReLoad()
     {
+        
         if (isNextScene2)
         {
+            DeadCount.count++;
             SceneManager.LoadScene("FactoryScene_2");
         }
-        else
-        {
-            SceneManager.LoadScene("FactoryScene_3");
-        }
-       
+   
     }
 }
-// 씬 세개로 
-// 두번쨰 씬 시작할때 검은 화면 3초 후에 다시 시작 
+

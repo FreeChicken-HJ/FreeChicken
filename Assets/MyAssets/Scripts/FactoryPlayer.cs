@@ -17,7 +17,8 @@ public class FactoryPlayer : MonoBehaviour
     public float jumpPower;
     Vector3 moveVec;
     Rigidbody rigid;
-    
+    public ParticleSystem jumpParticle;
+
     [Header("Bool")]
     public bool isJump;
     public bool isSlide;
@@ -25,7 +26,6 @@ public class FactoryPlayer : MonoBehaviour
     public bool isDie;
     public bool isStamp;
 
-    //public FactoryUIManager uIManager;
     public bool isTalk;
     public bool isEgg;
     public bool isStopSlide;
@@ -41,7 +41,11 @@ public class FactoryPlayer : MonoBehaviour
     public bool isSavePointPos;
 
     public bool isPlaying = false;
-   
+
+    public int DeathCount;
+
+    public bool isWallChagneColor;
+    public bool isClick;
     [Header("UI")]
     public GameObject turnEggCanvas;
     public GameObject changeEggCanvas;
@@ -52,9 +56,9 @@ public class FactoryPlayer : MonoBehaviour
     public GameObject DieCanvas;
     public GameObject UpstairCanvas;
     public GameObject scene2LastUI;
-    public GameObject PickUpUI;
+   
     public GameObject SavePointTxt;
-
+    public GameObject LoadingUI;
 
     [Header("Stats")]
     public GameObject eggBoxSpawnTriggerBox;
@@ -64,18 +68,21 @@ public class FactoryPlayer : MonoBehaviour
 
     
     public GameObject DieParticle;
+    public GameObject PickUpParticle;
     public Vector3 pos;
 
     public GameObject TMP;
     public GameObject StampTMP;
    
-    public FactorySceneChangeZone changezone;
+    
 
     public GameObject existingSlideObj;
     public GameObject changeSlideObj;
 
     public GameObject savePointPos_1;
     public GameObject savePointPos_2;
+
+    public GameObject ChangeEggDoor;
 
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
@@ -102,14 +109,13 @@ public class FactoryPlayer : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         isTalk = false;
-        changezone =  GameObject.Find("ChangeConveyorZone").GetComponent<FactorySceneChangeZone>();
-        //fixUI = gameObject.GetComponent<FactoryFixUI>();
+        
     }
    
     void Update()
     {
         
-        if (!isTalk && !isEgg && !isDie && !isStart /*&& !changezone.isButton*/&&!isPickUp &&!isStamp)
+        if (!isTalk && !isEgg && !isDie && !isStart &&!isPickUp &&!isStamp)
         {
             Move();
             GetInput();
@@ -125,10 +131,7 @@ public class FactoryPlayer : MonoBehaviour
         {
             anim.SetBool("isWalk", false);
         }
-        if (changezone.isButton)
-        {
-            anim.SetBool("isWalk", false);
-        }
+        
 
         if (isPickUp)
         {
@@ -148,7 +151,7 @@ public class FactoryPlayer : MonoBehaviour
             isPlaying = true;
             dieAudio.Play();
         }
-        PickUpUI.SetActive(true);
+        DieCanvas.SetActive(true);
         Invoke("ExitCanvas", 2f);
     }
     IEnumerator Check()
@@ -158,11 +161,12 @@ public class FactoryPlayer : MonoBehaviour
 
         if (Input.GetButton("E")&&!isSetEggFinish)
         {
-            Debug.Log("존변경!");
+            
             E.color = Color.red;
             isEgg = false;
+            isClick = false;
             changeEggCanvas.gameObject.SetActive(false);
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.2f);
             EggPrefab.gameObject.SetActive(false);
             
             thisMesh.SetActive(true);
@@ -170,7 +174,7 @@ public class FactoryPlayer : MonoBehaviour
         }
         E.color = Color.black;
     }
-    // Update is called once per frame
+  
     public void GetInput()
     {
         
@@ -204,7 +208,7 @@ public class FactoryPlayer : MonoBehaviour
     }
     void Turn()
     {
-        transform.LookAt(transform.position + moveVec); // LookAt(): 지정된 벡터를 향해서 회전시켜주는 함수
+        transform.LookAt(transform.position + moveVec); 
     }
     public void Jump()
     {
@@ -213,6 +217,7 @@ public class FactoryPlayer : MonoBehaviour
         {
             if (!isJump)
             {
+                jumpParticle.Play();
                 jumpAudio.Play();
                 isJump = true;
                 anim.SetTrigger("doJump");
@@ -222,23 +227,20 @@ public class FactoryPlayer : MonoBehaviour
         }
        
     }
-    /*void MoveWithPoc(Collision collision)
-    {
-        isPickUp = true;
-       
-    }*/
+  
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Sense" &&!isStamp)
         {
             StampTMP = collision.gameObject;
+            PickUpParticle.SetActive(true);
             pickUpCam.Priority = 100;
             mainCam.Priority = 1;
             isSlide = false;
             isStamp = true;
             thisRealObj.gameObject.transform.localScale = new Vector3(2f,0.5f,2f);
 
-            Invoke("PickUP", 2.5f);
+            Invoke("PickUP", 2f);
 
         }
         if(collision.gameObject.tag == "PickUpPoc" && !isPickUp)
@@ -248,7 +250,8 @@ public class FactoryPlayer : MonoBehaviour
             isSlide = false;
             pickUpCam.Priority = 100;
             mainCam.Priority = 1;
-            Invoke("PickUP", 2.5f);
+            PickUpParticle.SetActive(true);
+            Invoke("PickUP", 2f);
 
         }
         if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox")
@@ -279,11 +282,11 @@ public class FactoryPlayer : MonoBehaviour
                 
                 if (isSetEggFinish)
                 {
-                    Invoke("Scene2Road", 2.5f);
+                    Invoke("Scene2Road", 2f);
                 }
                 else
                 {
-                    Invoke("ExitCanvas", 2.5f);
+                    Invoke("ExitCanvas", 2f);
                 }
             }
             
@@ -300,29 +303,35 @@ public class FactoryPlayer : MonoBehaviour
     }
     void ExitCanvas()
     {
-       
-        Debug.Log("자리변경");
+
+        DeadCount.count++;
+        
         if (isDie)
         {
             DieCanvas.gameObject.SetActive(false);
             
-            DieParticle.SetActive(false);
+            
             dieCam.Priority = -3;
             isDie = false;
+            DieParticle.SetActive(false);
             anim.SetBool("isDie", false);
         }
         if(isPickUp)
         {   
-            PickUpUI.SetActive(false);
+           
             isPickUp = false;
             pickUpCam.Priority = -5;
+            DieCanvas.SetActive(false);
+            PickUpParticle.SetActive(false);
         }
         if (isStamp)
         {
-            PickUpUI.SetActive(false);
+        
             isStamp = false;
             thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
-            pickUpCam.Priority = -5;
+            pickUpCam.Priority = -5;    
+            DieCanvas.SetActive(false);
+            PickUpParticle.SetActive(false);
         }
        
         mainCam.Priority = 2;
@@ -344,76 +353,40 @@ public class FactoryPlayer : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
        
-        if(other.gameObject.tag == "Rock")//eggchangezone
+        if(other.CompareTag("Rock"))
         {
             mainAudio.Stop();
             eggChangeZoneAudio.Play();
         }
-        if (other.gameObject.tag == "PointZone"&& !isSetEggFinish)
+       
+        if (other.CompareTag("StopSlide")) 
         {
-           
-          
-               
-                
-                
-                turnEggCanvas.gameObject.SetActive(true);
-                
-                if (Input.GetButton("E") && !isSetEggFinish)
-                {
-                    Debug.Log("E");
-                    Spacebar.color = Color.red;
-                    Vector3 pos = other.gameObject.transform.position;
 
-                    tmpBox = other.gameObject;
-                    thisMesh.SetActive(false);
-                    EggPrefab.gameObject.SetActive(true);
-                    EggPrefab.transform.position = pos;
-                    turnEggCanvas.gameObject.SetActive(false);
-
-                    changeEggCanvas.gameObject.SetActive(true);
-                    //StartCoroutine("Check");
-                    isEgg = true;
-
-                    StartCoroutine(Egg());
-
-                }
             
-            Spacebar.color = Color.black;
-        }
-        if (other.gameObject.tag == "StopSlide") 
-        {
-
-            //Debug.Log("대화 종료");
-            //stopSlideCanvas.gameObject.SetActive(true);
-            fixAudio.Stop();
             mainCam.Priority = 1;
             stopConCam.Priority = 2;
             stopSlideCanvas.gameObject.SetActive(true);
             eggBoxSpawnTriggerBox.SetActive(true);
             existingSlideObj.SetActive(false);
             changeSlideObj.SetActive(true);
-            
+            isWallChagneColor = true;
 
 
         }
-        if(other.gameObject.tag == "EggBoxPos")
+        if(other.CompareTag("EggBoxPos"))
         {
-            Debug.Log("box에 충돌");
+            
             Vector3 pos = eggBoxSpawnPos.transform.position;
             Quaternion rotate = new Quaternion(-0.0188433286f, -0.706855774f, -0.706855536f, 0.0188433584f);
-            /*isSetEggFinish = false;
-            eggBox.GetComponent<FactoryMoveEggBox>().isChk = false;*/
+          
             eggBox.SetActive(true);
             eggBox.transform.position = pos;
             eggBox.transform.rotation = rotate;
+            
            
         }
-        if (other.gameObject.name == "Rail")
-        {
-            scene2LastUI.gameObject.SetActive(true);
-            Invoke("RoadScene", 5f);
-        }
-        if(other.gameObject.tag == "SavePoint_1")
+        
+        if(other.CompareTag("SavePoint_1"))
         {
             isSavePointPos = true;
             savePointAudio.Play();
@@ -421,30 +394,34 @@ public class FactoryPlayer : MonoBehaviour
             SavePointTxt.SetActive(true);
             Invoke("DestroySavePointTxt", 2f);
         }
-        if(other.gameObject.tag == "SavePoint_2")
+        if(other.CompareTag("SavePoint_2"))
         {
             savePointAudio.Play();
             savePointPos_2.SetActive(false);
             SavePointTxt.SetActive(true);
-            Invoke("DestroySavePointTxt", 2f);
+            
+            Invoke("ReLoadScene_2", 1f);
         }
+    }
+    
+    void ReLoadScene_2()
+
+    {
+        LoadingUI.SetActive(true);
+        SceneManager.LoadScene("FactoryScene_2");
     }
     void DestroySavePointTxt()
     {
         SavePointTxt.SetActive(false);
     }
-    void RoadScene()
-    {
-        scene2LastUI.gameObject.SetActive(false);
-        SceneManager.LoadScene("FactoryScene_3");
-    }
+
     IEnumerator Egg()
     {
         yield return new WaitForSeconds(3f);
         if (isEgg)
         {
-            Debug.Log("알로 변신 했고 3초 지났음");
-            
+
+            ChangeEggDoor.SetActive(false);
             isSetEggFinish = true;
             eggChangeZoneAudio.Stop();
             heartBeatAudio.Play();
@@ -454,44 +431,70 @@ public class FactoryPlayer : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Slide" && !isTalk && !isStopSlide)
+        if (other.CompareTag("Slide") && !isTalk && !isStopSlide)
         {
             isSlide = true;
         }
-        if (other.tag == "TurnPointR" && !isStopSlide)
+        if (other.CompareTag("TurnPointR") && !isStopSlide)
         {
             
             this.gameObject.transform.Translate(Vector3.right * Time.deltaTime * 1f, Space.World);
         }
-        if (other.tag == "TurnPointL" && !isStopSlide)
+        if (other.CompareTag("TurnPointL") && !isStopSlide)
         {
             
             this.gameObject.transform.Translate(Vector3.left * Time.deltaTime * 1f, Space.World);
         }
-        if (other.tag == "TurnPointD" && !isStopSlide)
+        
+        if (other.CompareTag("PointZone") && !isSetEggFinish &&!isClick)
         {
-            
-            this.gameObject.transform.Translate(Vector3.back * Time.deltaTime * 1f, Space.World);
 
+
+            turnEggCanvas.gameObject.SetActive(true);
+            
+            if (Input.GetButton("F") && !isSetEggFinish)
+            {
+                isClick = true;
+
+                Spacebar.color = Color.red;
+                Vector3 pos = other.gameObject.transform.position;
+
+                tmpBox = other.gameObject;
+                thisMesh.SetActive(false);
+                EggPrefab.gameObject.SetActive(true);
+                EggPrefab.transform.position = pos;
+                turnEggCanvas.gameObject.SetActive(false);
+
+                changeEggCanvas.gameObject.SetActive(true);
+
+                isEgg = true;
+
+                StartCoroutine(Egg());
+
+            }
+
+            Spacebar.color = Color.black;
         }
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Slide")
+        if (other.CompareTag("Slide"))
         {
             isSlide = false;
         }
-        if(other.tag == "PointZone")
+        if(other.CompareTag("PointZone"))
         {
             turnEggCanvas.gameObject.SetActive(false);
         }
-        if(other.tag == "StopSlide")
+        if(other.CompareTag("StopSlide"))
         {
+            
             mainCam.Priority = 2;
             stopConCam.Priority = 1;
             stopSlideCanvas.gameObject.SetActive(false);
+            
         }
-        //speed = 2.5f;
+        
     }
     
 }

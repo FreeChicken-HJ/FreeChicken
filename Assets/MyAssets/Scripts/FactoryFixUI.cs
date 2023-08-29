@@ -17,7 +17,7 @@ public class FactoryFixUI : MonoBehaviour
     public CinemachineVirtualCamera stopConCam;
 
     public GameObject fixObj;
-
+    public AudioSource fixAudio;
     float t = 0;
     // Start is called before the first frame update
     void Start()
@@ -34,7 +34,7 @@ public class FactoryFixUI : MonoBehaviour
         {
             
             E.color = Color.red;
-            Debug.Log("E");
+           
             if (slider.value < 100f)
             {
                 t += Time.deltaTime;
@@ -67,7 +67,9 @@ public class FactoryFixUI : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         mainCam.Priority = 2;
         stopConCam.Priority = 1;
-        fixObj.SetActive(false);
+        fixAudio.Stop();
+        Destroy(fixObj);
+        //fixObj.SetActive(false);
         //stopConCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }

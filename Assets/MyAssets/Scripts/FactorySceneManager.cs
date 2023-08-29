@@ -27,6 +27,7 @@ public class FactorySceneManager : MonoBehaviour
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera catchCam;
     
+    
     // Start is called before the first frame update
     void Start()
     {

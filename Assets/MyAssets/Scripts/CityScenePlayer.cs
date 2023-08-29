@@ -22,7 +22,7 @@ public class CityScenePlayer : MonoBehaviour
     public float Speed;
     public bool isfallingFruits;
     public bool ishurdleUp;
-
+    public bool isChk;
     bool isDie;
     bool particleAttack;
 
@@ -40,7 +40,7 @@ public class CityScenePlayer : MonoBehaviour
     public AudioSource BGM;
     public AudioSource DieAudio;
     public AudioSource JumpAudio;
-    
+    public AudioSource ChangeAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,11 +49,12 @@ public class CityScenePlayer : MonoBehaviour
         DiePs.gameObject.SetActive(false);
         particleAttack = false;
         isAllStop = true;
-
-        Invoke("NewStart", 3f);
+        
+        Invoke("NewStart", 2.9f);
     }
     void NewStart()
     {
+       
         startAudio.Stop();
         BGM.Play();
         isAllStop = false;
@@ -99,7 +100,7 @@ public class CityScenePlayer : MonoBehaviour
     void Move()
     {
 
-        //Move(direction * Time.deltaTime);
+     
 
         Vector3 position = transform.position;
         position.x += hAxis * Time.smoothDeltaTime * Speed;
@@ -120,10 +121,7 @@ public class CityScenePlayer : MonoBehaviour
             }
         }
         transform.position = position;
-        //GetInput();
-        //anim.SetTrigger("doRun");
-        //rigid.AddForce(direction * Time.deltaTime * Speed);
-        //transform.position += direction * Time.deltaTime;
+       
         anim_1.SetBool("isRun", true);
         
 
@@ -135,8 +133,6 @@ public class CityScenePlayer : MonoBehaviour
         {
             if (!isJump)
             {
-                //Cam.SetActive(false);
-                //jumpCam.SetActive(true);
                 
                 if (!isLast)
                 {
@@ -144,7 +140,7 @@ public class CityScenePlayer : MonoBehaviour
                     anim_1.SetTrigger("doJump");
                     Invoke("ReSetJumpCam", 1f);
                 }
-                //anim.SetBool("isJump", true);
+         
                 isJump = true;
                 JumpAudio.Play();
                 rigid.AddForce( Vector3.up* jumpPower, ForceMode.Impulse);
@@ -158,10 +154,9 @@ public class CityScenePlayer : MonoBehaviour
     }
     void ReSetJumpCam()
     {
-        //Cam.SetActive(true);
-        //jumpCam.SetActive(false);
+        
         jumpCam.Priority = -1;
-        //anim.SetBool("isJump", false);
+       
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -196,35 +191,18 @@ public class CityScenePlayer : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "DropBox")
-        {
-            isfallingFruits = true;
-
-        }
+       
         if (other.tag == "Obstacle" &&!isDie)
         {
             TagisObj();
         }
-        if(other.tag == "Hurdle")
-        {
-            ishurdleUp = true;
-            Invoke("hurdleDownSet", 2.5f);
-        }
-        if(other.tag == "Rain")
-        {
-            isJump = true;
-            Speed = 10f;
-        }
-        if(other.tag == "Ice")
-        {
-            isJump = true;
-            Speed = 20f;
-        }
-        if(other.tag == "LastZone")
+    
+        if(other.tag == "LastZone" && !isChk)
         {
             isAllStop = true;
+            isChk = true;
             BGM.Stop();
-            
+            //LastSong.Play(); 8.16
             TalkUI.gameObject.SetActive(true);
             Invoke("Exit", 2f);
         }
@@ -237,35 +215,22 @@ public class CityScenePlayer : MonoBehaviour
 
         isLast = true;
         LastZonePlayer.SetActive(true);
+        ChangeAudio.Play();
+        
         CurrentZonePlayer.SetActive(false);
         jumpPower = 15f;
-        Debug.Log(jumpPower);
+       
 
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Rain")
-        {
-            isJump = false;
-            Speed = 6f;
-        }
-        if (other.tag == "Ice")
-        {
-            isJump = false;
-            Speed = 6f;
-        }
-    }
-    void hurdleDownSet()
-    {
-        ishurdleUp = false;
-    }
+    
+   
     void TagisObj()
     {
         if (!isDie)
         {
             isDie = true;
             DieAudio.Play();
-            //this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+         
             DiePs.gameObject.SetActive(true);
             dieCam.Priority = 100;
             anim_1.SetTrigger("doDie");
@@ -276,7 +241,7 @@ public class CityScenePlayer : MonoBehaviour
     }
     void ReLoadScene()
     {
-        //anim.SetBool("isDie", false);
+    
         
         SceneManager.LoadScene("CityScene");
     }

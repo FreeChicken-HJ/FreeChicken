@@ -8,40 +8,47 @@ public class FactoryNPC : MonoBehaviour
 {
     public Slider NpcUI;
     public GameObject factoryUI;
+    public GameObject GetMemoryUI;
     public FactoryPlayer player;
+    public FactoryPlayer_2 player_2;
+    public FactoryPlayer_3 player_3;
+    
     public bool isEbutton;
     public GameObject Ebutton;
     public TextMeshProUGUI E;
 
-    public GameObject Video;
-    
-    public FactoryTextBlink text;
+   
     public bool isNear;
-  
+    public static bool isFinish;
+    public bool isSet;
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera npcCam;
     public GameObject npc;
+    public GameObject CamImage;
+    public AudioSource getMemorySound;
 
-    public AudioSource BGM;
-    public AudioSource MelodyBox;
-    //public Animator animator;
+   
     public float t;
     void Start()
     {
         
         Ebutton.SetActive(false);
         player = GameObject.FindWithTag("Player").GetComponent<FactoryPlayer>();
-      
+        player_2 = GameObject.FindWithTag("Player").GetComponent<FactoryPlayer_2>();
+        player_3 = GameObject.FindWithTag("Player").GetComponent<FactoryPlayer_3>();
+        
         t = 0;
+       
     }
+  
     void Update()
     {
-        //Check();
+        
         if (Input.GetButton("E") && isEbutton)
         {
            
             E.color = Color.red;
-            Debug.Log("E");
+            
             if (NpcUI.value <100f)
             {
                 t += Time.deltaTime;
@@ -49,16 +56,39 @@ public class FactoryNPC : MonoBehaviour
             }
             else
             {
-                Video.SetActive(true);
-                BGM.Stop();
-                MelodyBox.Play();
+                CamImage.SetActive(true);
                 isEbutton = false;
-               
-                player.isStopSlide = true;
-                player.isSlide = false;
-                player.isTalk = true;
-                Invoke("ReStart", 6.5f);
+                npc.SetActive(false);
                 
+                if (player != null)
+                {
+                    player.isStopSlide = true;
+                    player.isSlide = false;
+                    player.isTalk = true;
+                }
+                else if(player_2 != null)
+                {
+                    player_2.isStopSlide = true;
+                    player_2.isSlide = false;
+                    player_2.isTalk = true;
+                }
+                else if (player_3 != null)
+                {
+                    player_3.isStopSlide = true;
+                    player_3.isSlide = false;
+                    player_3.isTalk = true;
+                   
+                }
+                
+                getMemorySound.Play();
+                GetMemoryUI.SetActive(true);
+               
+                Ebutton.SetActive(false);
+
+                MemoryCount.memCount++;
+                
+                Invoke("ReStart", 2f);
+
 
             }
         }
@@ -72,16 +102,38 @@ public class FactoryNPC : MonoBehaviour
     }
    void ReStart()
     {
-        Video.SetActive(false);
+        
+        CamImage.SetActive(false);
+        GetMemoryUI.SetActive(false);
+        isFinish = true;
        
-
-        Destroy(this.gameObject);
-        Destroy(text.gameObject);
-
-        Destroy(Ebutton);
-        BGM.Play();
-        MelodyBox.Stop();
-        factoryUI.gameObject.SetActive(true); 
+        this.gameObject.SetActive(false);
+       
+        if (factoryUI != null)
+        {
+            factoryUI.gameObject.SetActive(true);
+        }
+        else if(factoryUI == null)
+        {
+            isNear = false;
+            isEbutton = false;
+            Ebutton.SetActive(false);
+            mainCam.Priority = 2;
+            npcCam.Priority = 1;
+            if (player != null)
+            {
+                player.isTalk = false;
+            }
+            else if (player_2 != null)
+            {
+                player_2.isTalk = false;
+            }
+            else if(player_3 != null)
+            {
+                player_3.isTalk = false;
+                //FactoryPlayer_3.isTalk = false;
+            }
+        }
     }
     public void OnTriggerEnter(Collider other)
     {
@@ -89,20 +141,26 @@ public class FactoryNPC : MonoBehaviour
         {
             isNear = true;
             isEbutton = true;
-            Ebutton.SetActive(true);
-            mainCam.Priority = 1;
-            npcCam.Priority=2;
+           
+                Ebutton.SetActive(true);
+                mainCam.Priority = 1;
+                npcCam.Priority = 2;
+            
+
         }
     }
+   
     public void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
         {
             isNear = false;
             isEbutton = false;
+            
             Ebutton.SetActive(false);
             mainCam.Priority = 2;
             npcCam.Priority = 1;
+            
         }
     }
 

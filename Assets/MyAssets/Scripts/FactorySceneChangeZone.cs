@@ -20,6 +20,8 @@ public class FactorySceneChangeZone : MonoBehaviour
     public GameObject BigEgg;
     public GameObject Pos;
 
+    public AudioSource ClickSound;
+
     [Header("Bool")]
     public bool isButton;
     public bool isL;
@@ -53,7 +55,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && !isL && !isG && !isR)
         {
             Particle.Play();
-            
+            ClickSound.Play();
             zoneR.gameObject.SetActive(false);
             zoneL.gameObject.SetActive(true);
             isL = true;
@@ -64,6 +66,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.R) && !isG && isL && !isR)
         {
             Particle.Play();
+            ClickSound.Play();
             zoneL.gameObject.SetActive(false);
             zoneG.gameObject.SetActive(true);
             isL = false;
@@ -74,7 +77,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.R) && !isR && !isL && isG)
         {
             Particle.Play();
-            
+            ClickSound.Play();
             zoneG.gameObject.SetActive(false);
             zoneR.gameObject.SetActive(true);
             isG = false;

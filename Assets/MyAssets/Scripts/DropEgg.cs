@@ -12,6 +12,7 @@ public class DropEgg : MonoBehaviour
     
     public GameObject Fix;
     public GameObject SavePoint;
+    public AudioSource fixSound;
     public AudioSource getEggSound;
     // Start is called before the first frame update
     void Awake()
@@ -30,6 +31,7 @@ public class DropEgg : MonoBehaviour
             Fix.SetActive(true);
             SavePoint.SetActive(true);
             isGetEgg = true;
+            fixSound.Play();
             Destroy(this.gameObject);
            
         }    

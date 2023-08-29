@@ -65,6 +65,7 @@ public class MoveObstacle : MonoBehaviour
     private Vector3 pos;
     private Vector3 scale;
     public ParticleSystem ChangeParticle;
+    public AudioSource ChangeSound;
 
     //Down & Destory Obj
     public bool isDown;
@@ -273,24 +274,28 @@ public class MoveObstacle : MonoBehaviour
         yield return new WaitForSeconds(1f);
         this.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
         ChangeParticle.Play();
+        ChangeSound.Play();
         
         yield return new WaitForSeconds(0.5f);
         this.gameObject.transform.localScale = new Vector3(1.5f,1.5f , 1.5f);
         ChangeParticle.Play();
+        ChangeSound.Play();
         this.Type = MoveObstacleType.B;
 
         initPositionX = transform.position.x;
         turningPoint = initPositionX - distance;
         yield return new WaitForSeconds(10f);
         this.Type = MoveObstacleType.L;
+        ChangeSound.Play();
         //this.moveSpeed = 0f;
         this.gameObject.transform.position = pos;
         this.gameObject.transform.localScale = scale;
+        //yield return new WaitForSeconds(3f);
         isChk = false;
 
 
     }
-            //MoveObstacleType.A
+           
     
     void OnCollisionStay(Collision collision) 
     {

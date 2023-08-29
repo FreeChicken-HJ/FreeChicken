@@ -5,30 +5,18 @@ using UnityEngine;
 public class FactoryBox : MonoBehaviour
 {
     public bool isTrigger;
-    //FollowCam cameraShake;
-    public GameObject particle;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //cameraShake = GameObject.Find("Main Camera").GetComponent<FollowCam>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (isTrigger)
-        {
-            this.gameObject.transform.rotation = Quaternion.Euler(-170, 0, 90);
-            
-        }
-    }
+    
+    public ParticleSystem particle;
+    public AudioSource bombSound;
+   
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player"&&!isTrigger)
         {
             isTrigger = true;
-            particle.gameObject.SetActive(true);
-            //cameraShake.StartCoroutine(cameraShake.Shake(.5f, .5f));
+            particle.Play();
+            bombSound.Play();
+            
         }  
     }
 }

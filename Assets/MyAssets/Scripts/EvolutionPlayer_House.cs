@@ -52,8 +52,12 @@ public class EvloutionPlayer : MonoBehaviour
     public bool isTalk2;
     public bool TalkEnd2;
 
-    //test
-    public GameObject EvolutionPlayer;
+    // 진화효과
+    private bool isRotating = false;
+    private Quaternion originalCameraRotation;
+    private float rotationTimer = 0.0f;
+    private float rotationDuration = 2.0f;
+    public GameObject EvoluPs;
 
 
 
@@ -77,10 +81,17 @@ public class EvloutionPlayer : MonoBehaviour
         {
             if (!isTalk2)
             {
-                Move();
-                GetInput();
-                Jump();
-                LookAround();
+                if (isRotating)
+                {
+                    HandleCameraRotation();
+                }
+                else
+                {
+                    Move();
+                    GetInput();
+                    Jump();
+                    LookAround();
+                }
             }
         }
     }
@@ -139,21 +150,57 @@ public class EvloutionPlayer : MonoBehaviour
 
     void NextCityScene()
     {
-        SceneManager.LoadScene("CityScene");
+        GameSave.isCity = true;
+        PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
+        SceneManager.LoadScene("Enter2DScene");
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "EvolutionSense2")
+        //if (other.gameObject.name == "EvolutionSense2")
+        //{
+        //    ReadygoCity.SetActive(true);
+        //}
+
+        if (other.CompareTag("evolu")) 
         {
-            ReadygoCity.SetActive(true);
+            StartRotation();
         }
 
-        if(other.gameObject.name == "GoCitySense")
+        if (other.gameObject.name == "GoCitySense")
         {
             GoCity.SetActive(true);
             Invoke("NextCityScene", 5f);
         }
+    }
+
+    private void HandleCameraRotation()
+    {
+        rotationTimer += Time.deltaTime;
+
+        // 회전 각도 계산 (0에서 720도까지)
+        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration); // 0부터 720도까지 두 바퀴 회전
+
+        // 회전
+        cameraArm.RotateAround(transform.position, Vector3.up, rotationAngle * Time.deltaTime);
+
+        EvoluPs.SetActive(true);
+
+        if (rotationTimer >= rotationDuration)
+        {
+            rotationTimer = 0.0f;
+            isRotating = false;
+
+            // 회전이 완료된 후에 원래 상태로 돌아가는 처리 추가
+            cameraArm.rotation = originalCameraRotation;
+            EvoluPs.SetActive(false);
+        }
+    }
+
+    public void StartRotation()
+    {
+        isRotating = true;
+        originalCameraRotation = cameraArm.rotation;  // 카메라 회전을 시작하기 전에 원래의 회전값 저장
     }
 
 
@@ -162,6 +209,11 @@ public class EvloutionPlayer : MonoBehaviour
         if (other.gameObject.name == "EvolutionSense2")
         {
             ReadygoCity.SetActive(false);
+        }
+
+        if (other.CompareTag("evolu"))
+        {
+            other.gameObject.SetActive(false);
         }
     }
 

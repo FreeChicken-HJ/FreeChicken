@@ -8,6 +8,7 @@ using Cinemachine;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class CaveScenePlayer : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class CaveScenePlayer : MonoBehaviour
     bool wDown;
     bool Dash;
     public bool Dead;
-    
     public bool isMove;
 
     Rigidbody rigid;
@@ -37,6 +37,11 @@ public class CaveScenePlayer : MonoBehaviour
     public float rhAxis;
     public float rvAxis;
 
+    // 반대로 움직이는 로직
+    private bool isReversed = false;
+    private float reverseDuration = 5.0f;
+    
+
     float time;
     Animator anim;
     Obstacle_Cave obstacle;
@@ -52,7 +57,6 @@ public class CaveScenePlayer : MonoBehaviour
     public bool isfallingObstacle;
     public bool isMoveUp;
     bool isJump;
-    bool reversal;
     //public ParticleSystem jumpPs;
     //public bool playJumpPs;
     public bool hasKey;
@@ -61,7 +65,7 @@ public class CaveScenePlayer : MonoBehaviour
     //public float jumpPower = 5f;
     //public int jumpCount = 2;   // 점프횟수, 2를 3으로 바꾸면 3단 점프
 
-    public bool isReversal;
+    
     public bool Talk_NPC1;
     public bool Talk_NPC2;
     public bool Talk_NPC3;
@@ -86,8 +90,6 @@ public class CaveScenePlayer : MonoBehaviour
     public CinemachineVirtualCamera mainCam2;
     public CinemachineVirtualCamera FinalCam;
     public CinemachineVirtualCamera DadDieCam;
-
- 
 
     [Header("UI")]  
     CaveSceneTalkManager talkManager;
@@ -156,28 +158,29 @@ public class CaveScenePlayer : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        if (!Dead &&!isReversal&&!isTalk)
+        if (!Dead &&!isReversed&&!isTalk)
         {
             Move();
             Jump();
             GetInput();
+        }
+        else if(!Dead && isReversed && !isTalk)
+        {
+            ReversalMove();
+            Jump();
+            GetInput();
+            //if (time > 5f)  // 3초동안만 좌우반전
+            //{
+            //    isReversed = false;
+            //}
         }
 
         if (isTalk)
         {
             anim.SetBool("isRun", false);
         }
-        if (isReversal)
-        {
-            ReversalMove();
-            Jump();
-
-            if (time > 15f)  // 3초동안만 좌우반전
-            {
-                isReversal = false;
-            }
-        }
-        if(isMomContact && Mom.gameObject.transform.position.x <= KissZone.transform.position.x && !isAnimChk)
+        
+        if (isMomContact && Mom.gameObject.transform.position.x <= KissZone.transform.position.x && !isAnimChk)
         {
             
             //isMomContact = false;
@@ -221,7 +224,6 @@ public class CaveScenePlayer : MonoBehaviour
 
         ShowMoveParticle();
         PoisonParticle.gameObject.SetActive(false);
-       
     }
 
     void Jump()
@@ -236,7 +238,7 @@ public class CaveScenePlayer : MonoBehaviour
 
     void ReversalMove() // 방향키 좌우반전
     {
-       //potion.reversalPotion = true;
+        //potion.reversalPotion = true;
 
         rhAxis = Input.GetAxisRaw("ReversalHorizontal");
         rvAxis = Input.GetAxisRaw("ReversalVertical");
@@ -552,19 +554,35 @@ public class CaveScenePlayer : MonoBehaviour
             Invoke("Destroy_SavePointObj4", 1.5f);
             Invoke("Destroy_SavePointImage", 2f);
         }
-        if (other.gameObject.CompareTag("Poison") &&!isReversal)
-        {
-            isReversal = true;
-            other.gameObject.SetActive(false);
-            // PoisonSound.Play();
+        //if (other.gameObject.CompareTag("Poison") &&!isReversal)
+        //{
+        //    Debug.Log("반대로..");
+        //    isReversal = true;
+        //    other.gameObject.SetActive(false);
+        //    // PoisonSound.Play();
           
+        //}
+
+        if(other.CompareTag("Poison"))
+        {
+            StartCoroutine(ReversePlayerMovement());
         }
-        if(other.gameObject.CompareTag("Item") &&!isFollow)
+
+        if (other.gameObject.CompareTag("Item") &&!isFollow)
         {
             StopPleaseUI.SetActive(true);
             Invoke("StopPleaseUIEnd", 3f);
         }
     }
+
+    private IEnumerator ReversePlayerMovement() // 플레이어 좌우반전
+    {
+        isReversed = true;
+        //ReversalMove();
+        yield return new WaitForSeconds(reverseDuration);
+        isReversed = false;
+    }
+
     void StopPleaseUIEnd()
     {
         StopPleaseUI.SetActive(false);

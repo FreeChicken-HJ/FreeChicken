@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using Cinemachine;
+using UnityEngine.UIElements;
 
 public class HouseScene2_Player : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class HouseScene2_Player : MonoBehaviour
     public bool isfallingObstacle;
 
 
-    public Image DieImage2;
+    public GameObject DieCanvas;
 
     Vector3 moveVec;
     Vector2 moveInput;
@@ -50,6 +51,8 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource dieAudio;
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
+    public AudioSource TalkAudio;
+    public AudioSource ClickButtonAudio;
 
     [Header("Dialogue")]
     public GameObject NPCDialogue;
@@ -60,11 +63,21 @@ public class HouseScene2_Player : MonoBehaviour
     public bool isTalk2;
     public bool TalkEnd2;
 
+    public GameObject menuSet;
+
     //test
     public GameObject EvolutionPlayer;
     public GameObject EvolutionSense;
 
-    
+    // 진화효과
+    private bool isRotating = false;
+    private Quaternion originalCameraRotation;
+    private float rotationTimer = 0.0f;
+    private float rotationDuration = 3.0f;
+    public GameObject EvoluPs;
+
+
+
     void Awake()
     {
         mainAudio.Play();
@@ -76,7 +89,7 @@ public class HouseScene2_Player : MonoBehaviour
     void Start()
     {
         DiePs.gameObject.SetActive(false);
-        DieImage2.gameObject.SetActive(false);
+        DieCanvas.gameObject.SetActive(false);
     }
 
     void Update()
@@ -85,11 +98,28 @@ public class HouseScene2_Player : MonoBehaviour
         {
             if (!isTalk1 || !isTalk2)
             {
-                Move();
-                GetInput();
-                Jump();
-                LookAround();
+                if (isRotating)
+                {
+                    HandleCameraRotation();
+                }
+                else
+                {
+                    Move();
+                    GetInput();
+                    Jump();
+                    LookAround();
+                }
             }
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            menuSet.SetActive(true);
+            mainAudio.Pause();
+            runAudio.Pause();
+            Time.timeScale = 0f;
+            isTalk1 = true;
+            isTalk2 = true;
         }
     }
 
@@ -142,7 +172,32 @@ public class HouseScene2_Player : MonoBehaviour
     {
         Dead = false;
         SceneManager.LoadScene("HouseScene2");
-        DieImage2.gameObject.SetActive(false);
+        DieCanvas.gameObject.SetActive(false);
+    }
+
+    public void ContinueGame()
+    {
+        menuSet.SetActive(false);
+        mainAudio.UnPause();
+        runAudio.UnPause();
+        isTalk1 = false;
+        isTalk2 = false;
+        Time.timeScale = 1;
+    }
+
+    public void GameExit()
+    {
+        Application.Quit();
+    }
+
+    public void ReplayGame()
+    {
+        SceneManager.LoadScene("HouseScene2");
+    }
+
+    public void ClickButtonSound()
+    {
+        ClickButtonAudio.Play();
     }
 
     void OnTriggerEnter(Collider other)
@@ -155,6 +210,9 @@ public class HouseScene2_Player : MonoBehaviour
         if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1)
         {
             NPCDialogue.SetActive(true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Run", false);
+            TalkAudio.Play();
             npc_cam.Priority = 10;
             mainCam.Priority = 1;
         }
@@ -162,7 +220,10 @@ public class HouseScene2_Player : MonoBehaviour
         if(other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
         {
             UnicycleDialogue.SetActive(true);
+            anim.SetBool("Walk", false); 
+            anim.SetBool("Run", false);
             unicycleCam.Priority = 10;
+            TalkAudio.Play();
             mainCam.Priority = 1;
         }
 
@@ -170,10 +231,47 @@ public class HouseScene2_Player : MonoBehaviour
         {
             Debug.Log("없어져라");
             //this.gameObject.SetActive(false);
-            Destroy(this.gameObject);
-            EvolutionPlayer.SetActive(true);
-            EvolutionSense.SetActive(false);
+            StartRotation();
+            Invoke("Destroy_", 2f);
+            //Destroy(this.gameObject);
+            //EvolutionPlayer.SetActive(true);
+            //EvolutionSense.SetActive(false);
         }
+    }
+
+    void Destroy_()
+    {
+        Destroy(this.gameObject);
+        EvolutionPlayer.SetActive(true);
+        EvolutionSense.SetActive(false);
+    }
+
+    private void HandleCameraRotation()
+    {
+        rotationTimer += Time.deltaTime;
+
+        // 회전 각도 계산 (0에서 720까지)
+        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration); // 0부터 720도까지 두 바퀴 회전
+
+        // 회전
+        cameraArm.RotateAround(transform.position, Vector3.up, rotationAngle * Time.deltaTime);
+        EvoluPs.SetActive(true);
+
+        if (rotationTimer >= rotationDuration)
+        {
+            rotationTimer = 0.0f;
+            isRotating = false;
+
+            // 회전이 완료된 후에 원래 상태로 돌아가는 처리 추가
+            cameraArm.rotation = originalCameraRotation;
+            EvoluPs.SetActive(false);
+        }
+    }
+
+    public void StartRotation()
+    {
+        isRotating = true;
+        originalCameraRotation = cameraArm.rotation;  // 카메라 회전을 시작하기 전에 원래의 회전값 저장
     }
 
 
@@ -183,13 +281,15 @@ public class HouseScene2_Player : MonoBehaviour
         {
             npc_cam.Priority = 1;
             mainCam.Priority = 10;
-            TalkEnd1= true;
+            TalkAudio.Pause();
+            TalkEnd1 = true;
         }
 
         if (other.gameObject.name == "Unicycle_Sense")
         {
             unicycleCam.Priority = 1;
             mainCam.Priority = 10;
+            TalkAudio.Pause();  
             TalkEnd2 = true;
         }
     }
@@ -200,7 +300,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             Dead = true;
             DieMotion();
-            DieImage2.gameObject.SetActive(true);
+            DieCanvas.gameObject.SetActive(true);
             Invoke("ReLoadScene", 3.5f);
         }
 

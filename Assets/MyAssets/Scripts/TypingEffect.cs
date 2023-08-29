@@ -12,7 +12,7 @@ public class TypingEffect : MonoBehaviour
     public CanvasGroup canvasGroup;
     public List<string> dialogueList;
     private int currentDialogueIndex = 0;
-    private bool isFading = false;
+    //private bool isFading = false;
 
     public float fadeDuration = 1.0f;
     public string nextSceneName;
@@ -37,7 +37,7 @@ public class TypingEffect : MonoBehaviour
             for (int i = 0; i <= dialogue.Length; ++i)
             {
                 text.text = dialogue.Substring(0, i);
-                yield return new WaitForSeconds(0.15f);
+                yield return new WaitForSeconds(0.05f);
             }
 
             while (!Input.GetMouseButtonDown(0))
@@ -61,7 +61,7 @@ public class TypingEffect : MonoBehaviour
 
     private IEnumerator FadeOutAndLoadScene()
     {
-        isFading = true;
+        //isFading = true;
 
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
@@ -72,7 +72,7 @@ public class TypingEffect : MonoBehaviour
         }
         canvasGroup.alpha = 0f;
 
-        isFading = false;
+        //isFading = false;
 
         // Load the next scene
         SceneManager.LoadScene(nextSceneName);

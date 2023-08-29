@@ -76,7 +76,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public float maxValue;
     
     public GameObject Pos1;
-    public GameObject Pos2;
+   
     public GameObject Pos3;
 
     public GameObject SavePointObj_1;

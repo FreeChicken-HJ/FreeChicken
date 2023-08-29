@@ -12,6 +12,7 @@ public class FactoryNPC : MonoBehaviour
     public FactoryPlayer player;
     public FactoryPlayer_2 player_2;
     public FactoryPlayer_3 player_3;
+    public HouseScenePlayer player_4;
     
     public bool isEbutton;
     public GameObject Ebutton;

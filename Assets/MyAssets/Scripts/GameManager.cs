@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             else if(cavePlayer!=null)
             {
                 menuSet.SetActive(true);
-                cavePlayer.mainSound.Pause();
+                cavePlayer.mainAudio.Pause();
                 Time.timeScale = 0f;
                 cavePlayer.isTalk= true;
             }
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
         }
         else if (cavePlayer != null)
         {
-            cavePlayer.mainSound.UnPause();
+            cavePlayer.mainAudio.UnPause();
             cavePlayer.isTalk = false;
         }
         

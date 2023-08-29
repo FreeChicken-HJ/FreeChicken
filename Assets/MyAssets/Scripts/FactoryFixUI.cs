@@ -56,7 +56,7 @@ public class FactoryFixUI : MonoBehaviour
         {
             mainCam.Priority = 2;
             stopConCam.Priority = 1;
-            E.color = Color.black;
+            E.color = Color.white;
             t = 0;
             slider.value = 0;
         }

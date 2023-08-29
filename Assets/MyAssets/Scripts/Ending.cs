@@ -74,7 +74,7 @@ public class Ending : MonoBehaviour
 
     private IEnumerator ShowDialogues()
     {
-        yield return new WaitForSeconds(5.0f); // 초기 대기 시간
+        yield return new WaitForSeconds(3.0f); // 초기 대기 시간
 
         foreach (string dialogue in dialogueList)
         {

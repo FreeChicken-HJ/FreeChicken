@@ -10,49 +10,50 @@ public class FactorySceneLeaveTruk : MonoBehaviour
     public GameObject showCanvas;
 
     public GameObject playerDieParticle;
-    public bool isNextScene2;
+   
+    public FactoryPlayer_2 player;
+    public GameObject Pos;
     // Start is called before the first frame update
     void Start()
     {
-       
+        player = GameObject.FindWithTag("Player").
+            GetComponent<FactoryPlayer_2>();
+            
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (isTouch)
-        {
-            this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 2.5f);
-            showCanvas.SetActive(true);
-            if (isNextScene2)
-            {
-                playerDieParticle.SetActive(true);
 
-            }
-
-
-        }
-    }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" &&!isTouch)
         {
            
             isTouch = true;
             particle.SetActive(true);
+            showCanvas.SetActive(true);
 
-            Invoke("ReLoad", 3.5f);
+            playerDieParticle.SetActive(true);
+
+            Invoke("ReLoad", 2.5f);
         }
+    }
+    void Restart()
+    {
+        DeadCount.count++;
+        showCanvas.SetActive(false);
+        
+        player.transform.position = Pos.transform.position;
+        player.isDie = false;
+
+        playerDieParticle.SetActive(false);
+        isTouch = false;
+
+
     }
     void ReLoad()
     {
-        
-        if (isNextScene2)
-        {
-            DeadCount.count++;
-            SceneManager.LoadScene("FactoryScene_2");
-        }
-   
+        player.isDie = true;
+        Invoke("Restart", .5f);
     }
 }
 

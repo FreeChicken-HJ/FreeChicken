@@ -37,6 +37,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     public ParticleSystem jumpParticle;
     public GameObject pickUpParticle;
 
+    public GameObject SpawnPos;
     [Header("UI")]
     public GameObject scene2LastUI;
     public GameObject LoadingUI;
@@ -85,9 +86,9 @@ public class FactoryPlayer_2 : MonoBehaviour
     {
 
         DieCanvas.SetActive(true);
-
+        isDie = true;
         dieAudio.Play();
-        Invoke("ExitCanvas", 2f);
+        Invoke("ExitCanvas", 1f);
     }
 
     // Update is called once per frame
@@ -162,7 +163,7 @@ public class FactoryPlayer_2 : MonoBehaviour
 
             isJump = false;
         }
-        if (collision.gameObject.tag == "ObstacleZone2" || collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "ObstacleZone2" || collision.gameObject.tag == "Obstacle" &&!isDie)
         {
             isDie = true;
             DieParticle.SetActive(true);
@@ -172,30 +173,43 @@ public class FactoryPlayer_2 : MonoBehaviour
             DieCanvas.SetActive(true);
             mainCam.Priority = 1;
             DieCam.Priority = 2;
-            Invoke("ExitCanvas", 1.5f);
+            Invoke("ExitCanvas", 2f);
         }
         
     }
-    void ExitCanvas()
+   
+    public void ExitCanvas()
     {
         DeadCount.count++;
-      
-        SceneManager.LoadScene("FactoryScene_2");
+        isDie = false;
+        DieParticle.SetActive(false);
+        DieCanvas.SetActive(false);
+        anim.SetBool("isDie", false);
+        pickUpCam.Priority = -1;
+        mainCam.Priority = 2;
+        DieCam.Priority = 1;
+        isSlide = true;
+        isStamp = false;
+        thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
+        pickUpParticle.SetActive(false);
+        this.gameObject.transform.position = SpawnPos.transform.position;
+
+        //SceneManager.LoadScene("FactoryScene_2");
 
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Rail")
         {
-            //scene2LastUI.gameObject.SetActive(true);
+            scene2LastUI.gameObject.SetActive(true);
             Invoke("RoadScene", 2f);
         }
     }
     void RoadScene()
     {
-        Debug.Log("제발떠라");
+      
         LoadingUI.SetActive(true);
-        //scene2LastUI.gameObject.SetActive(false);
+        
         BGM.Stop();
         Invoke("FinalSceneLoad", 2f);
         
@@ -210,23 +224,23 @@ public class FactoryPlayer_2 : MonoBehaviour
     {
         if (other.tag == "Slide")
         {
-            
+
             this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 2f, Space.World);
-           
-            
+
+
             // 이동하는 방향 쳐다보게 설정
         }
         if (other.tag == "TurnPointR")
         {
 
             this.gameObject.transform.Translate(Vector3.right * Time.deltaTime * 1f, Space.World);
-           
+
         }
         if (other.tag == "TurnPointL")
         {
 
             this.gameObject.transform.Translate(Vector3.left * Time.deltaTime * 1f, Space.World);
-            
+
         }
         if (other.tag == "TurnPointD")
         {
@@ -241,7 +255,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         {
             isSlide = false;
         }
-       
+
         //speed = 2.5f;
     }
 

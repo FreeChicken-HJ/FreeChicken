@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using TMPro;
 public class FactorySceneChangeZone : MonoBehaviour
 {
     [Header("Stats")]
@@ -34,6 +35,7 @@ public class FactorySceneChangeZone : MonoBehaviour
    
     [Header("UI")]
     public Slider ChangeConveorSlider;
+  
 
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
@@ -49,6 +51,15 @@ public class FactorySceneChangeZone : MonoBehaviour
         {
             Chk();
         }
+        if(Player.GetComponent<FactoryPlayer_2>().isDie)
+        {
+            zoneL.gameObject.SetActive(false);
+            zoneR.gameObject.SetActive(false);
+            zoneG.gameObject.SetActive(false);
+            ChangeConveorSlider.value = 0;
+            t = 0;
+            isEnd = false;
+        }
     }
     void Chk()
     {
@@ -56,6 +67,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         {
             Particle.Play();
             ClickSound.Play();
+            
             zoneR.gameObject.SetActive(false);
             zoneL.gameObject.SetActive(true);
             isL = true;
@@ -104,14 +116,11 @@ public class FactorySceneChangeZone : MonoBehaviour
                 ChangeConveorZone.gameObject.SetActive(false);
                 ChangeFinish.gameObject.SetActive(true);
                 isButton = false;
-                if (isScene_2)
-                {
-                    Player.GetComponent<FactoryPlayer_2>().isSlide = true;
-                }
-                else
-                {
-                    Player.GetComponent<FactoryPlayer>().isSlide = true;
-                }
+
+
+                Player.GetComponent<FactoryPlayer_2>().isSlide = true;
+                
+               
                 StartCoroutine(TheEnd());
 
             }

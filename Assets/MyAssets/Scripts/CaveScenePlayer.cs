@@ -126,6 +126,7 @@ public class CaveScenePlayer : MonoBehaviour
     public AudioSource debuffAudio;
     public AudioSource ElevtorAudio;
     public AudioSource fallingAudio;
+    public AudioSource BoxGetAudio;
 
     // MomDown
     public GameObject Mom;
@@ -395,6 +396,7 @@ public class CaveScenePlayer : MonoBehaviour
         rotationTimer += Time.deltaTime;
         float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration);
         GetUpgradePs.SetActive(true);
+
         if (rotationTimer >= rotationDuration)
         {
             rotationTimer = 0.0f;
@@ -419,7 +421,9 @@ public class CaveScenePlayer : MonoBehaviour
     {
         if (other.gameObject.name == "UpgradeBox")
         {
+            BoxGetAudio.Play();
             GetUpgradeBox_text.SetActive(true);
+           
             other.gameObject.SetActive(false);
             Invoke("HideGetupgrade_textAfterDelay", 5f);
             StartRotation();

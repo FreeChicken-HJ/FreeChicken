@@ -22,7 +22,7 @@ public class CaveSceneTalkManager : MonoBehaviour
     public bool isPlayerImage;
     CaveScenePlayer Player;
     public bool isTalkEnd;
-
+    public AudioSource TalkSound;
     //public CinemachineVirtualCamera NPC4Cam;
     //public CinemachineVirtualCamera mainCam;
 
@@ -60,6 +60,7 @@ public class CaveSceneTalkManager : MonoBehaviour
             currentSentences = sentences.Dequeue();
             isTyping = true;
             nextText.SetActive(false);
+            TalkSound.Play();
             StartCoroutine(Typing(currentSentences));
         }
 

@@ -23,7 +23,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
     public bool isTalkEnd;
 
     HouseScenePlayer player;
-
+    public AudioSource TalkSound;
     private void Awake()
     {
         instance = this;
@@ -71,6 +71,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
         {
             currentSentences = sentences.Dequeue();
             isTyping = true;
+            
             nextText.SetActive(false);
             StartCoroutine(Typing(currentSentences));
         }
@@ -128,6 +129,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
         {
             if (!isTyping)
             {
+                TalkSound.Play();
                 NextSentence();
                 ChangeImage();
             }

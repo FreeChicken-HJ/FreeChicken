@@ -74,6 +74,7 @@ public class HouseScenePlayer : MonoBehaviour
     public AudioSource bellAudio;
     public AudioSource TalkAudio;
     public AudioSource OpenDoorAudio;
+    public AudioSource BoxGetAudio;
 
     [Header("UI")]
     public GameObject NearDoor_text;
@@ -85,7 +86,7 @@ public class HouseScenePlayer : MonoBehaviour
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
     private float rotationTimer = 0.0f;
-    private float rotationDuration = 5.0f;
+    private float rotationDuration =3.0f;
     public GameObject GetUpgradePs;
 
     void Awake()
@@ -110,6 +111,7 @@ public class HouseScenePlayer : MonoBehaviour
         Cursor.visible = false;
         if (!Dead)
         {
+            DiePs.gameObject.SetActive(false);
             if (!isTalk)
             {
                 if (isRotating)
@@ -132,7 +134,7 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (shouldLookAround)
         {
-            StartCoroutine(HideGetupgrade_textAfterDelay(5f));
+            StartCoroutine(HideGetupgrade_textAfterDelay(3f));
         }
 
         if (!isOpeningDoor && Input.GetButtonDown("E") && isReadyDoorOpen)
@@ -165,7 +167,7 @@ public class HouseScenePlayer : MonoBehaviour
         {
             Debug.Log("문 올라감");
             startDoor.transform.Translate(Vector3.up * doorRaiseSpeed * Time.deltaTime);
-            if (startDoor.transform.position.y >= 3f)
+            if (startDoor.transform.position.y >=2f)
             {
                 startDoor.SetActive(false);
                 isRaisingDoor = false;
@@ -305,6 +307,7 @@ public class HouseScenePlayer : MonoBehaviour
         if(other.gameObject.name == "UpgradeBox")
         {
             shouldLookAround= true;
+            BoxGetAudio.Play();
             GetUpgradeBox_text.SetActive(true);
             other.gameObject.SetActive(false);
             StartRotation();
@@ -449,19 +452,19 @@ public class HouseScenePlayer : MonoBehaviour
             if (check_savepoint1 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage1", 2f);
+                Invoke("restart_stage1", 3f);
             }
 
             if (check_savepoint2 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage2", 2f);
+                Invoke("restart_stage2", 3f);
             }
 
             if (check_savepoint3 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage3", 2f);
+                Invoke("restart_stage3", 3f);
             }
         }
 

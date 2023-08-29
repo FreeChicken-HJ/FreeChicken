@@ -48,7 +48,9 @@ public class CitySceneToCaveScene : MonoBehaviour
     }
     void LoadCaveScene()
     {
-        SceneManager.LoadScene("CaveScene");
+        GameSave.isCave = true;
+        PlayerPrefs.SetInt("GoCave", GameSave.isCave ? 1 : 0);
+        SceneManager.LoadScene("Enter2DScene");
     }
    
     private void OnTriggerEnter(Collider other)

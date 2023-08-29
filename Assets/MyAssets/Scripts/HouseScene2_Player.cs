@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using Cinemachine;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
 
 public class HouseScene2_Player : MonoBehaviour
 {
@@ -52,7 +52,6 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
     public AudioSource TalkAudio;
-    public AudioSource ClickButtonAudio;
 
     [Header("Dialogue")]
     public GameObject NPCDialogue;
@@ -62,8 +61,6 @@ public class HouseScene2_Player : MonoBehaviour
     public bool TalkEnd1;
     public bool isTalk2;
     public bool TalkEnd2;
-
-    public GameObject menuSet;
 
     //test
     public GameObject EvolutionPlayer;
@@ -94,6 +91,7 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Update()
     {
+        Cursor.visible = false;
         if (!Dead)
         {
             if (!isTalk1 || !isTalk2)
@@ -110,16 +108,6 @@ public class HouseScene2_Player : MonoBehaviour
                     LookAround();
                 }
             }
-        }
-
-        if (Input.GetButtonDown("Cancel"))
-        {
-            menuSet.SetActive(true);
-            mainAudio.Pause();
-            runAudio.Pause();
-            Time.timeScale = 0f;
-            isTalk1 = true;
-            isTalk2 = true;
         }
     }
 
@@ -164,7 +152,7 @@ public class HouseScene2_Player : MonoBehaviour
     {
         //Dead = true;
         DiePs.gameObject.SetActive(true);
-        anim.SetBool("Die", true);
+        anim.SetBool("isDead", true);
         dieAudio.Play();
     }
 
@@ -175,30 +163,6 @@ public class HouseScene2_Player : MonoBehaviour
         DieCanvas.gameObject.SetActive(false);
     }
 
-    public void ContinueGame()
-    {
-        menuSet.SetActive(false);
-        mainAudio.UnPause();
-        runAudio.UnPause();
-        isTalk1 = false;
-        isTalk2 = false;
-        Time.timeScale = 1;
-    }
-
-    public void GameExit()
-    {
-        Application.Quit();
-    }
-
-    public void ReplayGame()
-    {
-        SceneManager.LoadScene("HouseScene2");
-    }
-
-    public void ClickButtonSound()
-    {
-        ClickButtonAudio.Play();
-    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -301,7 +265,7 @@ public class HouseScene2_Player : MonoBehaviour
             Dead = true;
             DieMotion();
             DieCanvas.gameObject.SetActive(true);
-            Invoke("ReLoadScene", 3.5f);
+            Invoke("ReLoadScene", 2f);
         }
 
         if (collision.gameObject.CompareTag("Ground")) 

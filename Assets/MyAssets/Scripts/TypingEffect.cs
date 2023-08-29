@@ -12,10 +12,12 @@ public class TypingEffect : MonoBehaviour
     public CanvasGroup canvasGroup;
     public List<string> dialogueList;
     private int currentDialogueIndex = 0;
-    //private bool isFading = false;
 
     public float fadeDuration = 1.0f;
+    public float initialDelay = 2.0f; // 초기 대기 시간
     public string nextSceneName;
+
+    private bool waitForClick = false; // 클릭 대기 상태
 
     private void Start()
     {
@@ -23,14 +25,18 @@ public class TypingEffect : MonoBehaviour
         if (dialogueList.Count > 0)
         {
             text.text = "";
-            StartCoroutine(TypingCoroutine());
+            StartCoroutine(InitialDelayCoroutine());
         }
+    }
+
+    private IEnumerator InitialDelayCoroutine()
+    {
+        yield return new WaitForSeconds(initialDelay);
+        StartCoroutine(TypingCoroutine());
     }
 
     private IEnumerator TypingCoroutine()
     {
-        yield return new WaitForSeconds(2f);
-
         while (currentDialogueIndex < dialogueList.Count)
         {
             string dialogue = dialogueList[currentDialogueIndex];
@@ -40,8 +46,14 @@ public class TypingEffect : MonoBehaviour
                 yield return new WaitForSeconds(0.05f);
             }
 
-            while (!Input.GetMouseButtonDown(0))
+            waitForClick = true; // 클릭 대기 활성화
+            while (waitForClick)
             {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    waitForClick = false;
+                    break;
+                }
                 yield return null;
             }
 
@@ -61,8 +73,6 @@ public class TypingEffect : MonoBehaviour
 
     private IEnumerator FadeOutAndLoadScene()
     {
-        //isFading = true;
-
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
         {
@@ -72,9 +82,6 @@ public class TypingEffect : MonoBehaviour
         }
         canvasGroup.alpha = 0f;
 
-        //isFading = false;
-
-        // Load the next scene
         SceneManager.LoadScene(nextSceneName);
     }
 }

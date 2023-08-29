@@ -238,7 +238,8 @@ MonoBehaviour:
     .."
   - "\uACFC\uC5F0 \uB098\uC758 \uC6B4\uBA85\uC740 .. ?"
   fadeDuration: 1
-  nextSceneName: HouseScene1
+  initialDelay: 2
+  nextSceneName: Enter2DScene
 --- !u!4 &203026016
 Transform:
   m_ObjectHideFlags: 0
@@ -746,7 +747,7 @@ GameObject:
   - component: {fileID: 1478389116}
   - component: {fileID: 1478389119}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: StartCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

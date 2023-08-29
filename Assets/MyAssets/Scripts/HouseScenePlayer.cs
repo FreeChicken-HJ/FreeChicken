@@ -73,7 +73,6 @@ public class HouseScenePlayer : MonoBehaviour
     public AudioSource savePointAudio;
     public AudioSource bellAudio;
     public AudioSource TalkAudio;
-    public AudioSource ClickButtonAudio;
     public AudioSource OpenDoorAudio;
 
     [Header("UI")]
@@ -81,7 +80,6 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject OpenDoor_text;
     public GameObject PushBell_text;
     public GameObject GetUpgradeBox_text;
-    public GameObject menuSet;
 
     // 새로운 능력얻는 효과
     private bool isRotating = false;
@@ -137,16 +135,6 @@ public class HouseScenePlayer : MonoBehaviour
             StartCoroutine(HideGetupgrade_textAfterDelay(5f));
         }
 
-
-        //if (Input.GetButtonDown("Cancel"))
-        //{
-        //    menuSet.SetActive(true);
-        //    mainAudio.Pause();
-        //    runAudio.Pause();
-        //    Time.timeScale = 0f;
-        //    isTalk = true;
-        //}
-
         if (!isOpeningDoor && Input.GetButtonDown("E") && isReadyDoorOpen)
         {
             Debug.Log("벨 처음 눌렀음");
@@ -189,7 +177,6 @@ public class HouseScenePlayer : MonoBehaviour
                 isReadyDoorOpen = false;
             }
         }
-
 }
 
     void GetInput()
@@ -217,8 +204,6 @@ public class HouseScenePlayer : MonoBehaviour
 
         anim.SetBool("Run", moveInput != Vector2.zero);
         anim.SetBool("Walk", wDown);
-
-        
     }
 
     void Jump()
@@ -234,43 +219,21 @@ public class HouseScenePlayer : MonoBehaviour
 
     void DieMotion()
     {
-        //Dead = true;
-        DieCanvas.gameObject.SetActive(true);
-        DiePs.gameObject.SetActive(true);
-        dieAudio.Play();
-        anim.SetTrigger("isDead");
-        Invoke("remove_dieUI", 3f);
+        if (DiePs != null) // DiePs가 파괴되지 않았는지 확인
+        {
+            //Dead = true;
+            DieCanvas.gameObject.SetActive(true);
+            DiePs.gameObject.SetActive(true);
+            dieAudio.Play();
+            anim.SetTrigger("isDead");
+            Invoke("remove_dieUI", 3f);
+        }
     }
 
     void NextScene()
     {
         SceneManager.LoadScene("HouseScene2");
     }
-
-    //public void ContinueGame()
-    //{
-    //    menuSet.SetActive(false);
-    //    mainAudio.UnPause();
-    //    runAudio.UnPause();
-    //    isTalk = false;
-    //    Time.timeScale = 1;
-    //}
-
-    //public void GameExit()
-    //{
-    //    Application.Quit();
-    //}
-
-    //public void ReplayGame()
-    //{
-    //    Time.timeScale = 1f;
-    //    SceneManager.LoadScene("HouseScene2");
-    //}
-
-    //public void ClickButtonSound()
-    //{
-    //    ClickButtonAudio.Play();
-    //}
 
     private void HandleCameraRotation()
     {
@@ -486,19 +449,19 @@ public class HouseScenePlayer : MonoBehaviour
             if (check_savepoint1 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage1", 3f);
+                Invoke("restart_stage1", 2f);
             }
 
             if (check_savepoint2 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage2", 3f);
+                Invoke("restart_stage2", 2f);
             }
 
             if (check_savepoint3 /*&& Dead*/)
             {
                 DieMotion();
-                Invoke("restart_stage3", 3f);
+                Invoke("restart_stage3", 2f);
             }
         }
 

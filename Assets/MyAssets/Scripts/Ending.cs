@@ -64,7 +64,7 @@ public class Ending : MonoBehaviour
 
     public void ReplayGame()
     {
-        SceneManager.LoadScene("HouseScene2");
+        SceneManager.LoadScene("New Scene");
     }
 
     public void ClickButtonSound()
@@ -147,12 +147,37 @@ public class Ending : MonoBehaviour
         StartCoroutine(SwitchToCamera3()); // 다음 카메라로 전환
     }
 
+    //IEnumerator SwitchToCamera3()
+    //{
+    //    yield return new WaitForSeconds(cameraSwitchDelay);
+
+    //    float currentTime = 0;
+    //    float initialPriority = camera2.Priority;
+
+    //    while (currentTime < camera3Duration)
+    //    {
+    //        currentTime += Time.deltaTime;
+    //        float t = currentTime / camera3Duration;
+
+    //        camera2.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
+    //        camera3.Priority = (int)Mathf.Lerp(10, 0, t);
+
+    //        yield return new WaitForEndOfFrame();
+    //    }
+
+    //    camera2.Priority = 0;
+    //    camera3.Priority = 10;
+    //}
+
     IEnumerator SwitchToCamera3()
     {
         yield return new WaitForSeconds(cameraSwitchDelay);
 
         float currentTime = 0;
         float initialPriority = camera2.Priority;
+
+        Vector3 initialPosition = mainCam.transform.position;
+        Vector3 targetPosition = initialPosition + Vector3.up;
 
         while (currentTime < camera3Duration)
         {
@@ -162,18 +187,15 @@ public class Ending : MonoBehaviour
             camera2.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
             camera3.Priority = (int)Mathf.Lerp(10, 0, t);
 
+            // Gradually move the camera upwards
+            mainCam.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+
             yield return new WaitForEndOfFrame();
-
-            //Invoke("ShowCanvas", 10f);
-
         }
 
         camera2.Priority = 0;
         camera3.Priority = 10;
-    }
 
-    void ShowCanvas()
-    {
-        EndingCanvas.SetActive(true);
+        mainCam.transform.position = targetPosition;
     }
 }

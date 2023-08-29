@@ -8080,7 +8080,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 254029496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 21.56, y: 0, z: -3.02}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14716,8 +14716,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419723465}
-  m_LocalRotation: {x: 0.2058269, y: 0.111268684, z: -0.023730446, w: 0.9719524}
-  m_LocalPosition: {x: 29.993488, y: 3.1588619, z: 35.80427}
+  m_LocalRotation: {x: 0.2058292, y: 0.11117478, z: -0.023710141, w: 0.97196317}
+  m_LocalPosition: {x: 8.433489, y: 3.1588619, z: 38.824272}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19652,7 +19652,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455634176}
-  m_LocalRotation: {x: 0.004933462, y: 0.9860335, z: -0.029697428, w: 0.16380405}
+  m_LocalRotation: {x: 0.004955226, y: 0.9859132, z: -0.029693853, w: 0.16452642}
   m_LocalPosition: {x: -1, y: -0.29999995, z: 7.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -27444,7 +27444,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755216494}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: -3.1999998}
+  m_LocalPosition: {x: 21.56, y: 1.8, z: -6.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34807,13 +34807,6 @@ MonoBehaviour:
   - "\uB4B7\uBB38\uC73C\uB85C \uB098\uAC00 \uC8FC\uCC28\uC7A5\uC5D0 \uC788\uC744
     \uAC83\uC774\uB2ED!"
   - "\uACE0\uB9D9\uB2ED!!"
-  - "\uC790\uC804\uAC70\uB97C \uD0C0\uAE30 \uC704\uD574\uC11C\uB294 \uC9C4\uD654\uD574\uC57C\uD55C\uB2ED"
-  - "\uB098\uB3C4.. \uB4DC\uB514\uC5B4 \uC131\uC778\uB2ED\uC774 \uB420 \uC218 \uC788\uB294\uAC70\uB2ED?"
-  - "\uADF8\uB807\uB2ED! \uC774\uBBF8 \uB10C \uAE30\uC5B5\uB4E4\uC744 \uBC1B\uC544\uB4DC\uB9AC\uC9C0
-    \uC54A\uC558\uB2ED?!"
-  - "\uB9DE\uB2ED!! \uB2E4 \uBC1B\uC544\uB4DC\uB9B4 \uC900\uBE44\uAC00 \uB418\uC5C8\uB2ED!"
-  - "\uC88B\uB2E4! \uC9C4 ~ \uD654~ "
-  - "\uC9C4 ~ \uD654 ~"
   - 
   isCnt: 0
 --- !u!114 &956422623

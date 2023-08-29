@@ -137,7 +137,7 @@ public class EvloutionPlayer : MonoBehaviour
     {
         //Dead = true;
         DiePs.gameObject.SetActive(true);
-        anim.SetBool("Die", true);
+        //anim.SetBool("Die", true);
         dieAudio.Play();
     }
 
@@ -150,6 +150,8 @@ public class EvloutionPlayer : MonoBehaviour
 
     void NextCityScene()
     {
+        Cursor.visible = true;
+        
         GameSave.isCity = true;
         PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
         SceneManager.LoadScene("Enter2DScene");

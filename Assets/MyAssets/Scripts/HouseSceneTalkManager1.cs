@@ -31,6 +31,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
 
     void Start()
     {
+        Cursor.visible = true;
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
@@ -85,6 +86,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
 
             }
             //isTalkEnd = true;
+            Cursor.visible = false;
             player.isTalk = false;
         }
     }

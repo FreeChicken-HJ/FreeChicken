@@ -35,6 +35,7 @@ public class EvloutionPlayer : MonoBehaviour
 
     Animator anim;
 
+    public GameObject Pos;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera unicycleCam;
@@ -52,6 +53,7 @@ public class EvloutionPlayer : MonoBehaviour
     public bool isTalk2;
     public bool TalkEnd2;
 
+    public GameObject LoadingUI;
     // 진화효과
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
@@ -63,7 +65,7 @@ public class EvloutionPlayer : MonoBehaviour
 
     void Awake()
     {
-        mainAudio.Play();
+        //mainAudio.Play();
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
@@ -135,28 +137,35 @@ public class EvloutionPlayer : MonoBehaviour
 
     void DieMotion()
     {
-        //Dead = true;
+        Dead = true;
         DiePs.gameObject.SetActive(true);
-        //anim.SetBool("Die", true);
+        anim.SetBool("isDead", true);
         dieAudio.Play();
     }
 
     void ReLoadScene()
     {
         Dead = false;
-        SceneManager.LoadScene("HouseScene2");
+        anim.SetBool("isDead",false);
+        DiePs.gameObject.SetActive(false);
+        this.gameObject.transform.position = Pos.gameObject.transform.position;
+        //SceneManager.LoadScene("HouseScene2");
         DieImage2.gameObject.SetActive(false);
     }
 
     void NextCityScene()
     {
-        Cursor.visible = true;
-        
+        //Cursor.visible = true;
+        mainAudio.Stop();
+        LoadingUI.SetActive(true);
         GameSave.isCity = true;
         PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
+        Invoke("Last", 2f);
+    }
+    void Last()
+    {
         SceneManager.LoadScene("Enter2DScene");
     }
-
     void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.name == "EvolutionSense2")
@@ -172,7 +181,7 @@ public class EvloutionPlayer : MonoBehaviour
         if (other.gameObject.name == "GoCitySense")
         {
             GoCity.SetActive(true);
-            Invoke("NextCityScene", 5f);
+            Invoke("NextCityScene", 3f);
         }
     }
 

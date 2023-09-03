@@ -8,7 +8,7 @@ public class FactoryNPC_1 : MonoBehaviour
 {
     public Slider NpcUI;
     
-    public FactoryPlayer_3 player;
+    public HouseScene2_Player player;
     public bool isEbutton;
     public GameObject Ebutton;
     public TextMeshProUGUI E;
@@ -23,12 +23,15 @@ public class FactoryNPC_1 : MonoBehaviour
 
     public AudioSource BGM;
     public AudioSource Memory;
+    public GameObject TalkUI;
+    public bool isFin;
+    public GameObject Wall;
     //public Animator animator;
     float t = 0;
     void Start()
     {
         Ebutton.SetActive(false);
-        player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer_3>();
+        player = GameObject.FindWithTag("Player").GetComponent<HouseScene2_Player>();
        
     }
     void Update()
@@ -49,12 +52,13 @@ public class FactoryNPC_1 : MonoBehaviour
                 Video.SetActive(true);
 
                 E.color = Color.white;
-                player.isTalk = true;
+                player.isTalk1 = true;
                 Destroy(Ebutton);
                 BGM.Stop();
                 Memory.Play();
-                Invoke("ReStart", 14f);
-                
+                Cursor.visible = true;
+                Invoke("ReStart", 38f);
+                isFin = true;
             }
         }
         if (Input.GetButtonUp("E"))
@@ -63,23 +67,31 @@ public class FactoryNPC_1 : MonoBehaviour
             E.color = Color.white;
             NpcUI.value = 0;
         }
-        
+
+       
     }
-    void ReStart()
+    public void ReStart()
     {
-        Video.SetActive(false);
-        maincam.Priority = 2;
-        npccam.Priority = -5;
-        Destroy(this.gameObject);
-        BGM.Play();
-        Memory.Stop();
-        player.isTalk = false;
+        if (isFin)
+        {
+            Video.SetActive(false);
+          /*  maincam.Priority = 2;
+            npccam.Priority = -5;*/
+            Destroy(this.gameObject);
+            BGM.Play();
+            Wall.SetActive(false);
+            Memory.Stop();
+            TalkUI.SetActive(true);
+            isFin = false;
+            //player.isTalk1 = false;
+
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
-            npccam.Priority = 10;
+            npccam.Priority = 100;
             maincam.Priority = 1;
             Ebutton.SetActive(true);
             isEbutton = true;

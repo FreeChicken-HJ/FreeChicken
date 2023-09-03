@@ -24,7 +24,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
 
     HouseScene2_Player player;
     //HouseScenePlayer player1;
-
+    public AudioSource TalkSound;
     private void Awake()
     {
         instance = this;
@@ -35,9 +35,10 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
+        Cursor.visible = true;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScene2_Player>();
         //player1 = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
-        player.isTalk = true;
+        //player.isTalk = true;
         //player1.isTalk = true;
     }
 
@@ -51,22 +52,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
         }
     }
 
-    //public void NextSentence()
-    //{
-    //    if (sentences.Count != 0)
-    //    {
-    //        currentSentences = sentences.Dequeue();
-    //        isTyping = true;
-    //        nextText.SetActive(false);
-    //        StartCoroutine(Typing(currentSentences));
-    //    }
-
-    //    if (sentences.Count == 0)
-    //    {
-    //        Destroy(instance.gameObject);
-    //        isTalkEnd = true;
-    //    }
-    //}
+ 
 
     public void NextSentence()
     {
@@ -80,14 +66,17 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
 
         if (sentences.Count == 0)
         {
+            player.isTalk1 = false;
+            player.isTalk2 = false;
             // 게임 오브젝트가 파괴되지 않았을 때에만 처리
             if (gameObject != null)
             {
                 Destroy(gameObject);
 
             }
+            Cursor.visible = false; 
             //isTalkEnd = true;
-            player.isTalk=false;
+            //player.isTalk=false;
             //player1.isTalk = false;
         }
     }
@@ -132,6 +121,7 @@ public class HouseSceneTalkManager : MonoBehaviour//, IPointerDownHandler
         {
             if (!isTyping)
             {
+                TalkSound.Play();
                 NextSentence();
                 ChangeImage();
             }

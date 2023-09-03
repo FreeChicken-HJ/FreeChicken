@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEditor.PlayerSettings;
+
 
 public class AI_Cave : MonoBehaviour
 {
@@ -36,7 +36,9 @@ public class AI_Cave : MonoBehaviour
     public float timeBetweenAttacks;
 
     public CaveScenePlayer player;
-
+    /*public AudioSource keyDropSound;
+    public AudioSource DieSound;
+*/
     //[SerializeField] private float walkTime;
     //[SerializeField] private float waitTime;
     //private float currentTime;
@@ -227,6 +229,7 @@ public class AI_Cave : MonoBehaviour
             Small_AI = true;
             Big_AI = false;
             small_potion.SetActive(false);
+            //DieSound.Play();
             this.gameObject.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
         }
 
@@ -243,6 +246,7 @@ public class AI_Cave : MonoBehaviour
     {
         mesh.SetActive(false);
         key.SetActive(true);
+        //keyDropSound.Play();
         //this.gameObject.SetActive(false);
     }
 

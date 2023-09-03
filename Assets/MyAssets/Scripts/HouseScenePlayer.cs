@@ -42,7 +42,7 @@ public class HouseScenePlayer : MonoBehaviour
 
     public GameObject startDoor;
     public GameObject DieCanvas;
-    public Image NextSceneImage;
+    public GameObject NextSceneImage;
 
     Obstacle_House obstacle_house;
 
@@ -102,13 +102,12 @@ public class HouseScenePlayer : MonoBehaviour
         obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
         StartCam.Priority = 10;
-        //DieImage.gameObject.SetActive(false);
-        //SavePointImage.SetActive(false);
+        MemoryCount.memCount = 0;
     }
 
     void Update()
     {
-        Cursor.visible = false;
+        
         if (!Dead)
         {
             DiePs.gameObject.SetActive(false);
@@ -229,6 +228,7 @@ public class HouseScenePlayer : MonoBehaviour
             dieAudio.Play();
             anim.SetTrigger("isDead");
             Invoke("remove_dieUI", 3f);
+           
         }
     }
 
@@ -349,14 +349,15 @@ public class HouseScenePlayer : MonoBehaviour
         if (other.gameObject.name == "NextScenePoint")
         {
             NextSceneImage.gameObject.SetActive(true);
+            mainAudio.Stop();
             Invoke("NextScene", 3.5f);
         }
 
         if (other.gameObject.CompareTag("Obstacle") && !Dead)
         {
             Dead = true;
-            DeadCount.count += 1;
-
+            /*DeadCount.count += 1;
+*/
             if (check_savepoint1 /*&& Dead*/)
             {
                 DieMotion();
@@ -376,7 +377,7 @@ public class HouseScenePlayer : MonoBehaviour
             }
         }
     }
-
+    
     void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("Sense"))
@@ -439,6 +440,7 @@ public class HouseScenePlayer : MonoBehaviour
 
     void remove_dieUI()
     {
+        DeadCount.count++;
         DieCanvas.gameObject.SetActive(false);
     }
 
@@ -447,7 +449,7 @@ public class HouseScenePlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Obstacle") && !Dead)
         {
             Dead = true;
-            DeadCount.count += 1;
+            //DeadCount.count += 1;
 
             if (check_savepoint1 /*&& Dead*/)
             {
@@ -479,7 +481,7 @@ public class HouseScenePlayer : MonoBehaviour
         if (other.CompareTag("Fire") && !Dead)
         {
             Dead = true;
-            DeadCount.count += 1;
+            //DeadCount.count += 1;
 
             if (check_savepoint1 /*&& Dead*/)
             {

@@ -51,8 +51,7 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource dieAudio;
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
-    public AudioSource TalkAudio;
-
+    
     [Header("Dialogue")]
     public GameObject NPCDialogue;
     public GameObject NPC;
@@ -62,6 +61,8 @@ public class HouseScene2_Player : MonoBehaviour
     public bool isTalk2;
     public bool TalkEnd2;
 
+    public GameObject Pos;
+    public GameObject Pos2;
     //test
     public GameObject EvolutionPlayer;
     public GameObject EvolutionSense;
@@ -85,13 +86,14 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
         DiePs.gameObject.SetActive(false);
         DieCanvas.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        Cursor.visible = false;
+        
         if (!Dead)
         {
             if (!isTalk1 || !isTalk2)
@@ -120,21 +122,24 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Move()
     {
-        moveInput = new Vector2(hAxis, vAxis);
-        bool isMove = moveInput.magnitude != 0;
-
-        if (isMove)
+        if (!isTalk1 && !isTalk2)
         {
-            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
-            moveVec = lookForward * moveInput.y + lookRight * moveInput.x;
+            moveInput = new Vector2(hAxis, vAxis);
+            bool isMove = moveInput.magnitude != 0;
 
-            characterBody.forward = moveVec;
-            transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
-            runAudio.Play();
+            if (isMove)
+            {
+                Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
+                Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+                moveVec = lookForward * moveInput.y + lookRight * moveInput.x;
+
+                characterBody.forward = moveVec;
+                transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
+                runAudio.Play();
+            }
+            anim.SetBool("Run", moveInput != Vector2.zero);
+            anim.SetBool("Walk", wDown);
         }
-        anim.SetBool("Run", moveInput != Vector2.zero);
-        anim.SetBool("Walk", wDown);
     }
 
     void Jump()
@@ -159,7 +164,18 @@ public class HouseScene2_Player : MonoBehaviour
     void ReLoadScene()
     {
         Dead = false;
-        SceneManager.LoadScene("HouseScene2");
+        DeadCount.count++;
+        //SceneManager.LoadScene("HouseScene2");
+        if (TalkEnd1)
+        {
+            this.gameObject.transform.position = Pos2.gameObject.transform.position;
+        }
+        else if (TalkEnd1)
+        {
+            this.gameObject.transform.position = Pos.gameObject.transform.position;
+        }
+        anim.SetBool("isDead", false);
+        DiePs.gameObject.SetActive(false);
         DieCanvas.gameObject.SetActive(false);
     }
 
@@ -173,33 +189,33 @@ public class HouseScene2_Player : MonoBehaviour
 
         if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1)
         {
+            isTalk1 = true;
             NPCDialogue.SetActive(true);
             anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
-            TalkAudio.Play();
+            
             npc_cam.Priority = 10;
             mainCam.Priority = 1;
         }
 
         if(other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
         {
+            isTalk2 = true;
             UnicycleDialogue.SetActive(true);
             anim.SetBool("Walk", false); 
             anim.SetBool("Run", false);
             unicycleCam.Priority = 10;
-            TalkAudio.Play();
+           
             mainCam.Priority = 1;
         }
 
         if(other.gameObject.name == "EvolutionSense1")
         {
             Debug.Log("없어져라");
-            //this.gameObject.SetActive(false);
+            
             StartRotation();
             Invoke("Destroy_", 2f);
-            //Destroy(this.gameObject);
-            //EvolutionPlayer.SetActive(true);
-            //EvolutionSense.SetActive(false);
+            
         }
     }
 
@@ -245,7 +261,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             npc_cam.Priority = 1;
             mainCam.Priority = 10;
-            TalkAudio.Pause();
+            
             TalkEnd1 = true;
         }
 
@@ -253,7 +269,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             unicycleCam.Priority = 1;
             mainCam.Priority = 10;
-            TalkAudio.Pause();  
+           
             TalkEnd2 = true;
         }
     }

@@ -18,7 +18,11 @@ public class GameSave : MonoBehaviour
     public ParticleSystem ShowParticle_1;
     public ParticleSystem ShowParticle_2;
     public ParticleSystem ShowParticle_3;
-   
+
+    private void Start()
+    {
+        Cursor.visible = true;
+    }
     public void Load()
     {
         

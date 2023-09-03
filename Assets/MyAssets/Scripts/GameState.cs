@@ -15,43 +15,46 @@ public class GameState : MonoBehaviour
     public GameObject LoadingUI;
 
     public AudioSource ClickSound;
+    
     public void OnMouseDown()
     {
         if (isF)
         {
             ClickSound.Play();
-            GetComponent<Renderer>().material.color = Color.blue;
+           
             SetLoadingUI();
-            FactoryScenePlay();
+            Invoke("FactoryScenePlay",2f);
            
             
         }
         else if (isH)
         {
             ClickSound.Play();
-            GetComponent<Renderer>().material.color = Color.blue;
+           
             SetLoadingUI();
-            HouseScenePlay();
+            Invoke("HouseScenePlay",2f);
             
         }
         else if (isCi)
         {
             ClickSound.Play();
             SetLoadingUI();
-            CityScenePlay();
-            GetComponent<Renderer>().material.color = Color.blue;
+            Invoke("CityScenePlay", 2f);
+          
+            
         }
         else if (isCa)
         {
             ClickSound.Play();
             SetLoadingUI();
-            CaveScenePlay();
-            GetComponent<Renderer>().material.color = Color.blue;
+            Invoke("CaveScenePlay", 2f);
+         
         }
     }  
     void SetLoadingUI()
     {
         LoadingUI.SetActive(true);
+        Cursor.visible = false;
         BGM.Stop();
       
     }

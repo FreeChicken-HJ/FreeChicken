@@ -12,6 +12,7 @@ public class Ending : MonoBehaviour
     public CinemachineVirtualCamera camera1;
     public CinemachineVirtualCamera camera2;
     public CinemachineVirtualCamera camera3;
+    public CinemachineVirtualCamera camera4;
 
     [Header("UI")]
     public GameObject EndingCanvas;
@@ -24,17 +25,19 @@ public class Ending : MonoBehaviour
     public float camera1Duration; // camera1로 전환하는 지속 시간 (초)
     public float camera2Duration; // camera2로 전환하는 지속 시간 (초)
     public float camera3Duration; // camera3로 전환하는 지속 시간 (초)
+    public float camera4Duration;
     public float cameraSwitchDelay; // 일정 시간 후에 카메라 전환 (초)
 
     private bool hasSwitchedToCamera1 = false;
     private bool hasSwitchedToCamera2 = false;
-
+    private bool hasSwitchedToCamera3 = false;
     public TextMeshProUGUI text;
     public List<string> dialogueList;
     public float typingSpeed;
     public float timeBetweenSentences;
     //private int currentDialogueIndex = 0;
 
+   
 
     void Start()
     {
@@ -43,15 +46,20 @@ public class Ending : MonoBehaviour
         camera1.Priority = 0;
         camera2.Priority = 0;
         camera3.Priority = 0;
+        camera4.Priority = 0;
         ChickenAudio.Play();
 
         text.text = "";
         StartCoroutine(ShowDialogues());
+        Invoke("ButtonShow", 3f);
     }
-
+    void ButtonShow()
+    {
+        ButtonCanvas.SetActive(true);
+    }
     void Update()
     {
-        if (!hasSwitchedToCamera1 && !hasSwitchedToCamera2) // 두 번째 카메라로 전환되지 않았을 때만
+        if (!hasSwitchedToCamera1 && !hasSwitchedToCamera2 && !hasSwitchedToCamera3) // 두 번째 카메라로 전환되지 않았을 때만
         {
             StartCoroutine(SwitchToCamera1());
         }
@@ -191,10 +199,41 @@ public class Ending : MonoBehaviour
             mainCam.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
 
             yield return new WaitForEndOfFrame();
+            if (hasSwitchedToCamera3)
+                yield break;
         }
 
         camera2.Priority = 0;
         camera3.Priority = 10;
+        StartCoroutine(SwitchToCamera4());
+        //mainCam.transform.position = targetPosition;
+    }
+    IEnumerator SwitchToCamera4()
+    {
+        yield return new WaitForSeconds(cameraSwitchDelay);
+
+        float currentTime = 0;
+        float initialPriority = camera2.Priority;
+
+        Vector3 initialPosition = mainCam.transform.position;
+        Vector3 targetPosition = initialPosition + Vector3.up;
+
+        while (currentTime < camera4Duration)
+        {
+            currentTime += Time.deltaTime;
+            float t = currentTime / camera4Duration;
+
+            camera3.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
+            camera4.Priority = (int)Mathf.Lerp(10, 0, t);
+
+            // Gradually move the camera upwards
+            mainCam.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        camera3.Priority = 0;
+        camera4.Priority = 10;
 
         mainCam.transform.position = targetPosition;
     }

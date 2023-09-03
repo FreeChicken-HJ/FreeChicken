@@ -13,6 +13,9 @@ public class CaveInteraction_Door : MonoBehaviour
     CaveScenePlayer player;
     CaveItem_Key key;
 
+    public GameObject DadChick;
+    public GameObject Thx;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
@@ -33,6 +36,7 @@ public class CaveInteraction_Door : MonoBehaviour
         {
             Debug.Log("¹®¿¡ °¡±îÀÌ °¬´ß");
             donotOpenDoorText.SetActive(true);
+            Invoke("CloseText", 2f);
             isOpen = true;
         }
 
@@ -43,7 +47,10 @@ public class CaveInteraction_Door : MonoBehaviour
             OpenDoorText.SetActive(true);
         }
     }
-
+    void CloseText()
+    {
+        donotOpenDoorText.SetActive(false);
+    }
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag.Equals("Player") && !player.hasKey)
@@ -67,6 +74,8 @@ public class CaveInteraction_Door : MonoBehaviour
             OpenDoorText.SetActive(false);
             --player.keyCount;
             Destroy(gameObject);
+            Thx.gameObject.SetActive(true);
+            Invoke("Last", 3f);
             Debug.Log("¹®À» ¿­¾ú´ß");
             
         }
@@ -78,7 +87,11 @@ public class CaveInteraction_Door : MonoBehaviour
 
         }
     }
-
+    void Last()
+    {
+        Thx.gameObject.SetActive(false);
+        DadChick.gameObject.SetActive(false);
+    }
     void DestroyOpenDoorText()
     {
         OpenDoorText.gameObject.SetActive(false);

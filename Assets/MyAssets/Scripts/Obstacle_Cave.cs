@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEditor.PlayerSettings;
+
 
 public class Obstacle_Cave : MonoBehaviour
 {
@@ -367,7 +367,21 @@ public class Obstacle_Cave : MonoBehaviour
 
     void Accel_z()
     {
-        rigid.AddForce(new Vector3(0, 0, -1) * moveSpeed, ForceMode.Acceleration);
+        if (isMove)
+        {
+            rigid.AddForce(new Vector3(0, 0, -1) * moveSpeed, ForceMode.Acceleration);
+            if (removeObj)
+            {
+
+                isMove = false;
+                this.gameObject.SetActive(false);
+                //objAnimator.SetBool("isMove", false);
+                //Destroy(this.gameObject);
+                //this.gameObject.SetActive(false);
+                //moveObj.SetActive(false);
+                //obj.transform.position 
+            }
+        }
     }
 
     void Orbit()
@@ -472,6 +486,7 @@ public class Obstacle_Cave : MonoBehaviour
                 isMove = false;
                 break;
             case MoveObstacleType.Q:
+                isMove = true;
                 Accel_z();
                 break;
         }

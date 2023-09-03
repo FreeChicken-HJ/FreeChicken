@@ -109,7 +109,8 @@ public class FactoryPlayer : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         isTalk = false;
-        
+        Cursor.visible = false;
+        MemoryCount.memCount = 0;
     }
    
     void Update()

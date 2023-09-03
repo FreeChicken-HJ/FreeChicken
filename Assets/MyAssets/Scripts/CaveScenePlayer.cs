@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Cinemachine;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
-using UnityEngine.UIElements;
+
 using Unity.Collections.LowLevel.Unsafe;
 
 public class CaveScenePlayer : MonoBehaviour
@@ -101,6 +101,7 @@ public class CaveScenePlayer : MonoBehaviour
     public bool isTalk;
     public GameObject StopPleaseUI;
     public GameObject GetUpgradeBox_text;
+    public GameObject LoadingUI;
     [Header("SavePoint")]
     //SavePoint
     public GameObject SavePointImage;
@@ -166,7 +167,8 @@ public class CaveScenePlayer : MonoBehaviour
     {
         obstacle = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_Cave>();
         DiePs.gameObject.SetActive(false);
-        FirstCam.Priority =999;
+        //FirstCam.Priority =999;
+        Cursor.visible = false;
     }
 
     void Update()
@@ -629,8 +631,11 @@ public class CaveScenePlayer : MonoBehaviour
 
         if(other.gameObject.name == "FinalPoint")
         {
-            SceneManager.LoadScene("EndingScene");
+            LoadingUI.SetActive(true);
+            Invoke("Last", 1.5f);
+           
         }
+
         //if (other.gameObject.CompareTag("Poison") &&!isReversal)
         //{
         //    Debug.Log("반대로..");
@@ -652,7 +657,10 @@ public class CaveScenePlayer : MonoBehaviour
             Invoke("StopPleaseUIEnd", 3f);
         }
     }
-
+    void Last()
+    {
+        SceneManager.LoadScene("EndingScene");
+    }
     private IEnumerator ReversePlayerMovement() // 플레이어 좌우반전
     {
         isReversed = true;

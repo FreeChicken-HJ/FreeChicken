@@ -34,7 +34,7 @@ public class FactoryUIManager : MonoBehaviour
         //instance.gameObject.SetActive(true);
         sentences = new Queue<string>();
         isTalkEnd = false;
-        
+        Cursor.visible = true;
         player.isTalk = true;
         
     }
@@ -67,7 +67,7 @@ public class FactoryUIManager : MonoBehaviour
             instance.gameObject.SetActive(false);
                 player.isTalk = false;
                 isTalkEnd = true;
-               
+            Cursor.visible = false;
                 player.isStopSlide = false;
                 npccam.Priority = 1;
                 maincam.Priority = 2;

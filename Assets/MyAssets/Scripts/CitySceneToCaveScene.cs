@@ -12,6 +12,7 @@ public class CitySceneToCaveScene : MonoBehaviour
     public CityScenePlayer player;
     public bool isContact;
     public bool isMove;
+    public GameObject LoadingUI;
 
     //public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera endCam;
@@ -50,9 +51,14 @@ public class CitySceneToCaveScene : MonoBehaviour
     {
         GameSave.isCave = true;
         PlayerPrefs.SetInt("GoCave", GameSave.isCave ? 1 : 0);
+        LoadingUI.SetActive(true);
+        Invoke("Last", 2f);
+    }
+    void Last()
+    {
+        
         SceneManager.LoadScene("Enter2DScene");
     }
-   
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")

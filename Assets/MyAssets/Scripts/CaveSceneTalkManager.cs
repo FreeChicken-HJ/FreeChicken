@@ -41,6 +41,7 @@ public class CaveSceneTalkManager : MonoBehaviour
         isPlayerImage = true;
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         Player.isTalk = true;
+        Cursor.visible = true;
     }
 
     public void OndiaLog(string[] lines)
@@ -69,6 +70,7 @@ public class CaveSceneTalkManager : MonoBehaviour
             //instance.gameObject.SetActive(false);
             Destroy(instance.gameObject);
             Player.isTalk = false;
+            Cursor.visible = false;
             //NPC4Cam.Priority = 1;
             //mainCam.Priority = 10;
         }

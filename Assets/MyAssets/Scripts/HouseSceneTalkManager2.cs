@@ -24,6 +24,10 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
 
     HouseScene2_Player player;
 
+    public AudioSource TalkSound;
+
+    public CinemachineVirtualCamera maincam;
+    public CinemachineVirtualCamera npccam;
     private void Awake()
     {
         instance = this;
@@ -31,6 +35,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
 
     void Start()
     {
+        Cursor.visible = true;
         sentences = new Queue<string>();
         isTalkEnd = false;
         isPlayerImage = true;
@@ -62,11 +67,16 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         if (sentences.Count == 0)
         {
             // 게임 오브젝트가 파괴되지 않았을 때에만 처리
+            maincam.Priority = 2;
+            npccam.Priority = -5;
+
+
             if (gameObject != null)
             {
                 Destroy(gameObject);
 
             }
+            Cursor.visible = false;
             //isTalkEnd = true;
             player.isTalk1 = false;
             player.isTalk2 = false;
@@ -113,8 +123,10 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         {
             if (!isTyping)
             {
+                TalkSound.Play();
                 NextSentence();
-                ChangeImage();
+
+                //ChangeImage();
             }
         }
     }

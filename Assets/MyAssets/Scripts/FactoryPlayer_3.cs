@@ -27,7 +27,8 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject PotionTMP_2;
 
     public GameObject NPC;
-    
+
+    public GameObject StartParticle;
     //public GameState gameState;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
@@ -66,7 +67,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     float t;
 
     public GameObject UpstairUI;
-
+    public GameObject LoadingUI;
     public GameObject LastUI;
     public GameObject truckPos;
     public GameObject Truck;
@@ -74,7 +75,8 @@ public class FactoryPlayer_3 : MonoBehaviour
     
     public float minValue;
     public float maxValue;
-    
+
+    public GameObject Pos0;
     public GameObject Pos1;
    
     public GameObject Pos3;
@@ -92,7 +94,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public AudioSource truckLeaveAudio;
     public AudioSource BGM;
     public AudioSource PipeMagicSound;
-
+    public AudioSource StartSound;
 
     void Awake()
     {
@@ -106,8 +108,17 @@ public class FactoryPlayer_3 : MonoBehaviour
     {
         
         BGM.Play();
+        isTalk = true;
+        StartSound.Play();
+        Invoke("ReStart", 3f);
     }
- 
+    void ReStart()
+    {
+        startUI.SetActive(false);
+        StartParticle.SetActive(false);
+        isTalk = false;
+        StartSound.Stop();
+    }
     void Update()
     {
 
@@ -125,16 +136,21 @@ public class FactoryPlayer_3 : MonoBehaviour
             Truck.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 4f);
             this.gameObject.transform.position = truckPos.transform.position;
             LastUI.SetActive(true);
-            Invoke("Finish", 3f);
+            Invoke("Finish", 2f);
             
         }
         
     }
     void Finish()
     {
+        LoadingUI.SetActive(true);
+        Invoke("Last", 2f);
+    }
+    void Last()
+    {
         GameSave.isHouse = true;
-        PlayerPrefs.SetInt("GoHouse", GameSave.isHouse? 1:0);
-        SceneManager.LoadScene("Enter2DScene"); 
+        PlayerPrefs.SetInt("GoHouse", GameSave.isHouse ? 1 : 0);
+        SceneManager.LoadScene("Enter2DScene");
     }
     private void FixedUpdate()
     {
@@ -333,6 +349,7 @@ public class FactoryPlayer_3 : MonoBehaviour
                 Invoke("ReSpawnCanvas", 2f);
                 
             }
+
         }
         if (collision.gameObject.tag == "Floor")
         {
@@ -354,8 +371,11 @@ public class FactoryPlayer_3 : MonoBehaviour
         isDie = false;
        
         DieParticle.SetActive(false);
-        SceneManager.LoadScene("FactoryScene_3");
+        mainCam.Priority = 2;
+        dieCam.Priority = 1;
         
+        anim.SetBool("isDie", false);
+        this.gameObject.transform.position = Pos0.transform.position;
     }
     void ReSpawnCanvas()
     {

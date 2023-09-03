@@ -8,6 +8,7 @@ using TMPro;
 public class TypingEffect : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public GameObject LoadingUI;
     public GameObject TalkCanvas;
     public CanvasGroup canvasGroup;
     public List<string> dialogueList;
@@ -18,9 +19,12 @@ public class TypingEffect : MonoBehaviour
     public string nextSceneName;
 
     private bool waitForClick = false; // 클릭 대기 상태
-
+    public AudioSource ButtonClickSound;
+    public AudioSource BGM;
     private void Start()
     {
+        Cursor.visible = true;
+        BGM.Play();
         canvasGroup.alpha = 1f; // 초기화
         if (dialogueList.Count > 0)
         {
@@ -51,8 +55,10 @@ public class TypingEffect : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0))
                 {
+                    ButtonClickSound.Play();
                     waitForClick = false;
                     break;
+
                 }
                 yield return null;
             }
@@ -81,7 +87,13 @@ public class TypingEffect : MonoBehaviour
             yield return null;
         }
         canvasGroup.alpha = 0f;
-
+        Cursor.visible = false;
+        BGM.Stop();
+        LoadingUI.SetActive(true);
+        Invoke("StartScene", 2f);
+    }
+    void StartScene()
+    {
         SceneManager.LoadScene(nextSceneName);
     }
 }

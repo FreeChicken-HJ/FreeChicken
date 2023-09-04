@@ -220,6 +220,39 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void Enter2dScene()
+    {
+        Time.timeScale = 1f;
+        if (isFactory_1)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isFactory_2)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isFactory_3)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isHouse_1)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isHouse_2)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isCity)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else if (isCave)
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+    }
+
     public void ReplayGame()
     {
         Time.timeScale = 1f;
@@ -252,8 +285,8 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("CaveScene_Final");
         }
-
     }
+
     public void ControlsUI()
     {
         if (isMain)
@@ -264,6 +297,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void ClickButtonSound()
     {
         ClickButtonAudio.Play();

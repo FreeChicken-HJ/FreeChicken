@@ -15,7 +15,10 @@ public class SlideBelt : MonoBehaviour
     // Start is called before the first frame update
     void Update()
     {
-        Move();
+        if (!player.isTalk)
+        {
+            Move();
+        }
     }
     void Move()
     {

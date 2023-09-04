@@ -13,7 +13,7 @@ public class CaveInteraction_Door : MonoBehaviour
     CaveScenePlayer player;
     CaveItem_Key key;
 
-    public GameObject DadChick;
+  
     public GameObject Thx;
 
     void Start()
@@ -73,7 +73,8 @@ public class CaveInteraction_Door : MonoBehaviour
 
             OpenDoorText.SetActive(false);
             --player.keyCount;
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
             Thx.gameObject.SetActive(true);
             Invoke("Last", 3f);
             Debug.Log("¹®À» ¿­¾ú´ß");
@@ -90,7 +91,8 @@ public class CaveInteraction_Door : MonoBehaviour
     void Last()
     {
         Thx.gameObject.SetActive(false);
-        DadChick.gameObject.SetActive(false);
+        
+        
     }
     void DestroyOpenDoorText()
     {

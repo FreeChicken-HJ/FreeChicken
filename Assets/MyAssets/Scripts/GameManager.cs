@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public AudioSource MainBGM;
     public GameObject mainUI;
+    public GameObject LoadingUI;
     void Start()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null)
@@ -48,9 +49,11 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         {
+            
             Cursor.visible = true;
             if(factoryPlayer1 != null)
             {
+
                 menuSet.SetActive(true);
                 factoryPlayer1.mainAudio.Pause();
                 factoryPlayer1.runAudio.Pause();
@@ -130,18 +133,19 @@ public class GameManager : MonoBehaviour
                 
             }
         }
-        if (isMain)
-        {
-            if (mainUI.activeSelf)
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    mainUI.SetActive(false);
-                }
-            }
-        }
+        
+       
     }
+   
+   
+    public void MainUIControlExit()
+    {
 
+          mainUI.SetActive(false);
+        
+
+
+    }
     public void ContinueGame()
     {
        
@@ -219,10 +223,9 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void Enter2dScene()
+    public void Enter()
     {
-        Time.timeScale = 1f;
+       
         if (isFactory_1)
         {
             SceneManager.LoadScene("Enter2DScene");
@@ -252,25 +255,42 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("Enter2DScene");
         }
     }
+    public void Enter2dScene()
+    {
+        Time.timeScale = 1f;
+        LoadingUI.SetActive(true);
+        if(factoryPlayer1!=null) factoryPlayer1.isTalk = true;
+        else if(factoryPlayer2!=null) factoryPlayer2.isTalk = true;
+        else if(factoryPlayer3!=null) factoryPlayer3.isTalk = true;
+        else if(cityPlayer!=null) cityPlayer.isAllStop = true;
+
+        MemoryCount.memCount = 0;
+        
+        Invoke("Enter", 5f);
+       
+    }
 
     public void ReplayGame()
     {
         Time.timeScale = 1f;
         if (isFactory_1)
         {
-            
+            MemoryCount.memCount = 0;
             SceneManager.LoadScene("FactoryScene_1");
         }
         else if (isFactory_2)
         {
+            MemoryCount.memCount = 0;
             SceneManager.LoadScene("FactoryScene_2");
         }
         else if (isFactory_3)
         {
+            MemoryCount.memCount = 0;
             SceneManager.LoadScene("FactoryScene_3");
         }
         else if (isHouse_1)
         {
+            MemoryCount.memCount = 0;
             SceneManager.LoadScene("HouseScene1");
         }
         else if (isHouse_2)

@@ -23,6 +23,8 @@ public class FactorySceneChangeZone : MonoBehaviour
 
     public AudioSource ClickSound;
 
+    public TextMeshProUGUI Rtxt;
+    public TextMeshProUGUI Etxt;
     [Header("Bool")]
     public bool isButton;
     public bool isL;
@@ -59,12 +61,18 @@ public class FactorySceneChangeZone : MonoBehaviour
             ChangeConveorSlider.value = 0;
             t = 0;
             isEnd = false;
+            ChangeConveorZone.SetActive(false);
+            isButton = false;
+            isChk = false;
+            ChangeCam.Priority = 1;
+            mainCam.Priority = 3;
         }
     }
     void Chk()
     {
         if (Input.GetKeyDown(KeyCode.R) && !isL && !isG && !isR)
         {
+            Rtxt.color = Color.red;
             Particle.Play();
             ClickSound.Play();
             
@@ -77,6 +85,7 @@ public class FactorySceneChangeZone : MonoBehaviour
        
         else if (Input.GetKeyDown(KeyCode.R) && !isG && isL && !isR)
         {
+            Rtxt.color = Color.red;
             Particle.Play();
             ClickSound.Play();
             zoneL.gameObject.SetActive(false);
@@ -88,6 +97,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         
         else if (Input.GetKeyDown(KeyCode.R) && !isR && !isL && isG)
         {
+            Rtxt.color = Color.red;
             Particle.Play();
             ClickSound.Play();
             zoneG.gameObject.SetActive(false);
@@ -98,12 +108,16 @@ public class FactorySceneChangeZone : MonoBehaviour
             
         } 
         isR = false;
-            
+       
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            Rtxt.color = Color.white;
+        }
 
-        
         if (Input.GetButton("E"))
         {
             Debug.Log("E");
+            Etxt.color = Color.red;
             if (ChangeConveorSlider.value < 100f)
             {
                 t += Time.deltaTime;
@@ -111,7 +125,7 @@ public class FactorySceneChangeZone : MonoBehaviour
             }
             else // 다 채워지면
             {
-
+                Etxt.color = Color.white;
                 ParticleSound.Play();
                 ChangeConveorZone.gameObject.SetActive(false);
                 ChangeFinish.gameObject.SetActive(true);
@@ -128,6 +142,7 @@ public class FactorySceneChangeZone : MonoBehaviour
         }
         if (Input.GetButtonUp("E"))
         {
+            Etxt.color = Color.white;
             t = 0;
             ChangeConveorSlider.value = 0;
         }
@@ -159,7 +174,9 @@ public class FactorySceneChangeZone : MonoBehaviour
     {
         Instantiate(BigEgg, Pos.transform.position, Quaternion.identity);
        
+       
     }
+   
 }
 // 반복 while
 //e 누르면 왼쪽 

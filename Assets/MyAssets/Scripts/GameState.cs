@@ -23,7 +23,7 @@ public class GameState : MonoBehaviour
             ClickSound.Play();
            
             SetLoadingUI();
-            Invoke("FactoryScenePlay",2f);
+            Invoke("FactoryScenePlay",5f);
            
             
         }
@@ -32,14 +32,14 @@ public class GameState : MonoBehaviour
             ClickSound.Play();
            
             SetLoadingUI();
-            Invoke("HouseScenePlay",2f);
+            Invoke("HouseScenePlay",5f);
             
         }
         else if (isCi)
         {
             ClickSound.Play();
             SetLoadingUI();
-            Invoke("CityScenePlay", 2f);
+            Invoke("CityScenePlay", 5f);
           
             
         }
@@ -47,7 +47,7 @@ public class GameState : MonoBehaviour
         {
             ClickSound.Play();
             SetLoadingUI();
-            Invoke("CaveScenePlay", 2f);
+            Invoke("CaveScenePlay", 5f);
          
         }
     }  

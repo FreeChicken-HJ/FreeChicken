@@ -30,7 +30,7 @@ public class StartScene : MonoBehaviour
         Cursor.visible = false;
 
         loadingUI.SetActive(true);
-        Invoke("Load", 1f);
+        Invoke("Load", 5f);
 
     }
     public void Load()

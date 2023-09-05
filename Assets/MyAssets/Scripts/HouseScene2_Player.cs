@@ -51,7 +51,7 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource dieAudio;
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
-    
+
     [Header("Dialogue")]
     public GameObject NPCDialogue;
     public GameObject NPC;
@@ -93,7 +93,7 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Update()
     {
-        
+
         if (!Dead)
         {
             if (!isTalk1 || !isTalk2)
@@ -170,7 +170,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             this.gameObject.transform.position = Pos2.gameObject.transform.position;
         }
-        else if (TalkEnd1)
+        else if (!TalkEnd1)
         {
             this.gameObject.transform.position = Pos.gameObject.transform.position;
         }
@@ -193,29 +193,29 @@ public class HouseScene2_Player : MonoBehaviour
             NPCDialogue.SetActive(true);
             anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
-            
+
             npc_cam.Priority = 10;
             mainCam.Priority = 1;
         }
 
-        if(other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
+        if (other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
         {
             isTalk2 = true;
             UnicycleDialogue.SetActive(true);
-            anim.SetBool("Walk", false); 
+            anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
             unicycleCam.Priority = 10;
-           
+
             mainCam.Priority = 1;
         }
 
-        if(other.gameObject.name == "EvolutionSense1")
+        if (other.gameObject.name == "EvolutionSense1")
         {
             Debug.Log("없어져라");
-            
+
             StartRotation();
             Invoke("Destroy_", 2f);
-            
+
         }
     }
 
@@ -261,7 +261,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             npc_cam.Priority = 1;
             mainCam.Priority = 10;
-            
+
             TalkEnd1 = true;
         }
 
@@ -269,7 +269,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             unicycleCam.Priority = 1;
             mainCam.Priority = 10;
-           
+
             TalkEnd2 = true;
         }
     }
@@ -284,7 +284,7 @@ public class HouseScene2_Player : MonoBehaviour
             Invoke("ReLoadScene", 2f);
         }
 
-        if (collision.gameObject.CompareTag("Ground")) 
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isJump = false;
         }

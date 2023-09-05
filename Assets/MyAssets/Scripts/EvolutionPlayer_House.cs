@@ -13,7 +13,7 @@ public class EvloutionPlayer : MonoBehaviour
     [SerializeField] public Transform cameraArm;
     public GameObject player;
 
-    public Image DieImage2;
+    public GameObject DieCanvas;
 
     Vector3 moveVec;
     Vector2 moveInput;
@@ -49,11 +49,11 @@ public class EvloutionPlayer : MonoBehaviour
 
     [Header("Dialogue")]
     public GameObject ReadygoCity;
-    public GameObject GoCity;
     public bool isTalk2;
     public bool TalkEnd2;
 
     public GameObject LoadingUI;
+
     // 진화효과
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
@@ -74,7 +74,7 @@ public class EvloutionPlayer : MonoBehaviour
     void Start()
     {
         DiePs.gameObject.SetActive(false);
-        DieImage2.gameObject.SetActive(false);
+        DieCanvas.gameObject.SetActive(false);
     }
 
     void Update()
@@ -150,7 +150,7 @@ public class EvloutionPlayer : MonoBehaviour
         DiePs.gameObject.SetActive(false);
         this.gameObject.transform.position = Pos.gameObject.transform.position;
         //SceneManager.LoadScene("HouseScene2");
-        DieImage2.gameObject.SetActive(false);
+        DieCanvas.gameObject.SetActive(false);
     }
 
     void NextCityScene()
@@ -176,11 +176,13 @@ public class EvloutionPlayer : MonoBehaviour
         if (other.CompareTag("evolu")) 
         {
             StartRotation();
+            ReadygoCity.SetActive(true);
         }
 
         if (other.gameObject.name == "GoCitySense")
         {
-            GoCity.SetActive(true);
+            isTalk2 = true;
+            LoadingUI.SetActive(true);
             Invoke("NextCityScene", 3f);
         }
     }
@@ -217,14 +219,15 @@ public class EvloutionPlayer : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == "EvolutionSense2")
-        {
-            ReadygoCity.SetActive(false);
-        }
+        //if (other.gameObject.name == "EvolutionSense2")
+        //{
+        //    ReadygoCity.SetActive(false);
+        //}
 
         if (other.CompareTag("evolu"))
         {
             other.gameObject.SetActive(false);
+            ReadygoCity.SetActive(false);
         }
     }
 
@@ -234,7 +237,7 @@ public class EvloutionPlayer : MonoBehaviour
         {
             Dead = true;
             DieMotion();
-            DieImage2.gameObject.SetActive(true);
+            DieCanvas.gameObject.SetActive(true);
             Invoke("ReLoadScene", 3.5f);
         }
 

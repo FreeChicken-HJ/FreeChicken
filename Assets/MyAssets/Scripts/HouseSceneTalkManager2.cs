@@ -126,7 +126,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
                 TalkSound.Play();
                 NextSentence();
 
-                //ChangeImage();
+                ChangeImage();
             }
         }
     }

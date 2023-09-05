@@ -74,6 +74,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
             isTyping = true;
             
             nextText.SetActive(false);
+            TalkSound.Play();
             StartCoroutine(Typing(currentSentences));
         }
 
@@ -131,7 +132,6 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
         {
             if (!isTyping)
             {
-                TalkSound.Play();
                 NextSentence();
                 ChangeImage();
             }

@@ -61,6 +61,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
             currentSentences = sentences.Dequeue();
             isTyping = true;
             nextText.SetActive(false);
+            TalkSound.Play();
             StartCoroutine(Typing(currentSentences));
         }
 
@@ -123,9 +124,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         {
             if (!isTyping)
             {
-                TalkSound.Play();
                 NextSentence();
-
                 ChangeImage();
             }
         }

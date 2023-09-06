@@ -18,6 +18,7 @@ public class FactoryFixUI : MonoBehaviour
 
     public GameObject fixObj;
     public AudioSource fixAudio;
+    public AudioSource GetEggSound;
     float t = 0;
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,7 @@ public class FactoryFixUI : MonoBehaviour
         mainCam.Priority = 2;
         stopConCam.Priority = 1;
         fixAudio.Stop();
+        GetEggSound.Play();
         Destroy(fixObj);
         //fixObj.SetActive(false);
         //stopConCam.gameObject.SetActive(false);

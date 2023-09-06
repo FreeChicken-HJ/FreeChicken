@@ -86,7 +86,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject SavePointObj_3;
 
     public GameObject SavePosUI;
-
+    public GameManager gameManager;
     [Header("Audio")]
     public AudioSource jumpAudio;
     public AudioSource dieAudio;
@@ -143,8 +143,9 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void Finish()
     {
+        gameManager.isLoading = true;
         LoadingUI.SetActive(true);
-        Invoke("Last", 2f);
+        Invoke("Last", 3f);
     }
     void Last()
     {

@@ -92,6 +92,12 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Update()
     {
+        if(this.gameObject.transform.position.y <= -100f && !Dead)
+        {
+            Dead = true;
+            DieMotion();
+            Invoke("ReLoadScene", 2f);
+        }
 
         if (!Dead)
         {
@@ -162,6 +168,7 @@ public class HouseScene2_Player : MonoBehaviour
     void ReLoadScene()
     {
         Dead = false;
+        anim.SetBool("isDead", false);
         DeadCount.count++;
 
         if (TalkEnd1)
@@ -172,7 +179,7 @@ public class HouseScene2_Player : MonoBehaviour
         {
             this.gameObject.transform.position = Pos.gameObject.transform.position;
         }
-        anim.SetBool("isDead", false);
+       
         DiePs.gameObject.SetActive(false);
         DieCanvas.gameObject.SetActive(false);
     }

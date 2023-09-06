@@ -26,9 +26,13 @@ public class GameManager : MonoBehaviour
     public bool isCave;
     public bool isMain;
 
+    public bool isLoading;
+
     public AudioSource MainBGM;
     public GameObject mainUI;
     public GameObject LoadingUI;
+
+   
     void Start()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null)
@@ -47,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") && !isLoading)
         {
             
             Cursor.visible = true;
@@ -126,10 +130,10 @@ public class GameManager : MonoBehaviour
             {
                 menuSet.SetActive(true);
                 Time.timeScale = 0f;
-                if (MainBGM != null)
+                /*if (MainBGM != null)
                 {
                     MainBGM.Pause();
-                }
+                }*/
                 
             }
         }
@@ -269,7 +273,7 @@ public class GameManager : MonoBehaviour
         Invoke("Enter", 5f);
        
     }
-
+  
     public void ReplayGame()
     {
         Time.timeScale = 1f;
@@ -280,12 +284,18 @@ public class GameManager : MonoBehaviour
         }
         else if (isFactory_2)
         {
-            MemoryCount.memCount = 0;
+            if (MemoryCount.memCount >= 2)
+            {
+                MemoryCount.memCount = 2;
+            }
             SceneManager.LoadScene("FactoryScene_2");
         }
         else if (isFactory_3)
         {
-            MemoryCount.memCount = 0;
+            if (MemoryCount.memCount >= 4)
+            {
+                MemoryCount.memCount = 4;
+            }
             SceneManager.LoadScene("FactoryScene_3");
         }
         else if (isHouse_1)

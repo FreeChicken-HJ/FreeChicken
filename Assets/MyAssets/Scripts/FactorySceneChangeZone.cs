@@ -170,6 +170,17 @@ public class FactorySceneChangeZone : MonoBehaviour
             //StartCoroutine(turnZone());
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isChk = false;
+            ChangeConveorZone.SetActive(false);
+            isButton = false;
+            ChangeCam.Priority = 1;
+            mainCam.Priority = 3;
+        }
+    }
     void SpawnBigEgg()
     {
         Instantiate(BigEgg, Pos.transform.position, Quaternion.identity);

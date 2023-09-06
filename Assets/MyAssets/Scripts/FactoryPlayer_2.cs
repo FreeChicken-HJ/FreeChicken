@@ -28,6 +28,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     public bool isTalk;
     public bool isStopSlide; 
     public bool isContact;
+    public bool isLoading;
     
     [Header("Stats")]
     public GameObject StampTMP;
@@ -41,6 +42,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     [Header("UI")]
     public GameObject scene2LastUI;
     public GameObject LoadingUI;
+    public GameManager gameManager;
   
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
@@ -81,6 +83,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         {
             this.gameObject.transform.position = StampTMP.transform.position;
         }
+      
     }
     void PickUP()
     {
@@ -209,9 +212,9 @@ public class FactoryPlayer_2 : MonoBehaviour
     {
       
         LoadingUI.SetActive(true);
-        
+        gameManager.isLoading = true;
         BGM.Stop();
-        Invoke("FinalSceneLoad", 2f);
+        Invoke("FinalSceneLoad", 3f);
         
        
     }

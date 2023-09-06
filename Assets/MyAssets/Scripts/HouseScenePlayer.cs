@@ -39,6 +39,7 @@ public class HouseScenePlayer : MonoBehaviour
     private float doorOpenDuration = 3.0f;
     private float doorRaiseSpeed = 0.8f;
     private bool shouldLookAround = false;
+    public GameManager gameManager;
 
     public GameObject startDoor;
     public GameObject DieCanvas;
@@ -82,6 +83,8 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject PushBell_text;
     public GameObject GetUpgradeBox_text;
 
+    public GameObject LoadingUI;
+
     // 새로운 능력얻는 효과
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
@@ -107,10 +110,11 @@ public class HouseScenePlayer : MonoBehaviour
 
     void Update()
     {
-        
+
         if (!Dead)
         {
             DiePs.gameObject.SetActive(false);
+            anim.SetBool("isDead", false);
             if (!isTalk)
             {
                 if (isRotating)
@@ -138,8 +142,8 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (!isOpeningDoor && Input.GetButtonDown("E") && isReadyDoorOpen)
         {
-            Debug.Log("벨 처음 눌렀음");
-            isOpeningDoor= true;
+
+            isOpeningDoor = true;
             pushBell = true;
             bellAudio.Play();
             PushBell_text.SetActive(false);
@@ -166,7 +170,7 @@ public class HouseScenePlayer : MonoBehaviour
         {
             Debug.Log("문 올라감");
             startDoor.transform.Translate(Vector3.up * doorRaiseSpeed * Time.deltaTime);
-            if (startDoor.transform.position.y >=2f)
+            if (startDoor.transform.position.y >= 2f)
             {
                 startDoor.SetActive(false);
                 isRaisingDoor = false;
@@ -178,7 +182,7 @@ public class HouseScenePlayer : MonoBehaviour
                 isReadyDoorOpen = false;
             }
         }
-}
+    }
 
     void GetInput()
     {
@@ -220,13 +224,13 @@ public class HouseScenePlayer : MonoBehaviour
 
     void DieMotion()
     {
-        if (DiePs != null) // DiePs가 파괴되지 않았는지 확인
+        if (DiePs != null) 
         {
-            //Dead = true;
+            
             DieCanvas.gameObject.SetActive(true);
             DiePs.gameObject.SetActive(true);
             dieAudio.Play();
-            anim.SetTrigger("isDead");
+            anim.SetBool("isDead",true);
             Invoke("remove_dieUI", 3f);
            
         }
@@ -290,14 +294,14 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (other.CompareTag("PushButton") && !pushBell)
         {
-            Debug.Log("벨 처음 누를 준비중");
+            
             PushBell_text.SetActive(true);
             isReadyDoorOpen = true;
         }
 
         if(other.CompareTag("PushButton") && isOpeningDoor)
         {
-            Debug.Log("이미 벨눌렀음");
+           
             PushBell_text.SetActive(false);
             bellAudio.Pause();
             OpenDoorAudio.Pause();
@@ -348,29 +352,29 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (other.gameObject.name == "NextScenePoint")
         {
-            NextSceneImage.gameObject.SetActive(true);
+            gameManager.isLoading = true;
+            LoadingUI.SetActive(true);
             mainAudio.Stop();
-            Invoke("NextScene", 3.5f);
+            Invoke("NextScene", 3f);
         }
 
         if (other.gameObject.CompareTag("Obstacle") && !Dead)
         {
             Dead = true;
-            /*DeadCount.count += 1;
-*/
-            if (check_savepoint1 /*&& Dead*/)
+           
+            if (check_savepoint1)
             {
                 DieMotion();
                 Invoke("restart_stage1", 3f);
             }
 
-            if (check_savepoint2 /*&& Dead*/)
+            if (check_savepoint2)
             {
                 DieMotion();
                 Invoke("restart_stage2", 3f);
             }
 
-            if (check_savepoint3 /*&& Dead*/)
+            if (check_savepoint3)
             {
                 DieMotion();
                 Invoke("restart_stage3", 3f);

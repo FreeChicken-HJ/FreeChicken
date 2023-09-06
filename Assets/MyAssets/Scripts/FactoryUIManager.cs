@@ -24,6 +24,7 @@ public class FactoryUIManager : MonoBehaviour
     public bool isTalkPoint2;
 
     public AudioSource TalkSound;
+    public AudioSource ButtonClickSound;
     private void Awake()
     {
         instance = this;
@@ -101,6 +102,7 @@ public class FactoryUIManager : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             if (!isTyping)
+                //ButtonClickSound.Play();
                 NextSentence();
                 
         }

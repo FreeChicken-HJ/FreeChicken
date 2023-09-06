@@ -26,6 +26,7 @@ public class FactoryNPC_1 : MonoBehaviour
     public GameObject TalkUI;
     public bool isFin;
     public GameObject Wall;
+    public GameManager gameManager;
     //public Animator animator;
     float t = 0;
     void Start()
@@ -48,6 +49,7 @@ public class FactoryNPC_1 : MonoBehaviour
             }
             else
             {
+                gameManager.isLoading = true;
                 isEbutton = false;
                 Video.SetActive(true);
 
@@ -56,6 +58,7 @@ public class FactoryNPC_1 : MonoBehaviour
                 Destroy(Ebutton);
                 BGM.Stop();
                 Memory.Play();
+                
                 Cursor.visible = true;
                 Invoke("ReStart", 38f);
                 isFin = true;
@@ -75,10 +78,12 @@ public class FactoryNPC_1 : MonoBehaviour
         if (isFin)
         {
             Video.SetActive(false);
-          /*  maincam.Priority = 2;
-            npccam.Priority = -5;*/
-            Destroy(this.gameObject);
+            maincam.Priority = 2;
+            npccam.Priority = -5;
+            //Destroy(this.gameObject);
+            npc.SetActive(false);
             BGM.Play();
+            gameManager.isLoading = false;
             Wall.SetActive(false);
             Memory.Stop();
             TalkUI.SetActive(true);

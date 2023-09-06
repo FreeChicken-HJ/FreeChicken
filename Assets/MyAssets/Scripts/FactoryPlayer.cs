@@ -46,6 +46,7 @@ public class FactoryPlayer : MonoBehaviour
 
     public bool isWallChagneColor;
     public bool isClick;
+    
     [Header("UI")]
     public GameObject turnEggCanvas;
     public GameObject changeEggCanvas;
@@ -84,13 +85,15 @@ public class FactoryPlayer : MonoBehaviour
 
     public GameObject ChangeEggDoor;
 
+    public GameObject BlockWall;
+    public GameManager gameManager;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera stopConCam;
     public CinemachineVirtualCamera managerCam;
     public CinemachineVirtualCamera dieCam;
     public CinemachineVirtualCamera pickUpCam;
-
+    public CinemachineVirtualCamera eggChangeCam;
 
 
     [Header("Audio")]
@@ -144,6 +147,7 @@ public class FactoryPlayer : MonoBehaviour
             this.gameObject.transform.position = StampTMP.transform.position;
             
         }
+       
     }
     void PickUP()
     {
@@ -263,8 +267,11 @@ public class FactoryPlayer : MonoBehaviour
        
         if(collision.gameObject.tag == "Floor")
         {
-            UpstairCanvas.SetActive(true);
-            Invoke("UpstairExit",2f);
+            if (!LoadingUI.activeSelf)
+            {
+                UpstairCanvas.SetActive(true);
+                Invoke("UpstairExit", 2f);
+            }
         }
         if (collision.gameObject.tag == "ObstacleZone1" || collision.gameObject.tag == "Obstacle")
         {
@@ -344,6 +351,7 @@ public class FactoryPlayer : MonoBehaviour
         if (isSavePointPos)
         {
             this.gameObject.transform.position = savePointPos_1.gameObject.transform.position;
+            BlockWall.SetActive(false);
         }
         else
         {
@@ -357,6 +365,9 @@ public class FactoryPlayer : MonoBehaviour
         if(other.CompareTag("Rock"))
         {
             mainAudio.Stop();
+            mainCam.Priority = -1;
+            eggChangeCam.Priority = 10;
+            BlockWall.SetActive(true);
             eggChangeZoneAudio.Play();
         }
        
@@ -400,7 +411,7 @@ public class FactoryPlayer : MonoBehaviour
             savePointAudio.Play();
             savePointPos_2.SetActive(false);
             SavePointTxt.SetActive(true);
-            
+            UpstairCanvas.SetActive(false);
             Invoke("ReLoadScene_2", 1f);
         }
     }
@@ -408,7 +419,14 @@ public class FactoryPlayer : MonoBehaviour
     void ReLoadScene_2()
 
     {
+        gameManager.isLoading = true;
         LoadingUI.SetActive(true);
+        mainAudio.Stop();
+        Invoke("Scene_2Load", 3f);
+       
+    }
+    void Scene_2Load()
+    {
         SceneManager.LoadScene("FactoryScene_2");
     }
     void DestroySavePointTxt()
@@ -421,7 +439,7 @@ public class FactoryPlayer : MonoBehaviour
         yield return new WaitForSeconds(3f);
         if (isEgg)
         {
-
+            eggChangeCam.Priority = -100;
             ChangeEggDoor.SetActive(false);
             isSetEggFinish = true;
             eggChangeZoneAudio.Stop();
@@ -452,7 +470,7 @@ public class FactoryPlayer : MonoBehaviour
 
 
             turnEggCanvas.gameObject.SetActive(true);
-            
+           
             if (Input.GetButton("F") && !isSetEggFinish)
             {
                 isClick = true;

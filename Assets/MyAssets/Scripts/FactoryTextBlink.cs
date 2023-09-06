@@ -11,11 +11,11 @@ public class FactoryTextBlink : MonoBehaviour
     {
         if(time < 0.5f)
         {
-            text.color = new Color(1, 1, 1, 1 -time);
+            text.color = new Color(1, 0, 0, 1 -time);
         }
         else
         {
-            text.color = new Color(1, 1, 1, time);
+            text.color = new Color(1, 0, 0, time);
             if(time > 1f)
             {
                 time = 0;

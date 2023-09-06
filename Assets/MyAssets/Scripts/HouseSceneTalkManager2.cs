@@ -25,6 +25,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
     HouseScene2_Player player;
 
     public AudioSource TalkSound;
+    public AudioSource ClickButtonSound;
 
     public CinemachineVirtualCamera maincam;
     public CinemachineVirtualCamera npccam;
@@ -42,6 +43,9 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScene2_Player>();
         player.isTalk1 = true;
         player.isTalk2 = true;
+
+        NpcImage.SetActive(false);
+        PlayerImage.SetActive(false);
     }
 
     public void OndiaLog(string[] lines)
@@ -52,7 +56,23 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         {
             sentences.Enqueue(line);
         }
+        //ShowImage();
     }
+
+    //void ShowImage()
+    //{
+    //    isImageVisible = true;
+    //    if (isNPCImage)
+    //    {
+    //        NpcImage.gameObject.SetActive(true);
+    //        PlayerImage.gameObject.SetActive(false);
+    //    }
+    //    else if (isPlayerImage)
+    //    {
+    //        NpcImage.gameObject.SetActive(false);
+    //        PlayerImage.gameObject.SetActive(true);
+    //    }
+    //}
 
     public void NextSentence()
     {
@@ -125,6 +145,14 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
             if (!isTyping)
             {
                 NextSentence();
+                ClickButtonSound.Play();
+                // 대화가 끝나면 이미지를 비활성화
+                if (sentences.Count == 0)
+                {
+                    NpcImage.SetActive(false);
+                    PlayerImage.SetActive(false);
+                }
+
                 ChangeImage();
             }
         }

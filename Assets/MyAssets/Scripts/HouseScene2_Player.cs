@@ -51,6 +51,7 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource dieAudio;
     public AudioSource jumpAudio;
     public AudioSource savePointAudio;
+    public AudioSource trumpetAudio;
 
     [Header("Dialogue")]
     public GameObject NPCDialogue;
@@ -73,8 +74,6 @@ public class HouseScene2_Player : MonoBehaviour
     private float rotationTimer = 0.0f;
     private float rotationDuration = 3.0f;
     public GameObject EvoluPs;
-
-
 
     void Awake()
     {
@@ -155,7 +154,6 @@ public class HouseScene2_Player : MonoBehaviour
 
     void DieMotion()
     {
-        //Dead = true;
         DiePs.gameObject.SetActive(true);
         anim.SetBool("isDead", true);
         dieAudio.Play();
@@ -165,7 +163,7 @@ public class HouseScene2_Player : MonoBehaviour
     {
         Dead = false;
         DeadCount.count++;
-        //SceneManager.LoadScene("HouseScene2");
+
         if (TalkEnd1)
         {
             this.gameObject.transform.position = Pos2.gameObject.transform.position;
@@ -178,7 +176,6 @@ public class HouseScene2_Player : MonoBehaviour
         DiePs.gameObject.SetActive(false);
         DieCanvas.gameObject.SetActive(false);
     }
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -212,10 +209,9 @@ public class HouseScene2_Player : MonoBehaviour
         if (other.gameObject.name == "EvolutionSense1")
         {
             Debug.Log("없어져라");
-
+            trumpetAudio.Play();
             StartRotation();
             Invoke("Destroy_", 2f);
-
         }
     }
 

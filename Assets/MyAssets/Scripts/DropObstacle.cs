@@ -7,37 +7,26 @@ public class DropObstacle : MonoBehaviour
     public GameObject[] prefab;
     BoxCollider area;
     public int cnt = 20;
-    GameObject go;
     CaveScenePlayer player;
-    //HouseScenePlayer player;
 
     void Start()
     {
         area = GetComponent<BoxCollider>();
-        //player = GameObject.Find("CaveCharacter").GetComponent<CaveScenePlayer>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
     }
 
     void Update()
     {
-        //if (player.isfallingObstacle)
-        //{
-        //    for (int i = 0; i < cnt; ++i)
-        //    {
-        //        Spawn();
-        //    }
-        //}
-        //player.isfallingObstacle = false;
-
-        if(player.isfallingObstacle)
+        if (player.isfallingObstacle)
         {
-            for(int i = 0; i < cnt; ++i)
+            for (int i = 0; i < cnt; ++i)
             {
                 Spawn();
             }
         }
-        player.isfallingObstacle= false;
+        player.isfallingObstacle = false;
     }
+
     void Spawn()
     {
         Vector3 pos = GetRandomPos();

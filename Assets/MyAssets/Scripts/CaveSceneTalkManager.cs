@@ -23,6 +23,7 @@ public class CaveSceneTalkManager : MonoBehaviour
     CaveScenePlayer Player;
     public bool isTalkEnd;
     public AudioSource TalkSound;
+    public AudioSource ClickButtonSound;
     //public CinemachineVirtualCamera NPC4Cam;
     //public CinemachineVirtualCamera mainCam;
 
@@ -42,6 +43,9 @@ public class CaveSceneTalkManager : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         Player.isTalk = true;
         Cursor.visible = true;
+
+        NpcImage.SetActive(false);
+        PlayerImage.SetActive(false);
     }
 
     public void OndiaLog(string[] lines)
@@ -116,7 +120,9 @@ public class CaveSceneTalkManager : MonoBehaviour
         {
             if (!isTyping)
             {
+                
                 NextSentence();
+                ClickButtonSound.Play();
                 ChangeImage();
             }
         }

@@ -45,6 +45,7 @@ public class CaveScenePlayer : MonoBehaviour
     float time;
     Animator anim;
     Obstacle_Cave obstacle;
+    DropObstacle dropObstacle;
     //GameManager_Cave manager;
     //FireTest firetest;
     //CaveItem_DebuffPotion potion;
@@ -55,6 +56,7 @@ public class CaveScenePlayer : MonoBehaviour
     public bool isSense;
     public bool isSenseTest;
     public bool isfallingObstacle;
+    public bool isfallingBook;
     public bool isMoveUp;
     bool isJump;
     //public ParticleSystem jumpPs;
@@ -442,9 +444,15 @@ public class CaveScenePlayer : MonoBehaviour
         {
             fallingAudio.Play();
             isfallingObstacle = true;
-
         }
-        
+
+        if(other.gameObject.name == "SpawnObstaclePos2")
+        {
+            fallingAudio.Play();
+            isfallingBook = true;
+        }
+
+
         if (other.gameObject.tag == "Door" && !isMoveUp)
         {
             other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z);

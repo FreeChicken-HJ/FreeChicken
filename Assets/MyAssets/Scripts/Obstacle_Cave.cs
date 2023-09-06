@@ -84,7 +84,6 @@ public class Obstacle_Cave : MonoBehaviour
         {
             initPositionX = transform.position.x;
             turningPoint = initPositionX - distance;
-
         }
 
         if (Type == MoveObstacleType.H)
@@ -92,15 +91,11 @@ public class Obstacle_Cave : MonoBehaviour
             initPositionZ = transform.position.z;
             turningPoint = initPositionZ - distance;
         }
+
         if(Type == MoveObstacleType.L) // ´ë±¼´ë±¼
         {
             objAnimator = GetComponent<Animator>();
         }
-        // Case C == Rotate
-        // Case D == Big Jump
-
-        // Case E == Delay & Drop
-        // Case F == Swing
         rigid = GetComponent<Rigidbody>();
 
     }
@@ -113,7 +108,6 @@ public class Obstacle_Cave : MonoBehaviour
         removeObj = false;
         
     }
-
     void upDown()
     {
         isSense = false;
@@ -154,7 +148,6 @@ public class Obstacle_Cave : MonoBehaviour
         {
             player.gameObject.transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
         }
-
     }
 
     void rotate_y()
@@ -256,22 +249,9 @@ public class Obstacle_Cave : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-       /* if (collision.gameObject.tag == "Player" && isPlayerAttack)
-        {
-            //player.healthbar.value -= 10f;
-
-        }*/
-        /*if (collision.gameObject.tag == "Player")
-        {
-            isPlayerFollow = true;
-        }*/
-
         if (collision.gameObject.tag == "Wall")
         {
-            Debug.Log("ºÎµúÈû");
-            removeObj = true;
-            //obj.gameObject.SetActive(false);
-            
+            removeObj = true;  
         }
     }
 
@@ -283,28 +263,12 @@ public class Obstacle_Cave : MonoBehaviour
 
             isBigJump = false;
         }
-       /* if (collision.gameObject.tag == "Player" && isMove)
-        {
-            isPlayerFollow = true;
-
-        }*/
-    }
-    void OnCollisionExit(Collision collision)
-    {
-       /* if (collision.gameObject.tag == "Player")
-        {
-            isPlayerFollow = false;
-        }*/
     }
 
     void Swing()
-    {
-        //isPlayerAttack = true;
-        
+    {  
         lerpTime += Time.deltaTime * swingSpeed;
         transform.rotation = CalculateMovementOfPendulum();
-
-
     }
 
     public void deguldegul()
@@ -328,14 +292,9 @@ public class Obstacle_Cave : MonoBehaviour
             }
             else if (removeObj)
             {
-
                 isMove = false;
                 this.gameObject.SetActive(false);
                 objAnimator.SetBool("isMove", false);
-                //Destroy(this.gameObject);
-                //this.gameObject.SetActive(false);
-                //moveObj.SetActive(false);
-                //obj.transform.position 
             }
             
         }
@@ -362,24 +321,34 @@ public class Obstacle_Cave : MonoBehaviour
 
     void Accel()
     {
-        rigid.AddForce(Vector3.right * moveSpeed, ForceMode.Acceleration);
+        if (isMove)
+        {
+            if (!removeObj)
+            {
+                rigid.AddForce(new Vector3(1, 0, 0) * moveSpeed, ForceMode.Acceleration);
+                isMove = false;
+            }
+            else if (removeObj)
+            {
+                isMove = false;
+                this.gameObject.SetActive(false);
+            }
+        }
     }
 
     void Accel_z()
     {
         if (isMove)
         {
-            rigid.AddForce(new Vector3(0, 0, -1) * moveSpeed, ForceMode.Acceleration);
-            if (removeObj)
+            if (!removeObj)
             {
-
+                rigid.AddForce(new Vector3(0, 0, -1) * moveSpeed, ForceMode.Acceleration);
+                isMove = false;
+            }
+            else if (removeObj)
+            {
                 isMove = false;
                 this.gameObject.SetActive(false);
-                //objAnimator.SetBool("isMove", false);
-                //Destroy(this.gameObject);
-                //this.gameObject.SetActive(false);
-                //moveObj.SetActive(false);
-                //obj.transform.position 
             }
         }
     }
@@ -415,21 +384,14 @@ public class Obstacle_Cave : MonoBehaviour
 
     void Update()
     {
-       /* if (removeObj)
-        {
-            obj.gameObject.SetActive(false);
-        }*/
-
         switch (Type)
         {
-            
             case MoveObstacleType.A:
                 isMove = false;
                 upDown();
                 break;
             case MoveObstacleType.B:
                 isMove = false;
-                //isPlayerAttack = true;
                 leftRight();
                 break;
             case MoveObstacleType.C:
@@ -443,12 +405,10 @@ public class Obstacle_Cave : MonoBehaviour
                 isDropObj = true;
                 break;
             case MoveObstacleType.F:
-                //isPlayerAttack = true;
                 isMove = false;
                 Swing();
                 break;
             case MoveObstacleType.G:
-                //isPlayerAttack = true;
                 rotate_y();
                 break;
             case MoveObstacleType.H:
@@ -474,11 +434,10 @@ public class Obstacle_Cave : MonoBehaviour
                 {
                     moveObj.SetActive(true);
                     this.gameObject.SetActive(false);
-                    //isSense = false;
                 }
-                //isSense = true;
                 break;
             case MoveObstacleType.O:
+                isMove = true;
                 Accel();
                 break;
             case MoveObstacleType.P:
@@ -490,7 +449,5 @@ public class Obstacle_Cave : MonoBehaviour
                 Accel_z();
                 break;
         }
-
-    }
-    
+    } 
 }

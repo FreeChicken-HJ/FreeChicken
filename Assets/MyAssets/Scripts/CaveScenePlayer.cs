@@ -75,6 +75,7 @@ public class CaveScenePlayer : MonoBehaviour
     public bool Talk_NPC5;
 
     public bool isChk;
+    public bool isDadAnimChk;
     public bool isAnimChk;
     public bool isFollow;
     public bool isFinal;
@@ -104,6 +105,7 @@ public class CaveScenePlayer : MonoBehaviour
     public GameObject StopPleaseUI;
     public GameObject GetUpgradeBox_text;
     public GameObject LoadingUI;
+    public GameObject LastUI;
     [Header("SavePoint")]
     //SavePoint
     public GameObject SavePointImage;
@@ -177,11 +179,11 @@ public class CaveScenePlayer : MonoBehaviour
     {
         time += Time.deltaTime;
 
-            if (!Dead &&!isReversed&&!isTalk)
-            {
-                Move();
-                Jump();
-                GetInput();
+        if (!Dead && !isReversed && !isTalk)
+        {
+            Move();
+            Jump();
+            GetInput();
 
             if (isRotating)
             {
@@ -189,13 +191,8 @@ public class CaveScenePlayer : MonoBehaviour
             }
         }
 
-        //if (!Dead &&!isReversed&&!isTalk)
-        //{
-        //    Move();
-        //    Jump();
-        //    GetInput();
-        //}
-        else if(!Dead && isReversed && !isTalk)
+
+        else if (!Dead && isReversed && !isTalk)
         {
             ReversalMove();
             Jump();
@@ -220,7 +217,18 @@ public class CaveScenePlayer : MonoBehaviour
             KissMovement();
 
         }
-        
+        if (image2 == null && Talk_NPC2 && !isDadAnimChk)
+        {
+            isTalk = true;
+            isDadAnimChk = true;
+            TalkToDaddy2Cam.Priority = 1;
+            mainCam.Priority = 10;
+            TalkAudio.Pause();
+            GameObject Daddy2 = GameObject.Find("Daddy");
+            NpcDad = Daddy2.GetComponent<Animator>();
+            NpcDad.SetTrigger("DadDown");
+            StartCoroutine(NpcDadDestroy(Daddy2));
+        }
     }
     void KissMovement()
     {
@@ -423,6 +431,10 @@ public class CaveScenePlayer : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if(other.gameObject.name == "LastTalkPoint")
+        {
+            if(LastUI!=null) LastUI.SetActive(true);
+        }
         if (other.gameObject.name == "UpgradeBox")
         {
             BoxGetAudio.Play();
@@ -488,7 +500,9 @@ public class CaveScenePlayer : MonoBehaviour
             //image3.SetActive(false);
             //image4.SetActive(false);
             image5.SetActive(false);
+            
             Talk_NPC2= true;
+           
         }
 
         if (other.gameObject.tag == "NPC3" && !Talk_NPC3)
@@ -640,7 +654,7 @@ public class CaveScenePlayer : MonoBehaviour
         if(other.gameObject.name == "FinalPoint")
         {
             LoadingUI.SetActive(true);
-            Invoke("Last", 1.5f);
+            Invoke("Last", 3f);
            
         }
 
@@ -694,17 +708,7 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 10;
         }
 
-        if (other.gameObject.tag == "NPC2" && !isTalk)
-        {
-            TalkToDaddy2Cam.Priority = 1;
-            mainCam.Priority = 10;
-            TalkAudio.Pause();
-            GameObject Daddy2 = GameObject.Find("Daddy");
-            NpcDad = Daddy2.GetComponent<Animator>();
-            NpcDad.SetTrigger("DadDown");
-            StartCoroutine(NpcDadDestroy(Daddy2));
-           
-        }
+       
 
         if (other.gameObject.tag == "NPC3")
         {
@@ -736,6 +740,7 @@ public class CaveScenePlayer : MonoBehaviour
     {
         yield return new WaitForSeconds(1.7f);
         obj.SetActive(false);
+        isTalk = false;
     }
     void DeadCheck()
     {

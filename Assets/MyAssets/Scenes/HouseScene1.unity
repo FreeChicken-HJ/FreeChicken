@@ -8742,6 +8742,7 @@ MonoBehaviour:
   isPlayerImage: 0
   isTalkEnd: 0
   TalkSound: {fileID: 1501876401}
+  ClickSound: {fileID: 867951560}
 --- !u!1 &493361787
 GameObject:
   m_ObjectHideFlags: 0

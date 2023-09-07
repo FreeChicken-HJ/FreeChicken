@@ -99,12 +99,12 @@ public class FactoryUIManager : MonoBehaviour
             isTyping = false;
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0)&&!isTyping)
         {
             if (!isTyping)
-                //ButtonClickSound.Play();
+
                 NextSentence();
-                
+            ButtonClickSound.Play();
         }
       
        

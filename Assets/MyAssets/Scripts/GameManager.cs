@@ -53,7 +53,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel") && !isLoading)
         {
-            
+
+            ClickButtonAudio.Play();
             Cursor.visible = true;
             if(factoryPlayer1 != null)
             {

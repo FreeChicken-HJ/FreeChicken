@@ -23929,6 +23929,7 @@ MonoBehaviour:
   isCity: 0
   isCave: 0
   isMain: 1
+  isLoading: 0
   MainBGM: {fileID: 1145742160}
   mainUI: {fileID: 822850955}
   LoadingUI: {fileID: 830937518}

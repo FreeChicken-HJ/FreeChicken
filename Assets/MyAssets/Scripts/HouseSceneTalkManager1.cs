@@ -24,6 +24,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
 
     HouseScenePlayer player;
     public AudioSource TalkSound;
+    public AudioSource ClickSound;
     private void Awake()
     {
         instance = this;
@@ -134,6 +135,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
             {
                 NextSentence();
                 ChangeImage();
+                ClickSound.Play();
             }
         }
     }

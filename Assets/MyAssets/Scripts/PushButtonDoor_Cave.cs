@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Build;
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -30,6 +30,7 @@ public class PushButtonDoor_Cave : MonoBehaviour
 
     Animator anim;
     public GameObject KissZone;
+    public AudioSource TrumpetSound;
     void Start()
     {
         anim = Daddy.GetComponent<Animator>();
@@ -115,6 +116,7 @@ public class PushButtonDoor_Cave : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             Debug.Log("¹öÆ° ´­·µ»ï");
+            TrumpetSound.Play();
             isPush = true;
             doorSet = false;
             goDaddy = true;
@@ -125,6 +127,7 @@ public class PushButtonDoor_Cave : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
+            TrumpetSound.Pause();
             Debug.Log("¹öÆ° ¶Ã»ï");
             isPush = false;
             doorSet = false;

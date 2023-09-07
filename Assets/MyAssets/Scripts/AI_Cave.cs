@@ -215,11 +215,17 @@ public class AI_Cave : MonoBehaviour
             }
         }
 
-        if(collision.gameObject.CompareTag("Obstacle"))
+        if(collision.gameObject.CompareTag("Obstacle") && !isDie)
         {
             isDie = true;
             anim.SetTrigger("isDead");
-            if(AI_Cave2&&isDie)
+
+            rigid.isKinematic = true;
+
+            Collider AICollider = GetComponent<Collider>();
+            AICollider.enabled = false;
+
+            if (AI_Cave2 && isDie)
             {
                 this.gameObject.tag = "Slide";
                 Invoke("DestroyAI_Obstacle", 3f);

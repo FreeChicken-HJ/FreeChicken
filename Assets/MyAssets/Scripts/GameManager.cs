@@ -27,10 +27,14 @@ public class GameManager : MonoBehaviour
     public bool isMain;
 
     public bool isLoading;
+    public bool isStart;
 
     public AudioSource MainBGM;
+    public AudioSource SFX;
     public GameObject mainUI;
     public GameObject LoadingUI;
+    public GameObject AudioSettingUI;
+    public GameObject Control_UI;
 
    
     void Start()
@@ -45,13 +49,12 @@ public class GameManager : MonoBehaviour
             evolutionPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<EvloutionPlayer>();
             cityPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CityScenePlayer>();
             cavePlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
-
         }
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel") && !isLoading)
+        if (Input.GetButtonDown("Cancel") && !isLoading && !isStart)
         {
 
             ClickButtonAudio.Play();
@@ -273,6 +276,40 @@ public class GameManager : MonoBehaviour
         
         Invoke("Enter", 5f);
        
+    }
+
+    public void AudioSettingScene()
+    {
+        AudioSettingUI.SetActive(true);
+    }
+
+    public void StartScene1()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("StartScene_Final");
+    }
+
+    public void StartScene2()
+    {
+        LoadingUI.SetActive(true);
+        MainBGM.Stop();
+        SFX.Stop();
+        Invoke("DelayStartScene2", 3f);
+    }
+
+    public void DelayStartScene2()
+    {
+        SceneManager.LoadScene("Start");
+    }
+
+    public void Controls()
+    {
+        Control_UI.SetActive(true);
+    }
+
+    public void ControlsExit()
+    {
+        Control_UI.SetActive(false);
     }
   
     public void ReplayGame()

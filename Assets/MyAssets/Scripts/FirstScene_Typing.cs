@@ -81,6 +81,7 @@ public class FirstScene_Typing : MonoBehaviour
         }
 
         yield return new WaitForSeconds(waitBeforeLoad);
+        Cursor.visible = true;
         SceneManager.LoadScene("StartScene_Final");
     }
 }

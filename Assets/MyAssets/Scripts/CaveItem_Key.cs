@@ -11,16 +11,20 @@ public class CaveItem_Key : MonoBehaviour
     bool isPickUp;
 
     CaveScenePlayer player;
-
+    AI_Cave ai;
+    public AudioSource getKeySound;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         pickUpKeyItemText.gameObject.SetActive(false);
         nearKeyItemText.gameObject.SetActive(false);
+        ai = GameObject.FindGameObjectWithTag("Slide").GetComponent<AI_Cave>();
+        this.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
     }
     void Update()
     {
         PickUp();
+        this.transform.position = ai.transform.position;
     }
 
     void OnTriggerEnter(Collider other)
@@ -49,6 +53,7 @@ public class CaveItem_Key : MonoBehaviour
             player.hasKey = true;
             ++player.keyCount;
             gameObject.SetActive(false);
+            getKeySound.Play();
             nearKeyItemText.gameObject.SetActive(false);
             pickUpKeyItemText.gameObject.SetActive(true);
             Invoke("notshowtext", 1.5f);

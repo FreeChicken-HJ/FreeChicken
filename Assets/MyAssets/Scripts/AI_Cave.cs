@@ -55,7 +55,11 @@ public class AI_Cave : MonoBehaviour
     public bool AI_Cave2;
 
     public AudioSource keyDropSound;
-
+    public AudioSource DieSound;
+    public AudioSource AttackSound;
+    public GameObject DieParticle_1;
+    public GameObject DieParticle_2;
+    
     //public bool isAllStop;
     // ÄÇÀ»¶§´Â obstacle & µû¶ó°¡±â
     // ÀÛ¾ÆÁö¸é ·£´ýÀÌµ¿ & Á×±â
@@ -73,7 +77,7 @@ public class AI_Cave : MonoBehaviour
         if (/*!isAllStop &&*/ !isDie )
         {
             nav.isStopped = false;
-            playerInSight = Physics.CheckSphere(transform.position, 4f, Player);
+            playerInSight = Physics.CheckSphere(transform.position, 3f, Player);
             playerInAttack = Physics.CheckSphere(transform.position, 1f, Player);
             if (Small_AI && !Big_AI && !playerInAttack) MoveRandom();
             if (!Small_AI && Big_AI &&playerInSight && !playerInAttack) Targeting();
@@ -161,14 +165,16 @@ public class AI_Cave : MonoBehaviour
 
     void Attack1()
     {
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
         Invoke("ResetAttack1", respawnTime);
     }
 
     void ResetAttack1()
     {
-        this.gameObject.transform.position = ResetPos1.gameObject.transform.position;
-        this.gameObject.SetActive(true);
+        //this.gameObject.transform.position = ResetPos1.gameObject.transform.position;
+        nav.SetDestination(ResetPos1.gameObject.transform.position);
+        //this.gameObject.SetActive(true);
+        nav.isStopped = true;
         isCollision = false;
     }
 
@@ -193,7 +199,7 @@ public class AI_Cave : MonoBehaviour
             Small_AI = true;
             Big_AI = false;
             small_potion.SetActive(false);
-            //DieSound.Play();
+            DieSound.Play();
             this.gameObject.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
         }
 
@@ -219,7 +225,7 @@ public class AI_Cave : MonoBehaviour
         {
             isDie = true;
             anim.SetTrigger("isDead");
-
+            DieParticle_2.SetActive(true);
             rigid.isKinematic = true;
 
             Collider AICollider = GetComponent<Collider>();
@@ -235,14 +241,18 @@ public class AI_Cave : MonoBehaviour
 
     void DestroyAI_Cave()
     {
+        
         keyDropSound.Play();
         mesh.SetActive(false);
         key.SetActive(true);
+        DieParticle_1.SetActive(false);
+
         //this.gameObject.SetActive(false);
     }
 
     void DestroyAI_Obstacle()
     {
+        DieParticle_2.SetActive(false);
         this.gameObject.SetActive(false);
     }
 
@@ -252,7 +262,8 @@ public class AI_Cave : MonoBehaviour
         if (other.gameObject.name == "FootPos" && !isDie && Small_AI && !Big_AI)
         {
             isDie = true;
-            
+            DieParticle_1.SetActive(true);
+            AttackSound.Play();
             Debug.Log("Á×¾î¶ô");
             anim.SetTrigger("isDead");
             Invoke("DestroyAI_Cave", 2f);

@@ -23,6 +23,7 @@ public class FirstScene_Typing : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
         text = targetText.text.ToString();
         targetText.text = " ";
         FirstSound.Play();

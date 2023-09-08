@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
     public GameObject LoadingUI;
     public GameObject AudioSettingUI;
     public GameObject Control_UI;
-
+    public GameObject WarnningUI;
    
     void Start()
     {
@@ -277,7 +278,7 @@ public class GameManager : MonoBehaviour
         Invoke("Enter", 5f);
        
     }
-
+   
     public void AudioSettingScene()
     {
         AudioSettingUI.SetActive(true);
@@ -296,17 +297,44 @@ public class GameManager : MonoBehaviour
         SFX.Stop();
         Invoke("DelayStartScene2", 3f);
     }
+    public void Enter2DExit()
+    {
+        PlayerData playerData = new PlayerData();
+        playerData.LevelChk = GameSave.Level;
+        string json = JsonUtility.ToJson(playerData);
 
+        File.WriteAllText("playerData.json", json);
+        Debug.Log(GameSave.Level + "플레이어데이터의 레벨");
+    }
+    public void ReSetEveryThing()
+    {
+        File.Delete("playerData.json");
+
+    }
     public void DelayStartScene2()
     {
-        SceneManager.LoadScene("Start");
+        if (File.Exists("playerData.json"))
+        {
+            SceneManager.LoadScene("Enter2DScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("Start");
+        }
     }
 
     public void Controls()
     {
         Control_UI.SetActive(true);
     }
-
+    public void Warnning()
+    {
+        if(WarnningUI != null) WarnningUI.SetActive(true);
+    }
+    public void WarnningExit()
+    {
+        WarnningUI.SetActive(false);
+    }
     public void ControlsExit()
     {
         Control_UI.SetActive(false);

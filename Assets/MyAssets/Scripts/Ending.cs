@@ -72,7 +72,7 @@ public class Ending : MonoBehaviour
 
     public void ReplayGame()
     {
-        SceneManager.LoadScene("New Scene");
+        SceneManager.LoadScene("FirstScene");
     }
 
     public void ClickButtonSound()
@@ -155,28 +155,7 @@ public class Ending : MonoBehaviour
         StartCoroutine(SwitchToCamera3()); // 다음 카메라로 전환
     }
 
-    //IEnumerator SwitchToCamera3()
-    //{
-    //    yield return new WaitForSeconds(cameraSwitchDelay);
-
-    //    float currentTime = 0;
-    //    float initialPriority = camera2.Priority;
-
-    //    while (currentTime < camera3Duration)
-    //    {
-    //        currentTime += Time.deltaTime;
-    //        float t = currentTime / camera3Duration;
-
-    //        camera2.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
-    //        camera3.Priority = (int)Mathf.Lerp(10, 0, t);
-
-    //        yield return new WaitForEndOfFrame();
-    //    }
-
-    //    camera2.Priority = 0;
-    //    camera3.Priority = 10;
-    //}
-
+   
     IEnumerator SwitchToCamera3()
     {
         yield return new WaitForSeconds(cameraSwitchDelay);
@@ -237,4 +216,12 @@ public class Ending : MonoBehaviour
 
         mainCam.transform.position = targetPosition;
     }
+   /* public void ResetEveryData()
+    {
+        if (File.Exists("playerData.json"))
+        {
+
+            File.Delete("playerData.json");
+        }
+    }*/
 }

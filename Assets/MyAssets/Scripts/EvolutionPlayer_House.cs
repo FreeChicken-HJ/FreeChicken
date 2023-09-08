@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using Cinemachine;
-
+using System.IO;
 public class EvloutionPlayer : MonoBehaviour
 {
     [SerializeField] private Transform characterBody;
@@ -158,12 +158,20 @@ public class EvloutionPlayer : MonoBehaviour
         //Cursor.visible = true;
         mainAudio.Stop();
         LoadingUI.SetActive(true);
-        GameSave.isCity = true;
-        PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
+       
         Invoke("Last", 2f);
     }
     void Last()
     {
+        GameSave.Level = 3;
+        GameSave.isCity = true;
+        PlayerData playerData = new PlayerData();
+        playerData.LevelChk = GameSave.Level;
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText("playerData.json", json);
+        
+        PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
         SceneManager.LoadScene("Enter2DScene");
     }
     void OnTriggerEnter(Collider other)
@@ -213,16 +221,13 @@ public class EvloutionPlayer : MonoBehaviour
     public void StartRotation()
     {
         isRotating = true;
-        originalCameraRotation = cameraArm.rotation;  // 카메라 회전을 시작하기 전에 원래의 회전값 저장
+        originalCameraRotation = cameraArm.rotation; 
     }
 
 
     void OnTriggerExit(Collider other)
     {
-        //if (other.gameObject.name == "EvolutionSense2")
-        //{
-        //    ReadygoCity.SetActive(false);
-        //}
+       
 
         if (other.CompareTag("evolu"))
         {

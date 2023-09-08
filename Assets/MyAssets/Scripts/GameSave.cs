@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 public class GameSave : MonoBehaviour
 {
     public bool isChk;
@@ -19,10 +19,25 @@ public class GameSave : MonoBehaviour
     public ParticleSystem ShowParticle_2;
     public ParticleSystem ShowParticle_3;
 
+    public static int Level = 1;
+    public bool isExist;
     private void Start()
     {
         Cursor.visible = true;
+        if (File.Exists("playerData.json"))
+        {
+            isExist = true;
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+            
+            Level  = loadedData.LevelChk;
+            Debug.Log(Level + "·¹º§");
+        }
+
+       
     }
+    
+    
     public void Load()
     {
         
@@ -31,6 +46,7 @@ public class GameSave : MonoBehaviour
         if (intHouse == 1)
         {
             isHouse = true;
+            Level = 2;
         }
         else
         {
@@ -42,6 +58,7 @@ public class GameSave : MonoBehaviour
         if (intCity == 1)
         {
             isCity = true;
+            Level = 3;
         }
         else
         {
@@ -53,38 +70,74 @@ public class GameSave : MonoBehaviour
         if (intCave == 1)
         {
             isCave = true;
+            Level = 4;
         }
         else
         {
             isCave = false;
         }
+        
     }
     public void Update()
     {
-        if (isHouse && !isChk)
+        if (isExist)
         {
-            House.SetActive(true);
-            ShowSound.Play();
+            if (Level == 2 && !isChk)
+            {
+                House.SetActive(true);
+                ShowSound.Play();
 
-            ShowParticle_1.Play();
-            
-            isChk = true;
-        }
-        if (isCity && !isChk)
-        {
-            City.SetActive(true);
-            ShowSound.Play();
+                ShowParticle_1.Play();
 
-            ShowParticle_2.Play();
-            
-            isChk = true;
+                isChk = true;
+            }
+            if (Level == 3 && !isChk)
+            {
+                House.SetActive(true);
+                City.SetActive(true);
+                ShowSound.Play();
+
+                ShowParticle_2.Play();
+
+                isChk = true;
+            }
+            if (Level == 4 && !isChk)
+            {
+                House.SetActive(true);
+                City.SetActive(true);
+                Cave.SetActive(true);
+                ShowSound.Play();
+                ShowParticle_3.Play();
+                isChk = true;
+            }
         }
-        if (isCave && !isChk)
+        else
         {
-            Cave.SetActive(true);
-            ShowSound.Play();
-           ShowParticle_3.Play();
-            isChk = true;
+            if (isHouse && !isChk && Level == 2)
+            {
+                House.SetActive(true);
+                ShowSound.Play();
+
+                ShowParticle_1.Play();
+
+                isChk = true;
+            }
+            if (isCity && !isChk && Level == 3)
+            {
+                City.SetActive(true);
+                ShowSound.Play();
+
+                ShowParticle_2.Play();
+
+                isChk = true;
+            }
+            if (isCave && !isChk && Level == 4)
+            {
+                Cave.SetActive(true);
+                ShowSound.Play();
+                ShowParticle_3.Play();
+                isChk = true;
+            }
         }
     }
 }

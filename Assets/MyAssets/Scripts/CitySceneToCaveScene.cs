@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
 using UnityEngine.SceneManagement;
+using System.IO;
 public class CitySceneToCaveScene : MonoBehaviour
 {
     
@@ -49,14 +50,21 @@ public class CitySceneToCaveScene : MonoBehaviour
     }
     void LoadCaveScene()
     {
-        GameSave.isCave = true;
-        PlayerPrefs.SetInt("GoCave", GameSave.isCave ? 1 : 0);
+       
         LoadingUI.SetActive(true);
         Invoke("Last", 2f);
     }
     void Last()
     {
-        
+        GameSave.isCave = true;
+        PlayerPrefs.SetInt("GoCave", GameSave.isCave ? 1 : 0);
+        GameSave.Level = 4;
+        PlayerData playerData = new PlayerData();
+        playerData.LevelChk = GameSave.Level;
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText("playerData.json", json);
+       
         SceneManager.LoadScene("Enter2DScene");
     }
     private void OnTriggerEnter(Collider other)

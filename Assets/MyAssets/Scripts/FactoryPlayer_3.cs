@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Cinemachine;
 using TMPro;
+using System.IO;
 public class FactoryPlayer_3 : MonoBehaviour
 {
     [Header("Settings")]
@@ -151,6 +152,14 @@ public class FactoryPlayer_3 : MonoBehaviour
     {
         GameSave.isHouse = true;
         PlayerPrefs.SetInt("GoHouse", GameSave.isHouse ? 1 : 0);
+
+        GameSave.Level = 2;
+        PlayerData playerData = new PlayerData();
+        playerData.LevelChk = GameSave.Level;
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText("playerData.json", json);
+       
         SceneManager.LoadScene("Enter2DScene");
     }
     private void FixedUpdate()

@@ -157,6 +157,7 @@ public class CaveScenePlayer : MonoBehaviour
     private float rotationDuration = 5.0f;
     public GameObject GetUpgradePs;
 
+    public GameManager gameManager;
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
@@ -173,6 +174,7 @@ public class CaveScenePlayer : MonoBehaviour
         DiePs.gameObject.SetActive(false);
         //FirstCam.Priority =999;
         Cursor.visible = false;
+       
     }
 
     void Update()
@@ -470,10 +472,7 @@ public class CaveScenePlayer : MonoBehaviour
             other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z);
         }
 
-        //if (other.gameObject.tag == "PushButton" && !isMoveUp)
-        //{
-        //    other.gameObject.transform.position = new Vector3(other.gameObject.transform.position.x, other.gameObject.transform.position.y + 3f, other.gameObject.transform.position.z);
-        //}
+       
 
         if (other.gameObject.tag == "NPC1" && !Talk_NPC1)
         {
@@ -653,20 +652,14 @@ public class CaveScenePlayer : MonoBehaviour
 
         if(other.gameObject.name == "FinalPoint")
         {
+            gameManager.isLoading = true;
             LoadingUI.SetActive(true);
+            mainAudio.Stop();
             Invoke("Last", 3f);
            
         }
 
-        //if (other.gameObject.CompareTag("Poison") &&!isReversal)
-        //{
-        //    Debug.Log("¹Ý´ë·Î..");
-        //    isReversal = true;
-        //    other.gameObject.SetActive(false);
-        //    // PoisonSound.Play();
-          
-        //}
-
+      
         if(other.CompareTag("Poison"))
         {
             StartCoroutine(ReversePlayerMovement());

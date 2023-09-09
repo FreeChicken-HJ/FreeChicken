@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject AudioSettingUI;
     public GameObject Control_UI;
     public GameObject WarnningUI;
+    public GameObject ExitUI;
    
     void Start()
     {
@@ -295,6 +296,7 @@ public class GameManager : MonoBehaviour
         LoadingUI.SetActive(true);
         MainBGM.Stop();
         SFX.Stop();
+        Cursor.visible = false;
         Invoke("DelayStartScene2", 3f);
     }
     public void Enter2DExit()
@@ -340,6 +342,14 @@ public class GameManager : MonoBehaviour
         Control_UI.SetActive(false);
     }
   
+    public void ExitShow()
+    {
+        if (ExitUI != null) ExitUI.SetActive(true);
+    }
+    public void ExitEnd()
+    {
+        ExitUI.SetActive(false);
+    }
     public void ReplayGame()
     {
         Time.timeScale = 1f;

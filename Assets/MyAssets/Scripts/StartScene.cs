@@ -7,6 +7,7 @@ public class StartScene : MonoBehaviour
     public GameObject loadingUI;
     public AudioSource ClickSound;
     public AudioSource BGM;
+    public GameManager gameManager;
     void Start()
     {
         Cursor.visible = false;
@@ -28,7 +29,7 @@ public class StartScene : MonoBehaviour
 
 
         Cursor.visible = false;
-
+        gameManager.isLoading = true;
         loadingUI.SetActive(true);
         Invoke("Load", 5f);
 

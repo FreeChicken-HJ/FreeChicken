@@ -41,6 +41,7 @@ public class CityScenePlayer : MonoBehaviour
     public AudioSource DieAudio;
     public AudioSource JumpAudio;
     public AudioSource ChangeAudio;
+    public AudioSource RingAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -202,6 +203,7 @@ public class CityScenePlayer : MonoBehaviour
             isAllStop = true;
             isChk = true;
             BGM.Stop();
+            RingAudio.Play();
             //LastSong.Play(); 8.16
             TalkUI.gameObject.SetActive(true);
             Invoke("Exit", 2f);

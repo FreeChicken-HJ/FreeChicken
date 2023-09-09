@@ -146,6 +146,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     {
         gameManager.isLoading = true;
         LoadingUI.SetActive(true);
+        BGM.Stop();
         Invoke("Last", 3f);
     }
     void Last()

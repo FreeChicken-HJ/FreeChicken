@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
 public class FactoryFixUI : MonoBehaviour
-{
-    
+{   
     public Slider slider;
     public TextMeshProUGUI stopSlideTxt;
     public GameObject nonestopSlideTxt;
@@ -20,14 +19,13 @@ public class FactoryFixUI : MonoBehaviour
     public AudioSource fixAudio;
     public AudioSource GetEggSound;
     float t = 0;
-    // Start is called before the first frame update
+    
     void Start()
     {
         stopSlideTxt.gameObject.SetActive(false);
         factoryPlayer = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
     }
-   
-    // Update is called once per frame 
+  
     void Update()
     {
         
@@ -45,7 +43,7 @@ public class FactoryFixUI : MonoBehaviour
             {
                 nonestopSlideTxt.SetActive(false);
                 stopSlideTxt.gameObject.SetActive(true);
-                //this.gameObject.SetActive(false);
+               
                 factoryPlayer.isSlide = false;
                 factoryPlayer.isStopSlide = true;
                 StartCoroutine(Stop());
@@ -71,8 +69,7 @@ public class FactoryFixUI : MonoBehaviour
         fixAudio.Stop();
         GetEggSound.Play();
         Destroy(fixObj);
-        //fixObj.SetActive(false);
-        //stopConCam.gameObject.SetActive(false);
+       
         this.gameObject.SetActive(false);
     }
    

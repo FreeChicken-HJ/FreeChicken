@@ -167,17 +167,16 @@ public class FactoryPlayer : MonoBehaviour
         if (Input.GetButton("E")&&!isSetEggFinish)
         {
             
-            E.color = Color.red;
+            
             isEgg = false;
             isClick = false;
             changeEggCanvas.gameObject.SetActive(false);
             yield return new WaitForSeconds(.2f);
-            EggPrefab.gameObject.SetActive(false);
-            
+            EggPrefab.gameObject.SetActive(false);           
             thisMesh.SetActive(true);
            
         }
-        E.color = Color.black;
+      
     }
   
     public void GetInput()
@@ -198,9 +197,6 @@ public class FactoryPlayer : MonoBehaviour
             anim.SetBool("isWalk", true);
 
             runAudio.Play();
-
-            
-
 
         }
         else if (hAxis == 0 && vAxis == 0)
@@ -235,7 +231,7 @@ public class FactoryPlayer : MonoBehaviour
   
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Sense" &&!isStamp)
+        if(collision.gameObject.CompareTag("Sense") &&!isStamp)
         {
             StampTMP = collision.gameObject;
             PickUpParticle.SetActive(true);
@@ -248,7 +244,7 @@ public class FactoryPlayer : MonoBehaviour
             Invoke("PickUP", 2f);
 
         }
-        if(collision.gameObject.tag == "PickUpPoc" && !isPickUp)
+        if(collision.gameObject.CompareTag("PickUpPoc") && !isPickUp)
         {
             TMP = collision.gameObject;
             isPickUp = true;
@@ -259,13 +255,13 @@ public class FactoryPlayer : MonoBehaviour
             Invoke("PickUP", 2f);
 
         }
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox")
+        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Slide") || collision.gameObject.CompareTag("EggBox"))
         {
 
             isJump = false;
         }
        
-        if(collision.gameObject.tag == "Floor")
+        if(collision.gameObject.CompareTag("Floor"))
         {
             if (!LoadingUI.activeSelf)
             {
@@ -273,7 +269,7 @@ public class FactoryPlayer : MonoBehaviour
                 Invoke("UpstairExit", 2f);
             }
         }
-        if (collision.gameObject.tag == "ObstacleZone1" || collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.CompareTag("ObstacleZone1") || collision.gameObject.CompareTag("Obstacle"))
         {
             if (!isDie && !isPickUp)
             {
@@ -422,6 +418,7 @@ public class FactoryPlayer : MonoBehaviour
         gameManager.isLoading = true;
         LoadingUI.SetActive(true);
         mainAudio.Stop();
+
         Invoke("Scene_2Load", 3f);
        
     }
@@ -467,15 +464,13 @@ public class FactoryPlayer : MonoBehaviour
         
         if (other.CompareTag("PointZone") && !isSetEggFinish &&!isClick)
         {
-
-
             turnEggCanvas.gameObject.SetActive(true);
            
             if (Input.GetButton("F") && !isSetEggFinish)
             {
                 isClick = true;
 
-                Spacebar.color = Color.red;
+               
                 Vector3 pos = other.gameObject.transform.position;
 
                 tmpBox = other.gameObject;
@@ -483,16 +478,13 @@ public class FactoryPlayer : MonoBehaviour
                 EggPrefab.gameObject.SetActive(true);
                 EggPrefab.transform.position = pos;
                 turnEggCanvas.gameObject.SetActive(false);
-
                 changeEggCanvas.gameObject.SetActive(true);
-
                 isEgg = true;
-
                 StartCoroutine(Egg());
 
             }
 
-            Spacebar.color = Color.black;
+          
         }
     }
     void OnTriggerExit(Collider other)

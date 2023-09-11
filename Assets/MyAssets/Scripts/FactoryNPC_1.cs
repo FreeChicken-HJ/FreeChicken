@@ -27,7 +27,7 @@ public class FactoryNPC_1 : MonoBehaviour
     public bool isFin;
     public GameObject Wall;
     public GameManager gameManager;
-    //public Animator animator;
+   
     float t = 0;
     void Start()
     {
@@ -80,7 +80,7 @@ public class FactoryNPC_1 : MonoBehaviour
             Video.SetActive(false);
             maincam.Priority = 2;
             npccam.Priority = -5;
-            //Destroy(this.gameObject);
+          
             npc.SetActive(false);
             BGM.Play();
             gameManager.isLoading = false;
@@ -88,13 +88,12 @@ public class FactoryNPC_1 : MonoBehaviour
             Memory.Stop();
             TalkUI.SetActive(true);
             isFin = false;
-            //player.isTalk1 = false;
-
+          
         }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             npccam.Priority = 100;
             maincam.Priority = 1;
@@ -104,7 +103,7 @@ public class FactoryNPC_1 : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             npccam.Priority = 1;
             maincam.Priority = 10;

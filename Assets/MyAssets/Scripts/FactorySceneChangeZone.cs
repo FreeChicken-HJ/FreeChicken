@@ -123,7 +123,7 @@ public class FactorySceneChangeZone : MonoBehaviour
                 t += Time.deltaTime;
                 ChangeConveorSlider.value = Mathf.Lerp(0, 100, t);
             }
-            else // 다 채워지면
+            else
             {
                 Etxt.color = Color.white;
                 ParticleSound.Play();
@@ -159,7 +159,7 @@ public class FactorySceneChangeZone : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !isChk && !isEnd)
+        if (other.gameObject.CompareTag("Player") && !isChk && !isEnd)
         {
             isChk = true;
             ChangeConveorZone.SetActive(true);
@@ -167,7 +167,7 @@ public class FactorySceneChangeZone : MonoBehaviour
             ChangeCam.Priority = 3;
             mainCam.Priority = 1;
             Invoke("SpawnBigEgg", 3f);
-            //StartCoroutine(turnZone());
+           
         }
     }
     private void OnTriggerExit(Collider other)
@@ -189,8 +189,3 @@ public class FactorySceneChangeZone : MonoBehaviour
     }
    
 }
-// 반복 while
-//e 누르면 왼쪽 
-// 다시 누르면 왼쪽 x 가운데 
-// 다시 누르면 가운데 x 오른쪽
-// 다시 누르면 오른쪽 x 왼쪽 

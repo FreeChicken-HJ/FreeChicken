@@ -105,7 +105,7 @@ public class FactoryManagerEnemy : MonoBehaviour
     {
         isAllStop = false;
     }
-    void Targeting() // 캐릭터 발견 & 따라가기 
+    void Targeting() 
     {
         
         isAttack = false;
@@ -113,10 +113,9 @@ public class FactoryManagerEnemy : MonoBehaviour
         isWalk = false;
         ContactUI.SetActive(true);
         agent.SetDestination(target.position);
-        // 심장 두근 소리 추가 6.11
        
     }
-    void MoveRandom() //랜덤이동 하다가 
+    void MoveRandom()
     {
         ContactUI.SetActive(false);
         isAttack = false;

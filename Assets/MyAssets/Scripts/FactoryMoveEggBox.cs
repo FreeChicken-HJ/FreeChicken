@@ -11,7 +11,6 @@ public class FactoryMoveEggBox : MonoBehaviour
     public FactoryPlayer player;
     public bool isChk;
    
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
@@ -19,7 +18,7 @@ public class FactoryMoveEggBox : MonoBehaviour
         Speed = 0;
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
         if (player.isSetEggFinish && !isChk)
@@ -41,31 +40,24 @@ public class FactoryMoveEggBox : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Slide")
+        if (other.CompareTag("Slide"))
         {
 
             this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * Speed, Space.World);
         }
-        if (other.tag == "TurnPointR")
+        if (other.CompareTag("TurnPointR"))
         {
             this.gameObject.transform.Translate(Vector3.right * Time.deltaTime * Speed, Space.World);
         }
-        if (other.tag == "TurnPointL")
+        if (other.CompareTag("TurnPointL"))
         {
             this.gameObject.transform.Translate(Vector3.left * Time.deltaTime * Speed, Space.World);
         }
-        if (other.tag == "TurnPointD")
+        if (other.CompareTag("TurnPointD"))
         {
             this.gameObject.transform.Translate(Vector3.back * Time.deltaTime * Speed, Space.World);
 
         }
     }
-    /*void OnTriggerEnter(Collider other)
-    {   
-        if(other.tag == "Obstacle")
-        {
-            Destroy(this.gameObject);
-        }
-        
-    }*/
+  
 }

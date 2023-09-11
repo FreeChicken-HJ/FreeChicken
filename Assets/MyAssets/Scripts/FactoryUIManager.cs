@@ -32,7 +32,7 @@ public class FactoryUIManager : MonoBehaviour
     
     void Start()
     {
-        //instance.gameObject.SetActive(true);
+        
         sentences = new Queue<string>();
         isTalkEnd = false;
         Cursor.visible = true;
@@ -72,8 +72,7 @@ public class FactoryUIManager : MonoBehaviour
                 player.isStopSlide = false;
                 npccam.Priority = 1;
                 maincam.Priority = 2;
-                //npc.SetActive(false);
-            
+              
            
         }
 

@@ -11,7 +11,7 @@ public class FactoryBox : MonoBehaviour
    
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player"&&!isTrigger)
+        if(other.CompareTag("Player")&&!isTrigger)
         {
             isTrigger = true;
             particle.Play();

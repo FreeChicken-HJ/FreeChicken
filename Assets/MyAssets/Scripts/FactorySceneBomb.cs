@@ -28,14 +28,7 @@ public class FactorySceneBomb : MonoBehaviour
 
     void Update()
     {
-        /*//nav.SetDestination(player.position);
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance <= range)
-        {
-            
-            //transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-
-        }*/
+      
         if (isAttack)
         {
             nav.SetDestination(player.position);
@@ -43,10 +36,9 @@ public class FactorySceneBomb : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
+       
         if (collision.gameObject.tag == "Player" && !isAttack)
         {
-            Debug.Log("충돌");
            
             anim.SetBool("isAttack", true);
             isAttack = true;
@@ -54,8 +46,7 @@ public class FactorySceneBomb : MonoBehaviour
         }
         if (collision.gameObject.tag == "Props" && isPop)
         {
-            Debug.Log("과연?00");
-            //isContact = true;
+           
             Instantiate(popParticle,new Vector3(collision.gameObject.transform.position.x,collision.gameObject.transform.position.y +1,collision.gameObject.transform.position.z), collision.gameObject.transform.rotation); // 그자리에 불나오게 설정
             this.gameObject.SetActive(false);
         }

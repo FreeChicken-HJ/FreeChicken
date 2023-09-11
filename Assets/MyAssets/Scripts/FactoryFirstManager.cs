@@ -8,11 +8,10 @@ public class FactoryFirstManager : MonoBehaviour
     public GameObject[] boxPos;
     public bool isContact;
     public GameObject particle;
-    //public GameObject Dieparticle;
+   
     int box;
     public FactoryPlayer player;
-    //public PlayerChangeEgg playeregg;
-
+   
     public GameObject talkCanvas1;
     public GameObject talkCanvas2;
     public CinemachineVirtualCamera mainCam;
@@ -30,18 +29,14 @@ public class FactoryFirstManager : MonoBehaviour
 
     public GameObject attackBox;
     public GameObject Wall;
-    //Renderer attackBoxRender;
-    // Start is called before the first frame update
+  
     void Start()
     {
         anim = GetComponent<Animator>();
         player = GameObject.Find("FactoryPlayer").GetComponent<FactoryPlayer>();
-        //attackBox = GameObject.Find("ChangeEggDestroy").GetComponent<Factory_WallColorChange>();
-        //attackBoxRender = attackBox.GetComponent<Renderer>();
-        //playeregg = GameObject.Find("PlayerEgg").GetComponent<PlayerChangeEgg>();
+      
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isContact)
@@ -77,7 +72,7 @@ public class FactoryFirstManager : MonoBehaviour
 
         }
       
-         //isChk = true;
+       
        Destroy(instance,3f);
     }
     void Die()
@@ -114,8 +109,7 @@ public class FactoryFirstManager : MonoBehaviour
         player.EggPrefab.SetActive(false);
         player.thisMesh.SetActive(true);
         player.isEgg = false;
-        eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0.1f;
-        Debug.Log("속도 업");
+        eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0.1f;        
         anim.SetBool("isAttack",false);
         player.isStopSlide = false;
         mainAudio_2.Play();
@@ -123,21 +117,17 @@ public class FactoryFirstManager : MonoBehaviour
     }
     Vector3 GetRandomPos()
     {
-
-        //box = Random.Range(0, boxPos.Length);
-        Vector3 pos = attackBox.transform.position;
-        //Vector3 pos = boxPos[box].transform.position;
+   
+        Vector3 pos = attackBox.transform.position;       
         return pos;
     }
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "EggBox" && !isChk)
-        {
-            Debug.Log("충돌");
+        if(other.gameObject.CompareTag("EggBox") && !isChk)
+        {           
             isContact = true;
             isChk = true;
             eggBox.GetComponent<FactoryMoveEggBox>().Speed = 0f;
-            Debug.Log("속도다운");
             anim.SetBool("isAttack", true);
             Invoke("PlayHitSound", .5f);
         }

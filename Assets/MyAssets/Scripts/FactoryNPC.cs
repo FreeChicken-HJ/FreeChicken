@@ -132,28 +132,26 @@ public class FactoryNPC : MonoBehaviour
             else if(player_3 != null)
             {
                 player_3.isTalk = false;
-                //FactoryPlayer_3.isTalk = false;
+                
             }
         }
     }
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.CompareTag("Player"))
         {
             isNear = true;
             isEbutton = true;
-           
-                Ebutton.SetActive(true);
-                mainCam.Priority = 1;
-                npcCam.Priority = 2;
-            
 
+            Ebutton.SetActive(true);
+            mainCam.Priority = 1;
+            npcCam.Priority = 2;
         }
     }
    
     public void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             isNear = false;
             isEbutton = false;

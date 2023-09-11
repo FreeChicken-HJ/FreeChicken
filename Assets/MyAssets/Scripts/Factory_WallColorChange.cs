@@ -16,13 +16,11 @@ public class Factory_WallColorChange : MonoBehaviour
         manager = GameObject.Find("Manager").GetComponent<FactoryFirstManager>();
         thisMat = GetComponent<Renderer>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (player.isWallChagneColor)
         {
-            //eggbox 중 랜덤으로 한곳의 박스 색을 해당 벽의 색으로 결정
+          
             ranRange = Random.Range(0,EggBoxColor.Length);
             thisMat.material = EggBoxColor[ranRange].material;
             manager.attackBox = EggBoxColor[ranRange].gameObject;

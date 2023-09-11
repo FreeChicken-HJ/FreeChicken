@@ -26,9 +26,7 @@ public class FactorySceneManager : MonoBehaviour
     public bool isChk;
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera catchCam;
-    
-    
-    // Start is called before the first frame update
+  
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -37,15 +35,14 @@ public class FactorySceneManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
-        if (player.AttackCnt >= 3 /*&& !isChk*/)
+        if (player.AttackCnt >= 3)
         {
             isChk = true;
             anim.SetBool("Walking", true);
-            agent.SetDestination(target.position); // player 향해서 달려가기 
+            agent.SetDestination(target.position); 
             
 
         }
@@ -54,8 +51,7 @@ public class FactorySceneManager : MonoBehaviour
             anim.SetBool("Walking", false);
 
             player.isAttack = true;
-            player.transform.position = handPos.transform.position; // 플레이어의 위치는 손으로
-                                                                    //anim.SetBool("Walking", true);
+            player.transform.position = handPos.transform.position; 
             agent.ResetPath();
             mainCam.Priority = -5;
             catchCam.Priority = 3;
@@ -74,7 +70,7 @@ public class FactorySceneManager : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Player") // 플레이어랑 충돌하면
+        if(collision.gameObject.tag == "Player") 
         {
             isCatch = true;
         }

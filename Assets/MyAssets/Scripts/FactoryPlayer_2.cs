@@ -61,13 +61,13 @@ public class FactoryPlayer_2 : MonoBehaviour
         isTalk = false;
         changeZone = GameObject.Find("ChangeConveyorZone").GetComponent<FactorySceneChangeZone>();
         BGM.Play();
-        //fixUI = gameObject.GetComponent<FactoryFixUI>();
+       
     }
    
     void Update()
     { 
 
-        if (!isTalk && !isDie /*&& !changeZone.isButton*/)
+        if (!isTalk && !isDie)
         {
             Move();
             GetInput();
@@ -94,7 +94,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         Invoke("ExitCanvas", 1f);
     }
 
-    // Update is called once per frame
+   
     public void GetInput()
     {
 
@@ -122,11 +122,10 @@ public class FactoryPlayer_2 : MonoBehaviour
         }
 
 
-
     }
     void Turn()
     {
-        transform.LookAt(transform.position + moveVec); // LookAt(): 지정된 벡터를 향해서 회전시켜주는 함수
+        transform.LookAt(transform.position + moveVec); 
     }
     public void Jump()
     {
@@ -148,7 +147,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Sense" && !isStamp)
+        if (collision.gameObject.CompareTag("Sense") && !isStamp)
         {
             StampTMP = collision.gameObject;
             pickUpCam.Priority = 100;
@@ -161,12 +160,12 @@ public class FactoryPlayer_2 : MonoBehaviour
 
         }
 
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox")
+        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Slide") || collision.gameObject.CompareTag("EggBox"))
         {
 
             isJump = false;
         }
-        if (collision.gameObject.tag == "ObstacleZone2" || collision.gameObject.tag == "Obstacle" &&!isDie)
+        if (collision.gameObject.CompareTag("ObstacleZone2") || collision.gameObject.CompareTag("Obstacle") &&!isDie)
         {
             isDie = true;
             DieParticle.SetActive(true);
@@ -197,7 +196,6 @@ public class FactoryPlayer_2 : MonoBehaviour
         pickUpParticle.SetActive(false);
         this.gameObject.transform.position = SpawnPos.transform.position;
 
-        //SceneManager.LoadScene("FactoryScene_2");
 
     }
     private void OnTriggerEnter(Collider other)
@@ -225,27 +223,27 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Slide")
+        if (other.CompareTag("Slide"))
         {
 
             this.gameObject.transform.Translate(Vector3.forward * Time.deltaTime * 2f, Space.World);
 
 
-            // 이동하는 방향 쳐다보게 설정
+          
         }
-        if (other.tag == "TurnPointR")
+        if (other.CompareTag("TurnPointR"))
         {
 
             this.gameObject.transform.Translate(Vector3.right * Time.deltaTime * 1f, Space.World);
 
         }
-        if (other.tag == "TurnPointL")
+        if (other.CompareTag("TurnPointL"))
         {
 
             this.gameObject.transform.Translate(Vector3.left * Time.deltaTime * 1f, Space.World);
 
         }
-        if (other.tag == "TurnPointD")
+        if (other.CompareTag("TurnPointD"))
         {
 
             this.gameObject.transform.Translate(Vector3.back * Time.deltaTime * 1f, Space.World);
@@ -254,12 +252,12 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Slide")
+        if (other.CompareTag("Slide"))
         {
             isSlide = false;
         }
 
-        //speed = 2.5f;
+       
     }
 
 

@@ -229,8 +229,6 @@ public class FactoryPlayer_3 : MonoBehaviour
             anim.SetBool("isWalk", false);
         }
 
-
-
     }
     void Turn()
     {
@@ -257,16 +255,16 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Exit") 
+        if (other.gameObject.CompareTag("Exit")) 
         {
-            Debug.Log("√‚±∏");
+            
             ExitUI.gameObject.SetActive(true);
             isEbutton = true;
            
            
         }
       
-       if(other.gameObject.tag == "SavePoint_1")
+       if(other.gameObject.CompareTag("SavePoint_1"))
         {
             isSavePointChk = true;
             isSavePoint_1 = true;
@@ -278,7 +276,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             Invoke("ResetUI", 3f);
         }
    
-       if(other.gameObject.tag == "SavePoint_2")
+       if(other.gameObject.CompareTag("SavePoint_2"))
         {
             isSavePointChk = true;
             isSavePoint_1 = false;
@@ -289,7 +287,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             SavePosUI.SetActive(true);
             Invoke("ResetUI", 3f);
         }
-        if (other.gameObject.tag == "Poison")
+        if (other.gameObject.CompareTag("Poison"))
         {
             isPotion = true;
             mainCam.Priority = -1;
@@ -300,7 +298,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             Invoke("ResetCam", 2f);
             
         }
-        if(other.gameObject.tag == "Item")
+        if(other.gameObject.CompareTag("Item"))
         {
             isPotion = true;
             mainCam.Priority = -1;
@@ -334,12 +332,12 @@ public class FactoryPlayer_3 : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Slide" || collision.gameObject.tag == "EggBox" || collision.gameObject.tag == "Props" || collision.gameObject.tag == "PickUpPoc" || collision.gameObject.tag == "Poison")
+        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Slide") || collision.gameObject.CompareTag("EggBox") || collision.gameObject.CompareTag("Props") || collision.gameObject.CompareTag("PickUpPoc") || collision.gameObject.CompareTag("Poison"))
         {
 
             isJump = false;
         }
-        if (collision.gameObject.tag == "ObstacleZone3"|| collision.gameObject.tag == "Obstacle"&&!isDie)
+        if (collision.gameObject.CompareTag("ObstacleZone3")|| collision.gameObject.CompareTag("Obstacle")&&!isDie)
         {
             
             isDie = true;
@@ -362,7 +360,7 @@ public class FactoryPlayer_3 : MonoBehaviour
             }
 
         }
-        if (collision.gameObject.tag == "Floor")
+        if (collision.gameObject.CompareTag("Floor"))
         {
             UpstairUI.gameObject.SetActive(true);
             Invoke("UpstairExit", 1f);
@@ -397,7 +395,7 @@ public class FactoryPlayer_3 : MonoBehaviour
         DieParticle.SetActive(false);
         mainCam.Priority = 2;
         dieCam.Priority = 1;
-        //isSavePointChk = false;
+        
         anim.SetBool("isDie", false);
         if (isSavePoint_1)
         {

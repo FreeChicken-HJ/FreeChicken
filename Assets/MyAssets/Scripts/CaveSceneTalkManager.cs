@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using Cinemachine;
 
 public class CaveSceneTalkManager : MonoBehaviour
 {
@@ -24,11 +22,6 @@ public class CaveSceneTalkManager : MonoBehaviour
     public bool isTalkEnd;
     public AudioSource TalkSound;
     public AudioSource ClickButtonSound;
-    //public CinemachineVirtualCamera NPC4Cam;
-    //public CinemachineVirtualCamera mainCam;
-
-    //---------------------------------
-
 
     private void Awake()
     {
@@ -71,12 +64,9 @@ public class CaveSceneTalkManager : MonoBehaviour
 
         if (sentences.Count == 0)
         {
-            //instance.gameObject.SetActive(false);
             Destroy(instance.gameObject);
             Player.isTalk = false;
             Cursor.visible = false;
-            //NPC4Cam.Priority = 1;
-            //mainCam.Priority = 10;
         }
     }
 

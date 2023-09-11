@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
@@ -15,17 +14,17 @@ public class TypingEffect : MonoBehaviour
     private int currentDialogueIndex = 0;
 
     public float fadeDuration = 1.0f;
-    public float initialDelay = 2.0f; // 초기 대기 시간
+    public float initialDelay = 2.0f; 
     public string nextSceneName;
 
-    private bool waitForClick = false; // 클릭 대기 상태
+    private bool waitForClick = false;
     public AudioSource ButtonClickSound;
     public AudioSource BGM;
     private void Start()
     {
         Cursor.visible = true;
         BGM.Play();
-        canvasGroup.alpha = 1f; // 초기화
+        canvasGroup.alpha = 1f;
         if (dialogueList.Count > 0)
         {
             text.text = "";
@@ -50,7 +49,7 @@ public class TypingEffect : MonoBehaviour
                 yield return new WaitForSeconds(0.05f);
             }
 
-            waitForClick = true; // 클릭 대기 활성화
+            waitForClick = true; 
             while (waitForClick)
             {
                 if (Input.GetMouseButtonDown(0))

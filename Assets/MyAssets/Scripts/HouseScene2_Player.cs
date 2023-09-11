@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
-using UnityEngine.UI;
 using Unity.VisualScripting;
 using Cinemachine;
 //using UnityEngine.UIElements;
@@ -33,7 +31,6 @@ public class HouseScene2_Player : MonoBehaviour
 
     public float hAxis;
     public float vAxis;
-    //public float jumpPower = 5f;
 
     public ParticleSystem DiePs;
     public ParticleSystem JumpPs;
@@ -64,11 +61,10 @@ public class HouseScene2_Player : MonoBehaviour
 
     public GameObject Pos;
     public GameObject Pos2;
-    //test
+
     public GameObject EvolutionPlayer;
     public GameObject EvolutionSense;
 
-    // 진화효과
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
     private float rotationTimer = 0.0f;
@@ -215,7 +211,6 @@ public class HouseScene2_Player : MonoBehaviour
 
         if (other.gameObject.name == "EvolutionSense1")
         {
-            Debug.Log("없어져라");
             trumpetAudio.Play();
             StartRotation();
             Invoke("Destroy_", 2f);
@@ -233,10 +228,8 @@ public class HouseScene2_Player : MonoBehaviour
     {
         rotationTimer += Time.deltaTime;
 
-        // 회전 각도 계산 (0에서 720까지)
-        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration); // 0부터 720도까지 두 바퀴 회전
+        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration); 
 
-        // 회전
         cameraArm.RotateAround(transform.position, Vector3.up, rotationAngle * Time.deltaTime);
         EvoluPs.SetActive(true);
 
@@ -245,7 +238,6 @@ public class HouseScene2_Player : MonoBehaviour
             rotationTimer = 0.0f;
             isRotating = false;
 
-            // 회전이 완료된 후에 원래 상태로 돌아가는 처리 추가
             cameraArm.rotation = originalCameraRotation;
             EvoluPs.SetActive(false);
         }
@@ -254,7 +246,7 @@ public class HouseScene2_Player : MonoBehaviour
     public void StartRotation()
     {
         isRotating = true;
-        originalCameraRotation = cameraArm.rotation;  // 카메라 회전을 시작하기 전에 원래의 회전값 저장
+        originalCameraRotation = cameraArm.rotation; 
     }
 
 
@@ -293,7 +285,7 @@ public class HouseScene2_Player : MonoBehaviour
         }
     }
 
-    public void LookAround() // 카메라
+    public void LookAround() 
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngle = cameraArm.rotation.eulerAngles;

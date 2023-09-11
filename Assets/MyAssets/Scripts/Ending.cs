@@ -22,11 +22,11 @@ public class Ending : MonoBehaviour
     public AudioSource ChickenAudio;
     public AudioSource ClickButtonAudio;
 
-    public float camera1Duration; // camera1로 전환하는 지속 시간 (초)
-    public float camera2Duration; // camera2로 전환하는 지속 시간 (초)
-    public float camera3Duration; // camera3로 전환하는 지속 시간 (초)
+    public float camera1Duration; 
+    public float camera2Duration; 
+    public float camera3Duration; 
     public float camera4Duration;
-    public float cameraSwitchDelay; // 일정 시간 후에 카메라 전환 (초)
+    public float cameraSwitchDelay; 
 
     private bool hasSwitchedToCamera1 = false;
     private bool hasSwitchedToCamera2 = false;
@@ -35,13 +35,9 @@ public class Ending : MonoBehaviour
     public List<string> dialogueList;
     public float typingSpeed;
     public float timeBetweenSentences;
-    //private int currentDialogueIndex = 0;
-
-   
 
     void Start()
     {
-        // 초기 상태에서 mainCam을 활성화
         mainCam.Priority = 10;
         camera1.Priority = 0;
         camera2.Priority = 0;
@@ -59,7 +55,7 @@ public class Ending : MonoBehaviour
     }
     void Update()
     {
-        if (!hasSwitchedToCamera1 && !hasSwitchedToCamera2 && !hasSwitchedToCamera3) // 두 번째 카메라로 전환되지 않았을 때만
+        if (!hasSwitchedToCamera1 && !hasSwitchedToCamera2 && !hasSwitchedToCamera3) 
         {
             StartCoroutine(SwitchToCamera1());
         }
@@ -82,7 +78,7 @@ public class Ending : MonoBehaviour
 
     private IEnumerator ShowDialogues()
     {
-        yield return new WaitForSeconds(3.0f); // 초기 대기 시간
+        yield return new WaitForSeconds(3.0f); 
 
         foreach (string dialogue in dialogueList)
         {
@@ -118,14 +114,14 @@ public class Ending : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             if (hasSwitchedToCamera1)
-                yield break; // 이미 전환 완료되었을 때 중단
+                yield break; 
         }
 
         mainCam.Priority = 0;
         camera1.Priority = 10;
 
         hasSwitchedToCamera1 = true;
-        StartCoroutine(SwitchToCamera2()); // 다음 카메라로 전환
+        StartCoroutine(SwitchToCamera2()); 
     }
 
     IEnumerator SwitchToCamera2()
@@ -146,13 +142,13 @@ public class Ending : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             if (hasSwitchedToCamera2)
-                yield break; // 이미 전환 완료되었을 때 중단
+                yield break; 
         }
 
         camera1.Priority = 0;
         camera2.Priority = 10;
 
-        StartCoroutine(SwitchToCamera3()); // 다음 카메라로 전환
+        StartCoroutine(SwitchToCamera3()); 
     }
 
    
@@ -174,7 +170,6 @@ public class Ending : MonoBehaviour
             camera2.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
             camera3.Priority = (int)Mathf.Lerp(10, 0, t);
 
-            // Gradually move the camera upwards
             mainCam.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
 
             yield return new WaitForEndOfFrame();
@@ -185,7 +180,6 @@ public class Ending : MonoBehaviour
         camera2.Priority = 0;
         camera3.Priority = 10;
         StartCoroutine(SwitchToCamera4());
-        //mainCam.transform.position = targetPosition;
     }
     IEnumerator SwitchToCamera4()
     {
@@ -205,7 +199,6 @@ public class Ending : MonoBehaviour
             camera3.Priority = (int)Mathf.Lerp(initialPriority, 0, t);
             camera4.Priority = (int)Mathf.Lerp(10, 0, t);
 
-            // Gradually move the camera upwards
             mainCam.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
 
             yield return new WaitForEndOfFrame();
@@ -216,12 +209,4 @@ public class Ending : MonoBehaviour
 
         mainCam.transform.position = targetPosition;
     }
-   /* public void ResetEveryData()
-    {
-        if (File.Exists("playerData.json"))
-        {
-
-            File.Delete("playerData.json");
-        }
-    }*/
 }

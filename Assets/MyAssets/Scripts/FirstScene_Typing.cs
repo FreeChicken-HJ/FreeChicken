@@ -28,8 +28,6 @@ public class FirstScene_Typing : MonoBehaviour
         targetText.text = " ";
         FirstSound.Play();
         textMeshPro = targetText.GetComponent<TextMeshProUGUI>();
-
-        // 현재 텍스트에 대한 소리 할당
         if (currentSoundIndex < typingSounds.Length)
         {
             AudioSource selectedAudioSource = typingSounds[currentSoundIndex];

@@ -6,9 +6,9 @@ public class PlayerNearAudio : MonoBehaviour
 {
     public GameObject player;
     public AudioSource newAudio;
-    public float proximityDistance = 10f;
+    public float proximityDistance;
     bool isPlaying = false;
-    // Start is called before the first frame update
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -16,24 +16,20 @@ public class PlayerNearAudio : MonoBehaviour
         {
             newAudio = GetComponent<AudioSource>();
         }
-        newAudio.spatialBlend = 1.0f;  // 3D 소리로 설정
+        newAudio.spatialBlend = 1.0f;  
         newAudio.minDistance = proximityDistance;
-        newAudio.maxDistance = proximityDistance * 2f;  // 소리의 최대 거리 설정
+        newAudio.maxDistance = proximityDistance * 2f; 
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.gameObject.transform.position);
 
-        // 플레이어가 가까이 있을 때 소리 재생
         if (distance <= proximityDistance && !isPlaying)
         {
             newAudio.Play();
             isPlaying = true;
         }
-        // 플레이어가 멀어질 때 소리 중지
         else if (distance > proximityDistance && isPlaying)
         {
             newAudio.Stop();

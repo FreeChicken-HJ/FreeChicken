@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using Cinemachine;
 
-public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
+public class HouseSceneTalkManager1 : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public GameObject nextText;
@@ -50,30 +48,13 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
         }
     }
 
-    //public void NextSentence()
-    //{
-    //    if (sentences.Count != 0)
-    //    {
-    //        currentSentences = sentences.Dequeue();
-    //        isTyping = true;
-    //        nextText.SetActive(false);
-    //        StartCoroutine(Typing(currentSentences));
-    //    }
-
-    //    if (sentences.Count == 0)
-    //    {
-    //        Destroy(instance.gameObject);
-    //        isTalkEnd = true;
-    //    }
-    //}
-
     public void NextSentence()
     {
         if (sentences.Count != 0)
         {
             currentSentences = sentences.Dequeue();
             isTyping = true;
-            
+
             nextText.SetActive(false);
             TalkSound.Play();
             StartCoroutine(Typing(currentSentences));
@@ -81,13 +62,11 @@ public class HouseSceneTalkManager1 : MonoBehaviour//, IPointerDownHandler
 
         if (sentences.Count == 0)
         {
-            // 게임 오브젝트가 파괴되지 않았을 때에만 처리
             if (gameObject != null)
             {
                 Destroy(gameObject);
 
             }
-            //isTalkEnd = true;
             Cursor.visible = false;
             player.isTalk = false;
         }

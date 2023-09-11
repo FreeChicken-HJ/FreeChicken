@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Unity.VisualScripting;
-
 using UnityEngine;
 
 public class Obstacle_House : MonoBehaviour
@@ -17,51 +16,42 @@ public class Obstacle_House : MonoBehaviour
     public HouseScenePlayer player;
     public HouseScene2_Player player2;
     
-
-    //UD_Floor
     float initPositionY;
     float initPositionX;
     float initPositionZ;
     public float distance;
     public float turningPoint;
 
-    //UD_Floor & LR_Floor
     public bool turnSwitch;
     public float moveSpeed;
 
-    //MovePlatform
     public bool isMove;
     public bool isPlayerFollow;
 
-    //RT_Floor
     public float rotateSpeed;
     public int angle_z = 50;
 
-    //Drop
     public float dropSpeed;
     public bool isDropObj;
 
-    //Swing
     public float angle = 0;
-    private float lerpTime = 0;
     public float swingSpeed;
 
-    //Circle
-    public float circleR; // 반지름
-    public float deg; // 각도
-    public float objSpeed; // 원운동 속도
+    public float circleR; 
+    public float deg; 
+    public float objSpeed; 
     public Transform Circletarget;
     public float orbitSpeed;
     Vector3 offSet;
 
     void Awake()
     {
-        if (Type == MoveObstacleType.A) // Up & Down
+        if (Type == MoveObstacleType.A)
         {
             initPositionY = transform.position.y;
             turningPoint = initPositionY - distance;
         }
-        if (Type == MoveObstacleType.B) // Right & Left
+        if (Type == MoveObstacleType.B)
         {
             initPositionX = transform.position.x;
             turningPoint = initPositionX - distance;
@@ -140,18 +130,6 @@ public class Obstacle_House : MonoBehaviour
     {
         transform.Rotate(-angle_z / 50 * rotateSpeed, 0, 0);
     }
-
-    void DownandDestroy()
-    {
-        if(isPlayerFollow)
-        {
-            player.gameObject.transform.position = player.transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.smoothDeltaTime;
-        }
-        transform.position = transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.smoothDeltaTime;
-
-        Destroy(this.gameObject, 5f);
-    }
-
 
     void rotate_xyz()
     {
@@ -248,7 +226,6 @@ public class Obstacle_House : MonoBehaviour
         }
     }
 
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player") &&!isPlayerFollow)
@@ -315,17 +292,6 @@ public class Obstacle_House : MonoBehaviour
                                 Vector3.back, orbitSpeed*Time.deltaTime);
 
         offSet = transform.position - Circletarget.position;
-    }
-
-    Quaternion CalculateMovementOfPendulum()
-    {
-        return Quaternion.Lerp(Quaternion.Euler(Vector3.forward * angle),
-            Quaternion.Euler(Vector3.back * angle), GetLerpTParam());
-    }
-
-    float GetLerpTParam()
-    {
-        return (Mathf.Sin(lerpTime) + 1) * .5f;
     }
 
     void Update()

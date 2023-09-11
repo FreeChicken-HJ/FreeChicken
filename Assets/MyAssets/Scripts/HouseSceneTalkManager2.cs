@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using Cinemachine;
 
-public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
+public class HouseSceneTalkManager2 : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public GameObject nextText;
@@ -56,23 +55,7 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
         {
             sentences.Enqueue(line);
         }
-        //ShowImage();
     }
-
-    //void ShowImage()
-    //{
-    //    isImageVisible = true;
-    //    if (isNPCImage)
-    //    {
-    //        NpcImage.gameObject.SetActive(true);
-    //        PlayerImage.gameObject.SetActive(false);
-    //    }
-    //    else if (isPlayerImage)
-    //    {
-    //        NpcImage.gameObject.SetActive(false);
-    //        PlayerImage.gameObject.SetActive(true);
-    //    }
-    //}
 
     public void NextSentence()
     {
@@ -87,7 +70,6 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
 
         if (sentences.Count == 0)
         {
-            // 게임 오브젝트가 파괴되지 않았을 때에만 처리
             maincam.Priority = 2;
             npccam.Priority = -5;
 
@@ -98,7 +80,6 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
 
             }
             Cursor.visible = false;
-            //isTalkEnd = true;
             player.isTalk1 = false;
             player.isTalk2 = false;
         }
@@ -146,13 +127,11 @@ public class HouseSceneTalkManager2 : MonoBehaviour//, IPointerDownHandler
             {
                 NextSentence();
                 ClickButtonSound.Play();
-                // 대화가 끝나면 이미지를 비활성화
                 if (sentences.Count == 0)
                 {
                     NpcImage.SetActive(false);
                     PlayerImage.SetActive(false);
                 }
-
                 ChangeImage();
             }
         }

@@ -45,8 +45,6 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject DieCanvas;
     public GameObject NextSceneImage;
 
-    Obstacle_House obstacle_house;
-
     [Header("Dialogue")]
     public GameObject startCanvas;
     public bool isTalk;
@@ -85,7 +83,6 @@ public class HouseScenePlayer : MonoBehaviour
 
     public GameObject LoadingUI;
 
-    // 새로운 능력얻는 효과
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
     private float rotationTimer = 0.0f;
@@ -102,7 +99,6 @@ public class HouseScenePlayer : MonoBehaviour
 
     void Start()
     {
-        obstacle_house = GameObject.FindGameObjectWithTag("Obstacle").GetComponent<Obstacle_House>();
         DiePs.gameObject.SetActive(false);
         StartCam.Priority = 10;
         MemoryCount.memCount = 0;
@@ -110,7 +106,6 @@ public class HouseScenePlayer : MonoBehaviour
 
     void Update()
     {
-
         if (!Dead)
         {
             DiePs.gameObject.SetActive(false);
@@ -142,7 +137,6 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (!isOpeningDoor && Input.GetButtonDown("E") && isReadyDoorOpen)
         {
-
             isOpeningDoor = true;
             pushBell = true;
             bellAudio.Play();
@@ -168,7 +162,6 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (isRaisingDoor)
         {
-            Debug.Log("문 올라감");
             startDoor.transform.Translate(Vector3.up * doorRaiseSpeed * Time.deltaTime);
             if (startDoor.transform.position.y >= 2f)
             {
@@ -206,7 +199,6 @@ public class HouseScenePlayer : MonoBehaviour
             transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
             runAudio.Play();
         }
-
         anim.SetBool("Run", moveInput != Vector2.zero);
         anim.SetBool("Walk", wDown);
     }
@@ -226,13 +218,11 @@ public class HouseScenePlayer : MonoBehaviour
     {
         if (DiePs != null) 
         {
-            
             DieCanvas.gameObject.SetActive(true);
             DiePs.gameObject.SetActive(true);
             dieAudio.Play();
             anim.SetBool("isDead",true);
             Invoke("remove_dieUI", 3f);
-           
         }
     }
 
@@ -245,10 +235,7 @@ public class HouseScenePlayer : MonoBehaviour
     {
         rotationTimer += Time.deltaTime;
 
-        // 회전 각도 계산 (0에서 720도까지)
-        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration); // 0부터 720도까지 두 바퀴 회전
-
-        // 회전
+        float rotationAngle = Mathf.Lerp(0f, 720f, rotationTimer / rotationDuration);
         cameraArm.RotateAround(transform.position, Vector3.up, rotationAngle * Time.deltaTime);
 
         GetUpgradePs.SetActive(true);
@@ -258,7 +245,6 @@ public class HouseScenePlayer : MonoBehaviour
             rotationTimer = 0.0f;
             isRotating = false;
 
-            // 회전이 완료된 후에 원래 상태로 돌아가는 처리 추가
             cameraArm.rotation = originalCameraRotation;
             GetUpgradePs.SetActive(false);
         }
@@ -267,14 +253,14 @@ public class HouseScenePlayer : MonoBehaviour
     public void StartRotation()
     {
         isRotating = true;
-        originalCameraRotation = cameraArm.rotation;  // 카메라 회전을 시작하기 전에 원래의 회전값 저장
+        originalCameraRotation = cameraArm.rotation;  
     }
 
     IEnumerator HideGetupgrade_textAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // 지정된 시간만큼 대기
+        yield return new WaitForSeconds(delay); 
 
-        GetUpgradeBox_text.SetActive(false); // GetUpgradeBox_text를 비활성화
+        GetUpgradeBox_text.SetActive(false); 
     }
 
     void OnTriggerEnter(Collider other)
@@ -294,14 +280,12 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (other.CompareTag("PushButton") && !pushBell)
         {
-            
             PushBell_text.SetActive(true);
             isReadyDoorOpen = true;
         }
 
         if(other.CompareTag("PushButton") && isOpeningDoor)
         {
-           
             PushBell_text.SetActive(false);
             bellAudio.Pause();
             OpenDoorAudio.Pause();
@@ -396,18 +380,11 @@ public class HouseScenePlayer : MonoBehaviour
         }
     }
 
-    IEnumerator GetSavePointImage()
-    {
-        SavePointImage.gameObject.SetActive(true);
-        yield break;
-    }
-
     void Destroy_SavePointImage()
     {
         SavePointImage.gameObject.SetActive(false);
     }
 
-    //------------Destroy_SavePointObj-----------------------------------------
     void Destroy_SavePointObj1()
     {
         SavePoint1Obj.gameObject.SetActive(false);
@@ -423,7 +400,6 @@ public class HouseScenePlayer : MonoBehaviour
         SavePoint3Obj.gameObject.SetActive(false);
     }
 
-    //------------restart_stage-----------------------------------------
     void restart_stage1()
     {
         Dead = false;
@@ -453,21 +429,20 @@ public class HouseScenePlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Obstacle") && !Dead)
         {
             Dead = true;
-            //DeadCount.count += 1;
 
-            if (check_savepoint1 /*&& Dead*/)
+            if (check_savepoint1)
             {
                 DieMotion();
                 Invoke("restart_stage1", 3f);
             }
 
-            if (check_savepoint2 /*&& Dead*/)
+            if (check_savepoint2)
             {
                 DieMotion();
                 Invoke("restart_stage2", 3f);
             }
 
-            if (check_savepoint3 /*&& Dead*/)
+            if (check_savepoint3)
             {
                 DieMotion();
                 Invoke("restart_stage3", 3f);
@@ -485,21 +460,20 @@ public class HouseScenePlayer : MonoBehaviour
         if (other.CompareTag("Fire") && !Dead)
         {
             Dead = true;
-            //DeadCount.count += 1;
 
-            if (check_savepoint1 /*&& Dead*/)
+            if (check_savepoint1)
             {
                 DieMotion();
                 Invoke("restart_stage1", 3f);
             }
 
-            if (check_savepoint2 /*&& Dead*/)
+            if (check_savepoint2)
             {
                 DieMotion();
                 Invoke("restart_stage2", 3f);
             }
 
-            if (check_savepoint3 /*&& Dead*/)
+            if (check_savepoint3)
             {
                 DieMotion();
                 Invoke("restart_stage3", 3f);
@@ -507,7 +481,7 @@ public class HouseScenePlayer : MonoBehaviour
         }
     }
 
-    public void LookAround() // 카메라
+    public void LookAround()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngle = cameraArm.rotation.eulerAngles;

@@ -7,7 +7,7 @@ public class HouseObstacle_UpDown : MonoBehaviour
     public enum MoveObstacleType { A,B};
     public MoveObstacleType Type;
 
-    public float moveSpeed = 3.0f;      // 오브젝트의 이동 속도
+    public float moveSpeed = 3.0f;   
 
     private bool isPlayerFollow = false;
     private Transform player;
@@ -58,7 +58,7 @@ public class HouseObstacle_UpDown : MonoBehaviour
     void RespawnObject()
     {
         gameObject.SetActive(true);
-        transform.position = originalPosition; // 초기 위치로 이동
+        transform.position = originalPosition;
         isPlayerFollow = false;
     }
 

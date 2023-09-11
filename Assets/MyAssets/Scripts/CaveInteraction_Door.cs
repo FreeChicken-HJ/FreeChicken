@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class CaveInteraction_Door : MonoBehaviour
 {
@@ -39,22 +37,19 @@ public class CaveInteraction_Door : MonoBehaviour
         {
             dadAnim.SetBool("isWalk", true);
             daddy.transform.position = Vector3.MoveTowards(daddy.transform.position, Target.transform.position, Time.deltaTime * 3f);
-            Debug.Log("°¡¶ù");
-            
         }
-
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player") && !player.hasKey &&!isEnd)
+        if (other.gameObject.CompareTag("Player") && !player.hasKey &&!isEnd)
         {
             donotOpenDoorText.SetActive(true);
             Invoke("CloseText", 2f);
             isOpen = true;
         }
 
-        if(other.gameObject.tag.Equals("Player") && player.hasKey && !isEnd)
+        if(other.gameObject.CompareTag("Player") && player.hasKey && !isEnd)
         {
             isOpen = true;
             OpenDoorText.SetActive(true);
@@ -67,13 +62,13 @@ public class CaveInteraction_Door : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player") && !player.hasKey && isOpen)
+        if (other.gameObject.CompareTag("Player") && !player.hasKey && isOpen)
         {
             donotOpenDoorText.SetActive(false);
             isOpen = false;
         }
 
-        if(other.gameObject.tag.Equals("Player") && player.hasKey && isOpen)
+        if(other.gameObject.CompareTag("Player") && player.hasKey && isOpen)
         {
             isOpen = false;
             OpenDoorText.SetActive(false);
@@ -94,7 +89,6 @@ public class CaveInteraction_Door : MonoBehaviour
             
             Thx.gameObject.SetActive(true);
             Invoke("Last", 6f);
-            Debug.Log("¹®À» ¿­¾ú´ß");
             
         }
         else if(Input.GetButtonDown("Interaction") && isOpen &&!player.hasKey)

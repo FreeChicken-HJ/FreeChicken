@@ -27,21 +27,16 @@ public class HouseNPC : MonoBehaviour
     public float t;
     void Start()
     {
-
         Ebutton.SetActive(false);
         player = GameObject.FindWithTag("Player").GetComponent<HouseScenePlayer>();
    
-       
         t = 0;
-
     }
 
     void Update()
     {
-
         if (Input.GetButton("E") && isEbutton)
         {
-
             E.color = Color.red;
 
             if (NpcUI.value < 100f)
@@ -51,22 +46,14 @@ public class HouseNPC : MonoBehaviour
             }
             else
             {
-                
                 isEbutton = false;
                 npc.SetActive(false);
-
-                
-
                 getMemorySound.Play();
                 GetMemoryUI.SetActive(true);
-
                 Ebutton.SetActive(false);
-
                 MemoryCount.memCount++;
 
                 Invoke("ReStart", 2f);
-
-
             }
         }
         if (Input.GetButtonUp("E"))
@@ -75,43 +62,34 @@ public class HouseNPC : MonoBehaviour
             t = 0;
             NpcUI.value = 0;
         }
-
     }
+
     void ReStart()
     {
-
-       
         GetMemoryUI.SetActive(false);
         isFinish = true;
-
         this.gameObject.SetActive(false);
-
-        
     }
+
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             isNear = true;
             isEbutton = true;
 
             Ebutton.SetActive(true);
-          
-
-
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             isNear = false;
             isEbutton = false;
 
             Ebutton.SetActive(false);
-           
-
         }
     }
 }

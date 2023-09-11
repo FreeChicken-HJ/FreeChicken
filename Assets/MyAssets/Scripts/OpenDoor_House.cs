@@ -9,11 +9,8 @@ public class OpenDoor_House : MonoBehaviour
     [SerializeField] TextMeshProUGUI neardoorText;
     bool isOpen;
 
-    HouseScenePlayer player;
-
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<HouseScenePlayer>();
         opendoorText.gameObject.SetActive(false);
         neardoorText.gameObject.SetActive(false);
     }
@@ -24,9 +21,8 @@ public class OpenDoor_House : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("πÆø° ∞°±Ó¿Ã ∞¨¥ﬂ");
             neardoorText.gameObject.SetActive(true);
             isOpen = true;
         }
@@ -34,7 +30,7 @@ public class OpenDoor_House : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             neardoorText.gameObject.SetActive(false);
             isOpen = false;
@@ -49,7 +45,6 @@ public class OpenDoor_House : MonoBehaviour
             neardoorText.gameObject.SetActive(false);
             opendoorText.gameObject.SetActive(true);
             Invoke("notshowtext", 1.5f);
-
         }
     }
 

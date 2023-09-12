@@ -5742,6 +5742,7 @@ GameObject:
   - component: {fileID: 75411819}
   - component: {fileID: 75411818}
   - component: {fileID: 75411821}
+  - component: {fileID: 75411822}
   m_Layer: 0
   m_Name: Portcullis_Metal (2)
   m_TagString: Ground
@@ -5836,6 +5837,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5476594047164684567, guid: dcf471cf5bc58a74db5ba5a1bc163997, type: 3}
+--- !u!65 &75411822
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75411816}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.0007095, y: 3.8836799, z: 0.10884649}
+  m_Center: {x: 0.00035268234, y: 1.9500479, z: 0.0039126445}
 --- !u!1 &77025484
 GameObject:
   m_ObjectHideFlags: 0
@@ -7750,7 +7772,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 254029496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.83, y: 14.723, z: 28.77}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13851,6 +13873,7 @@ GameObject:
   - component: {fileID: 406606461}
   - component: {fileID: 406606460}
   - component: {fileID: 406606463}
+  - component: {fileID: 406606464}
   m_Layer: 0
   m_Name: Portcullis_Metal (3)
   m_TagString: Ground
@@ -13945,6 +13968,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5476594047164684567, guid: dcf471cf5bc58a74db5ba5a1bc163997, type: 3}
+--- !u!65 &406606464
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406606458}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.0007095, y: 3.8836799, z: 0.10884649}
+  m_Center: {x: 0.00035268234, y: 1.9500469, z: 0.0039126147}
 --- !u!1001 &407078339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14030,8 +14074,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419723465}
-  m_LocalRotation: {x: 0.20580955, y: 0.11197181, z: -0.023882452, w: 0.9718716}
-  m_LocalPosition: {x: 29.993488, y: 3.1588619, z: 35.80427}
+  m_LocalRotation: {x: 0.20580941, y: 0.111978136, z: -0.023883821, w: 0.97187084}
+  m_LocalPosition: {x: 23.163488, y: -11.5641365, z: 7.0342712}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18966,8 +19010,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455634176}
-  m_LocalRotation: {x: 0.004770313, y: 0.9869181, z: -0.029724108, w: 0.15838686}
-  m_LocalPosition: {x: -1, y: -0.29999995, z: 7.2}
+  m_LocalRotation: {x: 0.004768842, y: 0.98692596, z: -0.029724345, w: 0.158338}
+  m_LocalPosition: {x: -1, y: -0.29999924, z: 7.200001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19948,8 +19992,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541722525}
-  m_LocalRotation: {x: 0.01167523, y: -0.45892984, z: 0.0060313605, w: 0.88837534}
-  m_LocalPosition: {x: 0.20372176, y: -0.86000025, z: 0.46302056}
+  m_LocalRotation: {x: 0.011675528, y: -0.45888585, z: 0.0060307826, w: 0.88839805}
+  m_LocalPosition: {x: -6.626278, y: -15.582999, z: -28.306978}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22449,7 +22493,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755216494}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: -3.1999998}
+  m_LocalPosition: {x: 6.83, y: 16.522999, z: 25.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27792,6 +27836,7 @@ GameObject:
   - component: {fileID: 1235405698}
   - component: {fileID: 1235405697}
   - component: {fileID: 1235405700}
+  - component: {fileID: 1235405701}
   m_Layer: 0
   m_Name: Portcullis_Metal (1)
   m_TagString: Ground
@@ -27883,9 +27928,30 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5476594047164684567, guid: dcf471cf5bc58a74db5ba5a1bc163997, type: 3}
+--- !u!65 &1235405701
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235405695}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.0007095, y: 3.8836799, z: 0.10884649}
+  m_Center: {x: 0.00035554337, y: 1.9500483, z: 0.0039126445}
 --- !u!1001 &1237910691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36209,15 +36275,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4836639314595006, guid: b3b30da2af31dfe44b078040b1ed3e5e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.32
+      value: 5.17
       objectReference: {fileID: 0}
     - target: {fileID: 4836639314595006, guid: b3b30da2af31dfe44b078040b1ed3e5e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.94
+      value: 2.68
       objectReference: {fileID: 0}
     - target: {fileID: 4836639314595006, guid: b3b30da2af31dfe44b078040b1ed3e5e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 29.82
+      value: 29.95
       objectReference: {fileID: 0}
     - target: {fileID: 4836639314595006, guid: b3b30da2af31dfe44b078040b1ed3e5e, type: 3}
       propertyPath: m_LocalRotation.w

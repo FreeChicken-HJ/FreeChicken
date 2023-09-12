@@ -31133,6 +31133,10 @@ PrefabInstance:
       propertyPath: newAudio
       value: 
       objectReference: {fileID: 1606336849}
+    - target: {fileID: 5326861488164832128, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5367888830279444368, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -31697,7 +31701,6 @@ PrefabInstance:
     - {fileID: 2441029324274171912, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 2863415663935950593, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 836450528481661077, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
-    - {fileID: 5326861488164832128, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 6605345009453365387, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 134339739018519108, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 8207585812661901534, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}

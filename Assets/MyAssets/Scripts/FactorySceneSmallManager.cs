@@ -9,7 +9,7 @@ public class FactorySceneSmallManager : MonoBehaviour
     public bool isAttack;
     Animator animator;
     public GameObject pos;
-    // Start is called before the first frame update
+  
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -28,7 +28,7 @@ public class FactorySceneSmallManager : MonoBehaviour
         {
             isAttack=false;
         }
-        Debug.Log(n);
+      
     }
 
     

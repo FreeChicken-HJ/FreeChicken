@@ -43,7 +43,8 @@ public class FactoryPlayer_2 : MonoBehaviour
     public GameObject scene2LastUI;
     public GameObject LoadingUI;
     public GameManager gameManager;
-  
+    public GameObject MemCountUI;
+
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera DieCam;
@@ -61,7 +62,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         isTalk = false;
         changeZone = GameObject.Find("ChangeConveyorZone").GetComponent<FactorySceneChangeZone>();
         BGM.Play();
-       
+        MemoryCount.memCount = 2;
     }
    
     void Update()
@@ -91,7 +92,7 @@ public class FactoryPlayer_2 : MonoBehaviour
         DieCanvas.SetActive(true);
         isDie = true;
         dieAudio.Play();
-        Invoke("ExitCanvas", 1f);
+        Invoke("ExitCanvas", 1.5f);
     }
 
    
@@ -156,7 +157,7 @@ public class FactoryPlayer_2 : MonoBehaviour
             isStamp = true;
             thisRealObj.gameObject.transform.localScale = new Vector3(2f, 0.5f, 2f);
             pickUpParticle.SetActive(true);
-            Invoke("PickUP", 2.5f);
+            Invoke("PickUP", 2f);
 
         }
 
@@ -182,28 +183,40 @@ public class FactoryPlayer_2 : MonoBehaviour
    
     public void ExitCanvas()
     {
+       
         DeadCount.count++;
-        isDie = false;
+        isStamp = false;
+      
         DieParticle.SetActive(false);
         DieCanvas.SetActive(false);
+        MemCountUI.SetActive(false);
         anim.SetBool("isDie", false);
-        pickUpCam.Priority = -1;
-        mainCam.Priority = 2;
-        DieCam.Priority = 1;
+        
         isSlide = true;
-        isStamp = false;
+       
+        isDie = false;
         thisRealObj.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
         pickUpParticle.SetActive(false);
         this.gameObject.transform.position = SpawnPos.transform.position;
-
-
+        pickUpCam.Priority = -1;
+       
+        DieCam.Priority = 1;
+        mainCam.Priority = 2;
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Rail")
         {
-            scene2LastUI.gameObject.SetActive(true);
-            Invoke("RoadScene", 2f);
+            if (MemoryCount.memCount == 4)
+            {
+                scene2LastUI.gameObject.SetActive(true);
+                Invoke("RoadScene", 2f);
+            }
+            else if(MemoryCount.memCount < 4)
+            {
+                MemCountUI.gameObject.SetActive(true);
+                Invoke("ExitCanvas", 1.5f);
+            }
         }
     }
     void RoadScene()

@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class FirstScene_Typing : MonoBehaviour
 {
-    private string text;
-    public TextMeshProUGUI targetText;
+   
+    public TextMeshProUGUI[] targetText;
     public float initialDelay = 2.0f; 
-    public float delay = 0.5f;
+    public float delay = 0.3f;
     public AudioSource[] typingSounds; 
     public AudioSource FirstSound;
     private int currentSoundIndex = 0; 
@@ -19,39 +19,43 @@ public class FirstScene_Typing : MonoBehaviour
     public float waitBeforeLoad = 1.0f; 
 
     public Image fadeImage; 
-    private TextMeshProUGUI textMeshPro;
-
+   
     void Start()
     {
         Cursor.visible = false;
-        text = targetText.text.ToString();
-        targetText.text = " ";
-        FirstSound.Play();
-        textMeshPro = targetText.GetComponent<TextMeshProUGUI>();
-        if (currentSoundIndex < typingSounds.Length)
+        for(int i = 0; i < targetText.Length; i++)
         {
-            AudioSource selectedAudioSource = typingSounds[currentSoundIndex];
-            StartCoroutine(StartTyping(selectedAudioSource));
+           
+            FirstSound.Play();
+          
+            if (currentSoundIndex < typingSounds.Length)
+            {
+                AudioSource selectedAudioSource = typingSounds[currentSoundIndex];
+                StartCoroutine(StartTyping(selectedAudioSource));
+            }
         }
+      
     }
 
     IEnumerator StartTyping(AudioSource audioSource)
     {
         yield return new WaitForSeconds(initialDelay); 
 
-        int count = 0;
+      
 
-        while (count != text.Length)
+        for (int i = 0; i < targetText.Length; i++)
         {
-            if (count < text.Length)
-            {
-                targetText.text += text[count].ToString();
-                audioSource.Play(); 
-                count++;
-            }
-
-            yield return new WaitForSeconds(delay);
+            
+            targetText[i].gameObject.SetActive(true);
+            audioSource.Play();
+            yield return new WaitForSeconds(.3f);
+            
         }
+  
+
+        yield return new WaitForSeconds(delay);
+        
+
         audioSource.Stop();
 
         float startTime = Time.time;
@@ -68,16 +72,17 @@ public class FirstScene_Typing : MonoBehaviour
 
         startTime = Time.time;
         endTime = startTime + textFadeDuration;
-        Color textStartColor = textMeshPro.color;
-        Color textEndColor = new Color(textStartColor.r, textStartColor.g, textStartColor.b, 0f); 
+        
 
-        while (Time.time < endTime)
+        for (int i = 0; i < targetText.Length; i++)
         {
-            float t = (Time.time - startTime) / textFadeDuration;
-            textMeshPro.color = Color.Lerp(textStartColor, textEndColor, t);
-            yield return null;
-        }
+            
 
+            targetText[i].gameObject.SetActive(false);
+           
+
+        }
+           
         yield return new WaitForSeconds(waitBeforeLoad);
         Cursor.visible = true;
         SceneManager.LoadScene("StartScene_Final");

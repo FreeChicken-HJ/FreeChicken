@@ -55,18 +55,25 @@ public class FactorySceneChangeZone : MonoBehaviour
         }
         if(Player.GetComponent<FactoryPlayer_2>().isDie)
         {
-            zoneL.gameObject.SetActive(false);
-            zoneR.gameObject.SetActive(false);
-            zoneG.gameObject.SetActive(false);
-            ChangeConveorSlider.value = 0;
-            t = 0;
-            isEnd = false;
-            ChangeConveorZone.SetActive(false);
-            isButton = false;
-            isChk = false;
-            ChangeCam.Priority = 1;
-            mainCam.Priority = 3;
+
+            StartCoroutine("Reset");
+          
         }
+    }
+    IEnumerator Reset()
+    {
+        yield return new WaitForSeconds(1.7f);
+        zoneL.gameObject.SetActive(false);
+        zoneR.gameObject.SetActive(false);
+        zoneG.gameObject.SetActive(false);
+        ChangeConveorSlider.value = 0;
+        t = 0;
+        isEnd = false;
+        ChangeConveorZone.SetActive(false);
+        isButton = false;
+        isChk = false;
+        ChangeCam.Priority = 1;
+        mainCam.Priority = 3;
     }
     void Chk()
     {
@@ -116,7 +123,7 @@ public class FactorySceneChangeZone : MonoBehaviour
 
         if (Input.GetButton("E"))
         {
-            Debug.Log("E");
+            
             Etxt.color = Color.red;
             if (ChangeConveorSlider.value < 100f)
             {

@@ -119,6 +119,66 @@ MonoBehaviour:
     m_Key: SavePoint_Txt
     m_Metadata:
       m_Items: []
+  - m_Id: 376270379433984
+    m_Key: FactoryScene1_UpstairTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 378026081533952
+    m_Key: FactoryScene1_TalkPoint3_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 379224163500032
+    m_Key: FactoryScene1_TalkPoint3-1_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 379971311648768
+    m_Key: FactoryScene1_StopConUI_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 380699988082688
+    m_Key: FactoryScene1_ChangeEggPoint_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 381110224568320
+    m_Key: FactoryScene1_3sceLaterTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 381716880310272
+    m_Key: FactoryScene1_TurnEggPointTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385053352673280
+    m_Key: FactoryScene2_ShowNextUI_Txt1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385110818832384
+    m_Key: FactoryScene2_ShowNextUI_Txt2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 387206079201280
+    m_Key: FactoryScene2_ChangeConTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 388575980830720
+    m_Key: FactoryScene2_FinishCon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 389411364552704
+    m_Key: FactoryScene2_MemCountTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 391831670898688
+    m_Key: FactoryScene3_LastUI_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 392145799102464
+    m_Key: FactoryScene3_StartUI_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 393178432552960
+    m_Key: FactoryScene3_ExitUI_Txt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

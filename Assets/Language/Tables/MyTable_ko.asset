@@ -126,6 +126,69 @@ MonoBehaviour:
     m_Localized: "\uC704\uCE58 \uC800\uC7A5\uC911 . . ."
     m_Metadata:
       m_Items: []
+  - m_Id: 376270379433984
+    m_Localized: "\uC704\uB85C \uC62C\uB77C\uAC00\uC57C\uD55C\uB2ED! "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 378026081533952
+    m_Localized: "\uAF65. .\uB531 \uAC78\uB838\uB2ED. . ."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 379224163500032
+    m_Localized: "\uB2E4\uD589\uC774\uB2ED!\n\uC778\uAC04\uC744 \uC798 \uC18D\uC600\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 379971311648768
+    m_Localized: "\uCEE8\uBCA0\uC774\uC5B4 \uBA48\uCD94\uAE30"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 380699988082688
+    m_Localized: "\uC790\uB9AC\uB97C \uBCC0\uACBD\uD560\uC218 \uC788\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 381110224568320
+    m_Localized: "3\uCD08 \uD6C4 \uD655\uC815\uB41C\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 381716880310272
+    m_Localized: "\uC54C\uB85C \uBCC0\uC2E0\uD560\uC218 \uC788\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385053352673280
+    m_Localized: "\uAF65! \uAE38\uC774 \uB9C9\uD614\uB2ED. . .!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385110818832384
+    m_Localized: "\uC606 \uAE38\uB85C \uD53C\uD558\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 387206079201280
+    m_Localized: "\uAE38\uC744 \uB9CC\uB4E4\uB2ED (      \uD0A4\uB97C \uB20C\uB7EC
+      \uB178\uC120\uBCC0\uACBD)\n     \uD0A4\uB97C \uB20C\uB7EC \uD655\uC815\uC2DC\uD0A4\uAE30"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 388575980830720
+    m_Localized: "\uD655\uC815!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 389411364552704
+    m_Localized: "Memory \uD655\uC778!\n4\uAC1C\uC758 \uBA54\uBAA8\uB9AC\uAC00 \uC788\uC5B4\uC57C
+      \uD0C8\uCD9C \uD560 \uC218 \uC788\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 391831670898688
+    m_Localized: "\uB4DC\uB514\uC5B4 \uD0C8\uCD9C\uC774\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 392145799102464
+    m_Localized: "Speed + Jump UP!\n\uB9C8\uC9C0\uB9C9 \uAE30\uC5B5\uBA54\uBAA8\uB9AC\uB97C
+      \uCC3E\uC544\uC11C \uD0C8\uCD9C\uD558\uB2ED!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 393178432552960
+    m_Localized: "\uD2B8\uB7ED\uC5D0 \uD0C0\uAE30"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

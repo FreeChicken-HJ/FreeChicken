@@ -179,6 +179,10 @@ MonoBehaviour:
     m_Key: FactoryScene3_ExitUI_Txt
     m_Metadata:
       m_Items: []
+  - m_Id: 400162414280704
+    m_Key: HouseScene2_ReadyGoCity_Txt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

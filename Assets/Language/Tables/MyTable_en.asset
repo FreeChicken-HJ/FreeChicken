@@ -195,6 +195,10 @@ MonoBehaviour:
     m_Localized: Get on the truck
     m_Metadata:
       m_Items: []
+  - m_Id: 400162414280704
+    m_Localized: Evolved!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

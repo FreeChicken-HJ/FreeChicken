@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MyTable_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 43439e9d3726bad4482dbe87d9b60d7f, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 6879290521237585920
+  m_TableData:
+  - m_Id: 408735858688
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 599937400832
+    m_Localized: Exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 693684289536
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 779315200000
+    m_Localized: Reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1382456115200
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2831332294656
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2938131857408
+    m_Localized: Interaction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3094914940928
+    m_Localized: Jump
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3158991323136
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3316160282624
+    m_Localized: Skip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3435442094080
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3619156803584
+    m_Localized: Ps. In the game, Exit and ReStart are the paths to hell!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4841817391104
+    m_Localized: 'All information will be deleted.
+
+      Are you sure you want to
+      delete all information?'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5211243298816
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5263886008320
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5750236528640
+    m_Localized: Are you sure you want to quit the game?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6079694913536
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128776658944
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9375117623296
+    m_Localized: Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9450199859200
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9700222320640
+    m_Localized: BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9750553968640
+    m_Localized: SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79090225659904
+    m_Localized: 'Ability to walk(SHIFT) + rotate the mouse!
+
+      Let''s use this
+      ability to escape from the house!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80904698347520
+    m_Localized: Get Memory!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 81697115619328
+    m_Localized: Push Bell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82039555375104
+    m_Localized: Saving location. . .
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6879290521237585920
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00400ec7cb1d0000

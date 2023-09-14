@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MyTable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: MyTable
+  m_TableCollectionNameGuidString: 43439e9d3726bad4482dbe87d9b60d7f
+  m_Entries:
+  - m_Id: 408735858688
+    m_Key: StartScene_Final_Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 599937400832
+    m_Key: StartScene_Final_Exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 693684289536
+    m_Key: StartScene_Final_Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 779315200000
+    m_Key: StartScene_Final_Reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1382456115200
+    m_Key: StartScene_Final_Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2831332294656
+    m_Key: StartScene_Final_wsad_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2938131857408
+    m_Key: StartScene_Final_E_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3094914940928
+    m_Key: StartScene_Final_Jump_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3158991323136
+    m_Key: StartScene_Final_Esc_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3316160282624
+    m_Key: StartScene_Final_MouseR_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3435442094080
+    m_Key: StartScene_Final_Controls_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3619156803584
+    m_Key: StartScene_Final_Ps_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4841817391104
+    m_Key: StartScene_Final_WaringUI_WarningTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5211243298816
+    m_Key: StartScene_Final_WaringUI_YesTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5263886008320
+    m_Key: StartScene_Final_WaringUI_NoTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5750236528640
+    m_Key: StartScene_Final_ExitUII_ExitTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6079694913536
+    m_Key: StartScene_Final_ExitUII_YesTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128776658944
+    m_Key: StartScene_Final_ExitUII_NoTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9375117623296
+    m_Key: StartScene_Final_Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9450199859200
+    m_Key: StartScene_Final_English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9700222320640
+    m_Key: StartScene_Final_BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9750553968640
+    m_Key: StartScene_Final_SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79090225659904
+    m_Key: HouseScene1_UpgradeTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80904698347520
+    m_Key: GetMemoryUI_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 81697115619328
+    m_Key: HouseScene1_PushBell_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82039555375104
+    m_Key: SavePoint_Txt
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6879290519033217049
+  references:
+    version: 2
+    RefIds:
+    - rid: 6879290519033217049
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1694610880428

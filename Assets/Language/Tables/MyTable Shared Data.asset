@@ -183,6 +183,50 @@ MonoBehaviour:
     m_Key: HouseScene2_ReadyGoCity_Txt
     m_Metadata:
       m_Items: []
+  - m_Id: 402431344001024
+    m_Key: CaveScene_donotDoorOpen_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 402808890081280
+    m_Key: CaveScene_nearItem_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 403700242595840
+    m_Key: CaveScene_OpenDoor_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 404129160511488
+    m_Key: CaveScene_PickupPotion_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 404525241221120
+    m_Key: CaveScene_Thx_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405629244948480
+    m_Key: CaveScene_PickUpItem_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405952462209024
+    m_Key: CaveScene_DaddyFinish_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 406401298874368
+    m_Key: CaveScene_UpgradeUI_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 407142650494976
+    m_Key: CaveScene_TimerDie_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 409696872579072
+    m_Key: CaveScene_DadDiex_Txt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410448135340032
+    m_Key: CaveScene_StopPlease_Txt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

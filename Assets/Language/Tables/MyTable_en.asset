@@ -199,6 +199,59 @@ MonoBehaviour:
     m_Localized: Evolved!
     m_Metadata:
       m_Items: []
+  - m_Id: 402431344001024
+    m_Localized: You need a key to open the door
+    m_Metadata:
+      m_Items: []
+  - m_Id: 402808890081280
+    m_Localized: The key to saving Dad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 403700242595840
+    m_Localized: Now I can open the door
+    m_Metadata:
+      m_Items: []
+  - m_Id: 404129160511488
+    m_Localized: The body moves in reverse. . .
+    m_Metadata:
+      m_Items: []
+  - m_Id: 404525241221120
+    m_Localized: Found Dad! Let's go behind Dad and spread out to find Mom!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405629244948480
+    m_Localized: 'I got the key
+
+      Let''s go rescue Dad'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405952462209024
+    m_Localized: "We safely escaped with Dad! \nLet's go find Mom!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 406401298874368
+    m_Localized: "Gain the dash ability! Press X to speed up! \nLet's use the ability
+      to escape the cave!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 407142650494976
+    m_Localized: "My son . . .With this slow pace, we won't make it out. . .! \nSquawk.
+      .!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 409696872579072
+    m_Localized: 'My son. . . leaving me behind. . .
+
+      Squack!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 410448135340032
+    m_Localized: 'Oh my goodness. . .
+
+      everyone''s been giving kisses to each
+      other. . Now stop and follow everyone!'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -46,7 +46,7 @@ public class TypingEffect : MonoBehaviour
             for (int i = 0; i <= dialogue.Length; ++i)
             {
                 text.text = dialogue.Substring(0, i);
-                yield return new WaitForSeconds(0.03f);
+                yield return new WaitForSeconds(0.04f);
             }
 
             waitForClick = true; 

@@ -313,22 +313,37 @@ public class GameManager : MonoBehaviour
     }
     public void StartScene2()
     {
-        string jsonData = File.ReadAllText("playerData.json");
-        PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
-      
-        if (loadedData.isStartEnd)
+        //ClickButtonAudio.Play();
+        Invoke("StartRealScene2", 0.35f);
+        
+    }
+    public void StartRealScene2()
+    {
+        if (File.Exists("PlayerData.json"))
         {
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
 
-            LoadSceneInfo.is2DEnterScene = true;
-            PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
-            LoadSceneInfo.LevelCnt = 2;
+            if (loadedData.isStartEnd)
+            {
 
-            SceneManager.LoadScene("LoadingScene");
+                LoadSceneInfo.is2DEnterScene = true;
+                PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
+                LoadSceneInfo.LevelCnt = 2;
+
+                SceneManager.LoadScene("LoadingScene");
+            }
+            else if (!loadedData.isStartEnd)
+            {
+                PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
+                LoadSceneInfo.LevelCnt = 1;
+                SceneManager.LoadScene("LoadingScene");
+            }
         }
         else
         {
 
-            LoadSceneInfo.isStartScene = true;
+
             PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
             LoadSceneInfo.LevelCnt = 1;
             SceneManager.LoadScene("LoadingScene");

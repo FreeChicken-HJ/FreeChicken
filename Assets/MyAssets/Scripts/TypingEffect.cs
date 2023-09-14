@@ -10,7 +10,8 @@ public class TypingEffect : MonoBehaviour
     public GameObject LoadingUI;
     public GameObject TalkCanvas;
     public CanvasGroup canvasGroup;
-    public List<string> dialogueList;
+    public List<string> dialogueList1;
+    public List<string> dialogueList2;
     private int currentDialogueIndex = 0;
 
     public float fadeDuration = 1.0f;
@@ -25,24 +26,36 @@ public class TypingEffect : MonoBehaviour
         Cursor.visible = true;
         BGM.Play();
         canvasGroup.alpha = 1f;
-        if (dialogueList.Count > 0)
+        if (dialogueList1.Count > 0 && !PlayerData.isEnglish)
         {
             text.text = "";
-            StartCoroutine(InitialDelayCoroutine());
+            StartCoroutine(InitialDelayCoroutine1());
+        }
+
+        if (dialogueList1.Count > 0 && PlayerData.isEnglish)
+        {
+            text.text = "";
+            StartCoroutine(InitialDelayCoroutine2());
         }
     }
 
-    private IEnumerator InitialDelayCoroutine()
+    private IEnumerator InitialDelayCoroutine1()
     {
         yield return new WaitForSeconds(initialDelay);
-        StartCoroutine(TypingCoroutine());
+        StartCoroutine(TypingCoroutine1());
     }
 
-    private IEnumerator TypingCoroutine()
+    private IEnumerator InitialDelayCoroutine2()
     {
-        while (currentDialogueIndex < dialogueList.Count)
+        yield return new WaitForSeconds(initialDelay);
+        StartCoroutine(TypingCoroutine2());
+    }
+
+    private IEnumerator TypingCoroutine1()
+    {
+        while (currentDialogueIndex < dialogueList1.Count)
         {
-            string dialogue = dialogueList[currentDialogueIndex];
+            string dialogue = dialogueList1[currentDialogueIndex];
             for (int i = 0; i <= dialogue.Length; ++i)
             {
                 text.text = dialogue.Substring(0, i);
@@ -64,7 +77,45 @@ public class TypingEffect : MonoBehaviour
 
             currentDialogueIndex++;
 
-            if (currentDialogueIndex >= dialogueList.Count)
+            if (currentDialogueIndex >= dialogueList1.Count)
+            {
+                StartCoroutine(FadeOutAndLoadScene());
+                yield break;
+            }
+
+            text.text = "";
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator TypingCoroutine2()
+    {
+        while (currentDialogueIndex < dialogueList2.Count)
+        {
+            string dialogue = dialogueList2[currentDialogueIndex];
+            for (int i = 0; i <= dialogue.Length; ++i)
+            {
+                text.text = dialogue.Substring(0, i);
+                yield return new WaitForSeconds(0.04f);
+            }
+
+            waitForClick = true;
+            while (waitForClick)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ButtonClickSound.Play();
+                    waitForClick = false;
+                    break;
+
+                }
+                yield return null;
+            }
+
+            currentDialogueIndex++;
+
+            if (currentDialogueIndex >= dialogueList2.Count)
             {
                 StartCoroutine(FadeOutAndLoadScene());
                 yield break;

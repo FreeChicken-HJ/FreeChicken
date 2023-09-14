@@ -46,7 +46,8 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject NextSceneImage;
 
     [Header("Dialogue")]
-    public GameObject startCanvas;
+    public GameObject startCanvas1;
+    public GameObject startCanvas2;
     public bool isTalk;
     public bool TalkEnd;
 
@@ -267,9 +268,17 @@ public class HouseScenePlayer : MonoBehaviour
             isfallingObstacle = true;
         }
 
-        if(other.CompareTag("Sense") && !isTalk && !TalkEnd)
+        if(other.CompareTag("Sense") && !isTalk && !TalkEnd && !PlayerData.isEnglish)
         {
-            startCanvas.SetActive(true);
+            startCanvas1.SetActive(true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Run", false);
+            TalkAudio.Play();
+        }
+
+        if (other.CompareTag("Sense") && !isTalk && !TalkEnd && PlayerData.isEnglish)
+        {
+            startCanvas2.SetActive(true);
             anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
             TalkAudio.Play();

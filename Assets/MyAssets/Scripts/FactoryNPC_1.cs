@@ -23,7 +23,8 @@ public class FactoryNPC_1 : MonoBehaviour
 
     public AudioSource BGM;
     public AudioSource Memory;
-    public GameObject TalkUI;
+    public GameObject TalkUI1;
+    public GameObject TalkUI2;
     public bool isFin;
     public GameObject Wall;
     public GameManager gameManager;
@@ -75,7 +76,7 @@ public class FactoryNPC_1 : MonoBehaviour
     }
     public void ReStart()
     {
-        if (isFin)
+        if (isFin && !PlayerData.isEnglish)
         {
             Video.SetActive(false);
             maincam.Priority = 2;
@@ -86,9 +87,25 @@ public class FactoryNPC_1 : MonoBehaviour
             gameManager.isLoading = false;
             Wall.SetActive(false);
             Memory.Stop();
-            TalkUI.SetActive(true);
+            TalkUI1.SetActive(true);
             isFin = false;
           
+        }
+
+        if (isFin && PlayerData.isEnglish)
+        {
+            Video.SetActive(false);
+            maincam.Priority = 2;
+            npccam.Priority = -5;
+
+            npc.SetActive(false);
+            BGM.Play();
+            gameManager.isLoading = false;
+            Wall.SetActive(false);
+            Memory.Stop();
+            TalkUI2.SetActive(true);
+            isFin = false;
+
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -111,5 +128,4 @@ public class FactoryNPC_1 : MonoBehaviour
             isEbutton = false;
         }
     }
-
 }

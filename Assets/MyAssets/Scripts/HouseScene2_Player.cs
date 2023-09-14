@@ -14,7 +14,6 @@ public class HouseScene2_Player : MonoBehaviour
     public GameObject player;
     public bool isfallingObstacle;
 
-
     public GameObject DieCanvas;
 
     Vector3 moveVec;
@@ -51,9 +50,11 @@ public class HouseScene2_Player : MonoBehaviour
     public AudioSource trumpetAudio;
 
     [Header("Dialogue")]
-    public GameObject NPCDialogue;
+    public GameObject NPCDialogue1;
+    public GameObject NPCDialogue2;
     public GameObject NPC;
-    public GameObject UnicycleDialogue;
+    public GameObject UnicycleDialogue1;
+    public GameObject UnicycleDialogue2;
     public bool isTalk1;
     public bool TalkEnd1;
     public bool isTalk2;
@@ -187,10 +188,10 @@ public class HouseScene2_Player : MonoBehaviour
             isfallingObstacle = true;
         }
 
-        if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1)
+        if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1 && !PlayerData.isEnglish)
         {
             isTalk1 = true;
-            NPCDialogue.SetActive(true);
+            NPCDialogue1.SetActive(true);
             anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
 
@@ -198,10 +199,32 @@ public class HouseScene2_Player : MonoBehaviour
             mainCam.Priority = 1;
         }
 
-        if (other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2)
+        if (other.gameObject.CompareTag("NPC") && !isTalk1 && !TalkEnd1 && PlayerData.isEnglish)
+        {
+            isTalk1 = true;
+            NPCDialogue2.SetActive(true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Run", false);
+
+            npc_cam.Priority = 10;
+            mainCam.Priority = 1;
+        }
+
+        if (other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2 && !PlayerData.isEnglish)
         {
             isTalk2 = true;
-            UnicycleDialogue.SetActive(true);
+            UnicycleDialogue1.SetActive(true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Run", false);
+            unicycleCam.Priority = 10;
+
+            mainCam.Priority = 1;
+        }
+
+        if (other.gameObject.name == "Unicycle_Sense" && !isTalk2 && !TalkEnd2 && PlayerData.isEnglish)
+        {
+            isTalk2 = true;
+            UnicycleDialogue2.SetActive(true);
             anim.SetBool("Walk", false);
             anim.SetBool("Run", false);
             unicycleCam.Priority = 10;

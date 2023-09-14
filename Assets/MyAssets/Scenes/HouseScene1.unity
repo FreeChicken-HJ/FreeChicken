@@ -8650,6 +8650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuSet: {fileID: 5747714941189012388}
   ClickButtonAudio: {fileID: 867951560}
+  isStartScene: 0
   isFactory_1: 0
   isFactory_2: 0
   isFactory_3: 0
@@ -8663,11 +8664,11 @@ MonoBehaviour:
   MainBGM: {fileID: 0}
   SFX: {fileID: 0}
   mainUI: {fileID: 0}
-  LoadingUI: {fileID: 2109328041}
   AudioSettingUI: {fileID: 0}
   Control_UI: {fileID: 0}
   WarnningUI: {fileID: 0}
   ExitUI: {fileID: 0}
+  LoadingUI: {fileID: 2109328041}
 --- !u!4 &493361789
 Transform:
   m_ObjectHideFlags: 0
@@ -9079,6 +9080,7 @@ GameObject:
   - component: {fileID: 551839792}
   - component: {fileID: 551839791}
   - component: {fileID: 551839790}
+  - component: {fileID: 551839795}
   m_Layer: 0
   m_Name: HouseCharacter
   m_TagString: Player
@@ -9117,8 +9119,8 @@ MonoBehaviour:
   startDoor: {fileID: 803540913}
   DieCanvas: {fileID: 1793193930}
   NextSceneImage: {fileID: 2109328041}
-  startCanvas1: {fileID: 491378927}
-  startCanvas2: {fileID: 1032169198}
+  startCanvas1: {fileID: 0}
+  startCanvas2: {fileID: 0}
   isTalk: 0
   TalkEnd: 0
   SavePointImage: {fileID: 7042178874092922086}
@@ -9144,7 +9146,6 @@ MonoBehaviour:
   OpenDoor_text: {fileID: 1857480336}
   PushBell_text: {fileID: 2000758094}
   GetUpgradeBox_text: {fileID: 1680492802}
-  LoadingUI: {fileID: 2109328041}
   GetUpgradePs: {fileID: 1102993462}
 --- !u!136 &551839791
 CapsuleCollider:
@@ -9237,6 +9238,61 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &551839795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551839789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 6879290542245281837
+  references:
+    version: 2
+    RefIds:
+    - rid: 6879290542245281837
+      type: {class: TrackedMonoBehaviourObject, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 551839790}
+        m_TrackedProperties:
+          items:
+          - rid: 6879290542245281838
+          - rid: 6879290542245281839
+        m_UpdateType: 0
+        m_Changed:
+          m_PersistentCalls:
+            m_Calls: []
+    - rid: 6879290542245281838
+      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: startCanvas1
+        m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: ko
+          value: {fileID: 0}
+        - localeIdentifier:
+            m_Code: en
+          value: {fileID: 0}
+    - rid: 6879290542245281839
+      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: startCanvas2
+        m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: ko
+          value: {fileID: 0}
+        - localeIdentifier:
+            m_Code: en
+          value: {fileID: 0}
 --- !u!4 &562917378 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5150418573016795124, guid: fe09b7e50ce887d46a0f0a576e545599, type: 3}
@@ -19272,7 +19328,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669487602}
-  m_LocalRotation: {x: 0.1891075, y: -0.000000008447959, z: 0.000000001626928, w: 0.9819564}
+  m_LocalRotation: {x: 0.1891075, y: 0.000000008447957, z: -0.0000000016269277, w: 0.9819564}
   m_LocalPosition: {x: 0, y: -0.9, z: 2.2000008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

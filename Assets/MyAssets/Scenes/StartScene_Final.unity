@@ -11479,8 +11479,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Korean
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e2774acbf1a98bb40a6583231445e208, type: 2}
+  m_sharedMaterial: {fileID: -5672783498229041432, guid: e2774acbf1a98bb40a6583231445e208, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13601,7 +13601,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &5098527391104300931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13718,7 +13718,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3428550432824351908}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
   m_Name: 
@@ -13745,7 +13745,7 @@ MonoBehaviour:
           value: 1
         - localeIdentifier:
             m_Code: en
-          value: 0
+          value: 1
 --- !u!222 &5818965262640659792
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14473,7 +14473,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754060817513303749}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
   m_Name: 
@@ -14500,7 +14500,7 @@ MonoBehaviour:
           value: 1
         - localeIdentifier:
             m_Code: en
-          value: 0
+          value: 1
 --- !u!224 &6750019962751410187
 RectTransform:
   m_ObjectHideFlags: 0

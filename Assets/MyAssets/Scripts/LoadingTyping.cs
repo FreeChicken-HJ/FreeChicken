@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LoadingTyping : MonoBehaviour
 {
@@ -12,10 +13,16 @@ public class LoadingTyping : MonoBehaviour
     private string currentText;
     private int index;
 
+   
+
     private void Start()
     {
-        fullText = textUI.text;
-        StartCoroutine(TypeText());
+        if (textUI != null)
+        {
+            fullText = textUI.text;
+
+            StartCoroutine(TypeText());
+        }
     }
 
     private IEnumerator TypeText()

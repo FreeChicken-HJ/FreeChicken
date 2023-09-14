@@ -5,26 +5,55 @@ using TMPro;
 public class CityMap_CountDown : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public bool isCity;
+    public int CountValue;
+    public bool isFin;
+    public bool isStart;
+    public bool isStop;
+    public AudioSource countDownSound;
     
-    // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        StartCoroutine(CountDown());
+        if (isStart)
+        {
+            isStart = false;
+            isStop = false;
+            text.gameObject.SetActive(true);
+            StartCoroutine(CountDown());
+        }   
+        
     }
     IEnumerator CountDown()
     {
-        int countdownValue = 3;
-
-        while (countdownValue > 0)
+        if (!isCity)
         {
-            text.text = countdownValue.ToString();
-            yield return new WaitForSeconds(.9f);
-            countdownValue--;
+            if (countDownSound != null)
+            {
+                countDownSound.Play();
+            }
         }
-
-        text.text = "GO!";
+        while (CountValue > 0 && !isStop)
+        {
+           
+            text.text = CountValue.ToString();
+            yield return new WaitForSeconds(1f);
+            CountValue--;
+        }
+        if (isCity)
+        {
+            text.text = "GO!";
+        }
         yield return new WaitForSeconds(.2f);
-
+        if (!isCity)
+        {
+            if (countDownSound != null)
+            {
+                countDownSound.Stop();
+            }
+        }
+        
+        if(!isStop && !isCity) isFin = true;
         text.gameObject.SetActive(false);
+       
     }
 }

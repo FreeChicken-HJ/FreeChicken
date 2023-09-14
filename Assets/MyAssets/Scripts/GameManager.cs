@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject menuSet;
     public AudioSource ClickButtonAudio;
+   
+    
+    public bool isStartScene;
     public bool isFactory_1;
     public bool isFactory_2;
     public bool isFactory_3;
@@ -33,11 +36,12 @@ public class GameManager : MonoBehaviour
     public AudioSource MainBGM;
     public AudioSource SFX;
     public GameObject mainUI;
-    public GameObject LoadingUI;
+   
     public GameObject AudioSettingUI;
     public GameObject Control_UI;
     public GameObject WarnningUI;
     public GameObject ExitUI;
+    public GameObject LoadingUI;
    
     void Start()
     {
@@ -52,8 +56,26 @@ public class GameManager : MonoBehaviour
             cityPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CityScenePlayer>();
             cavePlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         }
+       
     }
+    public void SetKorean()
+    {
+        PlayerData.isEnglish = false;
+        PlayerData playerData = new PlayerData();
+       
+        playerData.isEng = false;
+        string json = JsonUtility.ToJson(playerData);
+        File.WriteAllText("playerData.json", json);
+    }
+    public void SetEnglish()
+    {
+        PlayerData.isEnglish = true;
+        PlayerData playerData = new PlayerData();
 
+        playerData.isEng = true;
+        string json = JsonUtility.ToJson(playerData);
+        File.WriteAllText("playerData.json", json);
+    }
     void Update()
     {
         if (Input.GetButtonDown("Cancel") && !isLoading && !isStart)
@@ -143,8 +165,8 @@ public class GameManager : MonoBehaviour
                 
             }
         }
-        
        
+
     }
    
    
@@ -228,7 +250,8 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    
+  
     public void GameExit()
     {
         Application.Quit();
@@ -267,16 +290,14 @@ public class GameManager : MonoBehaviour
     }
     public void Enter2dScene()
     {
-        Time.timeScale = 1f;
-        LoadingUI.SetActive(true);
-        if(factoryPlayer1!=null) factoryPlayer1.isTalk = true;
-        else if(factoryPlayer2!=null) factoryPlayer2.isTalk = true;
-        else if(factoryPlayer3!=null) factoryPlayer3.isTalk = true;
-        else if(cityPlayer!=null) cityPlayer.isAllStop = true;
 
+        Time.timeScale = 1f;
         MemoryCount.memCount = 0;
+        LoadSceneInfo.is2DEnterScene = true;
+        PlayerPrefs.SetInt("Scene2DEnter", LoadSceneInfo.is2DEnterScene ? 1 : 0);
+        LoadSceneInfo.LevelCnt = 2;
+        SceneManager.LoadScene("LoadingScene");
         
-        Invoke("Enter", 5f);
        
     }
    
@@ -290,41 +311,51 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("StartScene_Final");
     }
-
     public void StartScene2()
     {
-        LoadingUI.SetActive(true);
-        MainBGM.Stop();
-        SFX.Stop();
-        Cursor.visible = false;
-        Invoke("DelayStartScene2", 3f);
+        string jsonData = File.ReadAllText("playerData.json");
+        PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+      
+        if (loadedData.isStartEnd)
+        {
+
+            LoadSceneInfo.is2DEnterScene = true;
+            PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
+            LoadSceneInfo.LevelCnt = 2;
+
+            SceneManager.LoadScene("LoadingScene");
+        }
+        else
+        {
+
+            LoadSceneInfo.isStartScene = true;
+            PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
+            LoadSceneInfo.LevelCnt = 1;
+            SceneManager.LoadScene("LoadingScene");
+        }
     }
     public void Enter2DExit()
     {
         PlayerData playerData = new PlayerData();
         playerData.LevelChk = GameSave.Level;
+        playerData.isStartEnd = true;
+        if (PlayerData.isEnglish)
+        {
+            playerData.isEng = true;
+        }
         string json = JsonUtility.ToJson(playerData);
 
         File.WriteAllText("playerData.json", json);
-        Debug.Log(GameSave.Level + "플레이어데이터의 레벨");
+
+
+        
     }
     public void ReSetEveryThing()
     {
         File.Delete("playerData.json");
 
     }
-    public void DelayStartScene2()
-    {
-        if (File.Exists("playerData.json"))
-        {
-            SceneManager.LoadScene("Enter2DScene");
-        }
-        else
-        {
-            SceneManager.LoadScene("Start");
-        }
-    }
-
+   
     public void Controls()
     {
         Control_UI.SetActive(true);
@@ -345,6 +376,7 @@ public class GameManager : MonoBehaviour
     public void ExitShow()
     {
         if (ExitUI != null) ExitUI.SetActive(true);
+       
     }
     public void ExitEnd()
     {

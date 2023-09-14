@@ -30,6 +30,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     public GameObject NPC;
 
     public GameObject StartParticle;
+    public LoadingTyping Loading;
     //public GameState gameState;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
@@ -68,7 +69,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     float t;
 
     public GameObject UpstairUI;
-    public GameObject LoadingUI;
+    
     public GameObject LastUI;
     public GameObject truckPos;
     public GameObject Truck;
@@ -107,7 +108,7 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void Start()
     {
-        
+        Loading = GetComponent<LoadingTyping>();
         BGM.Play();
         isTalk = true;
         StartSound.Play();
@@ -144,14 +145,8 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void Finish()
     {
-        gameManager.isLoading = true;
-        LoadingUI.SetActive(true);
-        BGM.Stop();
-        Invoke("Last", 3f);
-    }
-    void Last()
-    {
         GameSave.isHouse = true;
+       
         PlayerPrefs.SetInt("GoHouse", GameSave.isHouse ? 1 : 0);
 
         GameSave.Level = 2;
@@ -160,9 +155,16 @@ public class FactoryPlayer_3 : MonoBehaviour
         string json = JsonUtility.ToJson(playerData);
 
         File.WriteAllText("playerData.json", json);
-       
-        SceneManager.LoadScene("Enter2DScene");
+
+       //playerData.isEnglish = true;
+
+        LoadSceneInfo.is2DEnterScene = true;
+        PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
+        LoadSceneInfo.LevelCnt = 2;
+        SceneManager.LoadScene("LoadingScene");
     }
+
+   
     private void FixedUpdate()
     {
         if (isEbutton)

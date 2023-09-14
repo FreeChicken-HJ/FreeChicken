@@ -31,7 +31,7 @@ public class GameSave : MonoBehaviour
             PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
             
             Level  = loadedData.LevelChk;
-            Debug.Log(Level + "·¹º§");
+           
         }
 
        

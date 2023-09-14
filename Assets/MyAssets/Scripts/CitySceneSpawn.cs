@@ -10,13 +10,11 @@ public class CitySceneSpawn : MonoBehaviour
     int areaIndex = 0;
     int spawnAreaCntStart = 2;
     public CityScenePlayer currentPlayer;
-    //public CityScenePlayer lastPlayer;
-
-    //public int cityCnt;
+  
 
     public bool isStop;
     public bool isFinish;
-    // Start is called before the first frame update
+  
     public Material[] newSkyBox;
     void Awake()
     {
@@ -68,7 +66,7 @@ public class CitySceneSpawn : MonoBehaviour
         clone.GetComponent<CityArea>().Setup(this,currentPlayer);
         
         areaIndex++;
-        Debug.Log(areaIndex);
+        
 
     }
     void SpawnLastMap()

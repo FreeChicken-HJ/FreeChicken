@@ -42,6 +42,7 @@ public class CityScenePlayer : MonoBehaviour
     public AudioSource JumpAudio;
     public AudioSource ChangeAudio;
     public AudioSource RingAudio;
+    public GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +52,8 @@ public class CityScenePlayer : MonoBehaviour
         particleAttack = false;
         isAllStop = true;
         
+       
+        gameManager.isLoading = true;
         Invoke("NewStart", 2.9f);
     }
     void NewStart()
@@ -58,6 +61,7 @@ public class CityScenePlayer : MonoBehaviour
        
         startAudio.Stop();
         BGM.Play();
+        gameManager.isLoading = false;
         isAllStop = false;
         isStart = true;
         startCam.Priority = -1;
@@ -238,7 +242,7 @@ public class CityScenePlayer : MonoBehaviour
             anim_1.SetTrigger("doDie");
             anim_1.SetBool("isRun", false);
             rigid.isKinematic = true;
-            Invoke("ReLoadScene", 1f);
+            if(!isAllStop) Invoke("ReLoadScene", 1f);
         }
     }
     void ReLoadScene()

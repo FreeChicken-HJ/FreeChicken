@@ -6,7 +6,8 @@ using System.IO;
 public class PlayerData
 {
     public int LevelChk;
-    //public GameSave save;
-    
-  
+    public static bool isEnglish;
+    public bool isEng;
+    public bool isStartEnd;
+   
 }

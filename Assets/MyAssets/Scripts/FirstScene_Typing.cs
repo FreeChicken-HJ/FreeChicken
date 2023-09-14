@@ -74,14 +74,14 @@ public class FirstScene_Typing : MonoBehaviour
         endTime = startTime + textFadeDuration;
         
 
-        for (int i = 0; i < targetText.Length; i++)
+       /* for (int i = 0; i < targetText.Length; i++)
         {
             
 
             targetText[i].gameObject.SetActive(false);
            
 
-        }
+        }*/
            
         yield return new WaitForSeconds(waitBeforeLoad);
         Cursor.visible = true;

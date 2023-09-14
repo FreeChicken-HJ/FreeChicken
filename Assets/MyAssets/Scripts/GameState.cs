@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 public class GameState : MonoBehaviour
 {
     
-    
-   
     public bool isF;
     public bool isH;
     public bool isCi;
@@ -60,21 +58,20 @@ public class GameState : MonoBehaviour
     }
     public void FactoryScenePlay()
     {
-        //DontDestroyOnLoad(gameObject);
+        
         SceneManager.LoadScene("FactoryScene_1");
        
-        Debug.Log("«√∑π¿Ã");
-        //House.SetActive(true);
+       
     }
     public void HouseScenePlay()
     {
-        //DontDestroyOnLoad(gameObject);
+       
         SceneManager.LoadScene("HouseScene1");
 
     }
     public void CityScenePlay()
     {
-        //DontDestroyOnLoad(gameObject);
+       
         SceneManager.LoadScene("CityScene");
 
     }

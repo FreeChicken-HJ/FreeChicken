@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-
+using System.IO;
 public class TypingEffect : MonoBehaviour
 {
     public TextMeshProUGUI text;
@@ -46,7 +46,7 @@ public class TypingEffect : MonoBehaviour
             for (int i = 0; i <= dialogue.Length; ++i)
             {
                 text.text = dialogue.Substring(0, i);
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.03f);
             }
 
             waitForClick = true; 
@@ -89,6 +89,11 @@ public class TypingEffect : MonoBehaviour
         Cursor.visible = false;
         BGM.Stop();
         LoadingUI.SetActive(true);
+        PlayerData playerData = new PlayerData();
+        playerData.isStartEnd = true;
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText("playerData.json", json);
         Invoke("StartScene", 2f);
     }
     void StartScene()

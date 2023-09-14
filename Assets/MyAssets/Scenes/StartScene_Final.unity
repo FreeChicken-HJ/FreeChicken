@@ -1489,18 +1489,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &209108824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4334,11 +4322,11 @@ MonoBehaviour:
   MainBGM: {fileID: 1664922180}
   SFX: {fileID: 1283020410}
   mainUI: {fileID: 9091388056178706698}
-  LoadingUI: {fileID: 1724747158}
   AudioSettingUI: {fileID: 5098527391104300930}
   Control_UI: {fileID: 9091388056178706698}
   WarnningUI: {fileID: 2086273982}
   ExitUI: {fileID: 611307409}
+  Loading: {fileID: 0}
 --- !u!4 &883820460
 Transform:
   m_ObjectHideFlags: 0
@@ -8346,12 +8334,6 @@ Transform:
   m_Father: {fileID: 987258763}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -0.067, y: -213.203, z: -0.231}
---- !u!1 &1724747158 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4406740238230005024, guid: d9e225ef610cba347b37e86dc442f13c,
-    type: 3}
-  m_PrefabInstance: {fileID: 640504596}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1724747163 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6161787849786332833, guid: d9e225ef610cba347b37e86dc442f13c,

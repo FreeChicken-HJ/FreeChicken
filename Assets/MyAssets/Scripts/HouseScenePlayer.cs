@@ -81,7 +81,7 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject PushBell_text;
     public GameObject GetUpgradeBox_text;
 
-    public GameObject LoadingUI;
+  
 
     private bool isRotating = false;
     private Quaternion originalCameraRotation;
@@ -226,10 +226,7 @@ public class HouseScenePlayer : MonoBehaviour
         }
     }
 
-    void NextScene()
-    {
-        SceneManager.LoadScene("HouseScene2");
-    }
+
 
     private void HandleCameraRotation()
     {
@@ -336,10 +333,8 @@ public class HouseScenePlayer : MonoBehaviour
 
         if (other.gameObject.name == "NextScenePoint")
         {
-            gameManager.isLoading = true;
-            LoadingUI.SetActive(true);
-            mainAudio.Stop();
-            Invoke("NextScene", 3f);
+            Invoke("NextScene", 1.5f);
+            
         }
 
         if (other.gameObject.CompareTag("Obstacle") && !Dead)
@@ -365,7 +360,13 @@ public class HouseScenePlayer : MonoBehaviour
             }
         }
     }
-    
+    void NextScene()
+    {
+        LoadSceneInfo.isHouse_2 = true;
+        PlayerPrefs.SetInt("SceneHouse_2", LoadSceneInfo.isHouse_2 ? 1 : 0);
+        LoadSceneInfo.LevelCnt = 7;
+        SceneManager.LoadScene("LoadingScene");
+    }
     void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("Sense"))

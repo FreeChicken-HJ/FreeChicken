@@ -18,6 +18,8 @@ public class FactoryNPC : MonoBehaviour
     public GameObject Ebutton;
     public TextMeshProUGUI E;
 
+    public GameObject EnglishUI;
+    public GameObject KoreanUI;
    
     public bool isNear;
     public static bool isFinish;
@@ -113,6 +115,14 @@ public class FactoryNPC : MonoBehaviour
         if (factoryUI != null)
         {
             factoryUI.gameObject.SetActive(true);
+            if (PlayerData.isEnglish )
+            {
+                EnglishUI.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                KoreanUI.SetActive(true);
+            }
         }
         else if(factoryUI == null)
         {

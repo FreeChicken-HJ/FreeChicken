@@ -46,6 +46,8 @@ public class FactoryPlayer : MonoBehaviour
 
     public bool isWallChagneColor;
     public bool isClick;
+
+    public bool isEnglish;
     
     [Header("UI")]
     public GameObject turnEggCanvas;
@@ -59,8 +61,8 @@ public class FactoryPlayer : MonoBehaviour
     public GameObject scene2LastUI;
    
     public GameObject SavePointTxt;
-    public GameObject LoadingUI;
-
+    public GameObject loadingUI;
+    
     [Header("Stats")]
     public GameObject eggBoxSpawnTriggerBox;
     public GameObject eggBox;
@@ -87,6 +89,7 @@ public class FactoryPlayer : MonoBehaviour
 
     public GameObject BlockWall;
     public GameManager gameManager;
+    public LoadingTyping Loading;
     [Header("Camera")]
     public CinemachineVirtualCamera mainCam;
     public CinemachineVirtualCamera stopConCam;
@@ -114,6 +117,7 @@ public class FactoryPlayer : MonoBehaviour
         isTalk = false;
         Cursor.visible = false;
         MemoryCount.memCount = 0;
+       
     }
    
     void Update()
@@ -263,11 +267,10 @@ public class FactoryPlayer : MonoBehaviour
        
         if(collision.gameObject.CompareTag("Floor"))
         {
-            if (!LoadingUI.activeSelf)
-            {
+            
                 UpstairCanvas.SetActive(true);
                 Invoke("UpstairExit", 2f);
-            }
+            
         }
         if (collision.gameObject.CompareTag("ObstacleZone1") || collision.gameObject.CompareTag("Obstacle"))
         {
@@ -286,7 +289,7 @@ public class FactoryPlayer : MonoBehaviour
                 
                 if (isSetEggFinish)
                 {
-                    Invoke("Scene2Road", 2f);
+                    Invoke("ReLoadScene_2", 2f);
                 }
                 else
                 {
@@ -297,10 +300,7 @@ public class FactoryPlayer : MonoBehaviour
         }
         
     }
-    void Scene2Road()
-    {
-        SceneManager.LoadScene("FactoryScene_2");
-    }
+
     void UpstairExit()
     {
         UpstairCanvas.SetActive(false);
@@ -409,23 +409,21 @@ public class FactoryPlayer : MonoBehaviour
             SavePointTxt.SetActive(true);
             UpstairCanvas.SetActive(false);
             Invoke("ReLoadScene_2", 1f);
+            
         }
     }
     
     void ReLoadScene_2()
 
     {
-        gameManager.isLoading = true;
-        LoadingUI.SetActive(true);
-        mainAudio.Stop();
-
-        Invoke("Scene_2Load", 3f);
+       
+        LoadSceneInfo.isFactory_2 = true;
+        PlayerPrefs.SetInt("SceneFactory_2", LoadSceneInfo.isFactory_2 ? 1 : 0);
+        LoadSceneInfo.LevelCnt = 4;
+        SceneManager.LoadScene("LoadingScene");
        
     }
-    void Scene_2Load()
-    {
-        SceneManager.LoadScene("FactoryScene_2");
-    }
+  
     void DestroySavePointTxt()
     {
         SavePointTxt.SetActive(false);

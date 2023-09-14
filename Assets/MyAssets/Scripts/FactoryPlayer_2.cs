@@ -41,7 +41,7 @@ public class FactoryPlayer_2 : MonoBehaviour
     public GameObject SpawnPos;
     [Header("UI")]
     public GameObject scene2LastUI;
-    public GameObject LoadingUI;
+    
     public GameManager gameManager;
     public GameObject MemCountUI;
 
@@ -221,19 +221,14 @@ public class FactoryPlayer_2 : MonoBehaviour
     }
     void RoadScene()
     {
-      
-        LoadingUI.SetActive(true);
-        gameManager.isLoading = true;
-        BGM.Stop();
-        Invoke("FinalSceneLoad", 3f);
+        LoadSceneInfo.isFactory_3 = true;
+        PlayerPrefs.SetInt("SceneFactory_3", LoadSceneInfo.isFactory_3 ? 1 : 0);
+        LoadSceneInfo.LevelCnt = 5;
+        SceneManager.LoadScene("LoadingScene");
         
        
     }
-    void FinalSceneLoad()
-    {
-        
-        SceneManager.LoadScene("FactoryScene_3");
-    }
+   
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Slide"))

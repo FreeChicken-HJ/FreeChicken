@@ -52,7 +52,7 @@ public class EvloutionPlayer : MonoBehaviour
     public bool isTalk2;
     public bool TalkEnd2;
 
-    public GameObject LoadingUI;
+    
 
     // 진화효과
     private bool isRotating = false;
@@ -155,31 +155,12 @@ public class EvloutionPlayer : MonoBehaviour
 
     void NextCityScene()
     {
-        //Cursor.visible = true;
-        mainAudio.Stop();
-        LoadingUI.SetActive(true);
-       
-        Invoke("Last", 2f);
-    }
-    void Last()
-    {
-        GameSave.Level = 3;
-        GameSave.isCity = true;
-        PlayerData playerData = new PlayerData();
-        playerData.LevelChk = GameSave.Level;
-        string json = JsonUtility.ToJson(playerData);
-
-        File.WriteAllText("playerData.json", json);
         
-        PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
-        SceneManager.LoadScene("Enter2DScene");
     }
+  
     void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.name == "EvolutionSense2")
-        //{
-        //    ReadygoCity.SetActive(true);
-        //}
+      
 
         if (other.CompareTag("evolu")) 
         {
@@ -190,8 +171,22 @@ public class EvloutionPlayer : MonoBehaviour
         if (other.gameObject.name == "GoCitySense")
         {
             isTalk2 = true;
-            LoadingUI.SetActive(true);
-            Invoke("NextCityScene", 3f);
+            GameSave.Level = 3;
+            GameSave.isCity = true;
+            PlayerData playerData = new PlayerData();
+            playerData.LevelChk = GameSave.Level;
+            string json = JsonUtility.ToJson(playerData);
+
+            File.WriteAllText("playerData.json", json);
+
+            PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
+
+
+
+            LoadSceneInfo.is2DEnterScene = true;
+            PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
+            LoadSceneInfo.LevelCnt = 2;
+            SceneManager.LoadScene("LoadingScene");
         }
     }
 

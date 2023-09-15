@@ -38,11 +38,7 @@ public class TypingEffect : MonoBehaviour
             StartCoroutine(InitialDelayCoroutine2());
         }
         
-        PlayerData playerData = new PlayerData();
-        playerData.isStartEnd = true;
-        string json = JsonUtility.ToJson(playerData);
-
-        File.WriteAllText("playerData.json", json);
+       
     }
 
     private IEnumerator InitialDelayCoroutine1()
@@ -151,6 +147,14 @@ public class TypingEffect : MonoBehaviour
     }
     void StartScene()
     {
+        /*if (!File.Exists("PlayerData.json"))
+        {
+            PlayerData playerData = new PlayerData();
+            playerData.isStartEnd = true;
+            string json = JsonUtility.ToJson(playerData);
+
+            File.WriteAllText("playerData.json", json);
+        }*/
         SceneManager.LoadScene(nextSceneName);
     }
 }

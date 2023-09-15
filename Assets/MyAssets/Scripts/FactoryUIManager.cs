@@ -25,6 +25,8 @@ public class FactoryUIManager : MonoBehaviour
 
     public AudioSource TalkSound;
     public AudioSource ButtonClickSound;
+    public GameObject Korean;
+    public GameObject English;
     private void Awake()
     {
         instance = this;
@@ -37,6 +39,14 @@ public class FactoryUIManager : MonoBehaviour
         isTalkEnd = false;
         Cursor.visible = true;
         player.isTalk = true;
+        if (PlayerData.isEnglish)
+        {
+            English.SetActive(true);
+        }
+        else if (!PlayerData.isEnglish)
+        {
+            Korean.SetActive(true);
+        }
         
     }
    

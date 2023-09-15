@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using System.IO;
 public class FactoryPlayer : MonoBehaviour
 {
     [Header("Setting")]
@@ -109,6 +110,8 @@ public class FactoryPlayer : MonoBehaviour
     public AudioSource secoundmainAudio; 
     public AudioSource heartBeatAudio;
     public AudioSource fixAudio;
+    public bool isEng;
+    public bool isKorean;
     void Awake()
     {
         mainAudio.Play();
@@ -117,9 +120,11 @@ public class FactoryPlayer : MonoBehaviour
         isTalk = false;
         Cursor.visible = false;
         MemoryCount.memCount = 0;
+
        
     }
-   
+
+
     void Update()
     {
         

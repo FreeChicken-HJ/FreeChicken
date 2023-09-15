@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
-
+using System.IO;
 public class LocaleManager : MonoBehaviour
 {
     public bool isChanging;
-
+   
     public void ChangeLocale(int index)
     {
         if (isChanging)

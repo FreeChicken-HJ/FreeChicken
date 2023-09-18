@@ -425,11 +425,19 @@ public class GameManager : MonoBehaviour
             LocaleManager.ChangeLocale(0);
             PlayerData.isEnglish = true;
         }
+        GameSave.Level = 0;
 
+        if (File.Exists("playerData.json"))
+        {
 
-       
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            loadedData.LevelChk = 0;
+
+        }
         File.Delete("playerData.json");
-
+        
         Debug.Log(isEnglish);
         Debug.Log("PlayerData" + PlayerData.isEnglish);
     }

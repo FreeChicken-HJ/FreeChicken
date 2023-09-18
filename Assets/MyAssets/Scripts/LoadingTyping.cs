@@ -17,6 +17,7 @@ public class LoadingTyping : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
         if (textUI != null)
         {
             fullText = textUI.text;

@@ -28,6 +28,12 @@ public class FirstScene_Typing : MonoBehaviour
     void Start()
     {
         Cursor.visible = false;
+        if (LocaleManager != null)
+        {
+            PlayerData.isEnglish = true;
+            
+            LocaleManager.ChangeLocale(0);
+        }
         if (File.Exists("playerData.json"))
         {
             

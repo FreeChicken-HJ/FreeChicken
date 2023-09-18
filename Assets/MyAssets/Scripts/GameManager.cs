@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
             cityPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CityScenePlayer>();
             cavePlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         }
-
+        
         if (File.Exists("playerData.json"))
         {
 

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using Cinemachine;
+using System.IO;
 public class HouseScenePlayer : MonoBehaviour
 {
     [Header("Setting")]
@@ -44,6 +45,7 @@ public class HouseScenePlayer : MonoBehaviour
     public GameObject startDoor;
     public GameObject DieCanvas;
     public GameObject NextSceneImage;
+    public bool isEnglish;
 
     [Header("Dialogue")]
     public GameObject startCanvas1;
@@ -96,6 +98,15 @@ public class HouseScenePlayer : MonoBehaviour
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         isJump = false;
+        if (File.Exists("playerData.json"))
+        {
+            
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            isEnglish = loadedData.isEng;
+
+        }
     }
 
     void Start()

@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public bool isLoading;
     public bool isStart;
+    public bool isEnglish;
 
     public bool is2D;
 
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     public GameObject ExitUI;
     public GameObject LoadingUI;
    
+    public LocaleManager LocaleManager;
     void Start()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null)
@@ -58,7 +60,34 @@ public class GameManager : MonoBehaviour
             cityPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CityScenePlayer>();
             cavePlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<CaveScenePlayer>();
         }
-       
+
+        if (File.Exists("playerData.json"))
+        {
+
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            isEnglish = loadedData.isEng;
+            Debug.Log(isEnglish);
+        }
+        if (isEnglish)
+        {
+            if (LocaleManager != null)
+            {
+                PlayerData.isEnglish = true;
+                LocaleManager = GetComponent<LocaleManager>();
+                LocaleManager.ChangeLocale(0);
+            }
+        }
+        else if (!isEnglish)
+        {
+            if (LocaleManager != null)
+            {
+                PlayerData.isEnglish = false;
+                LocaleManager = GetComponent<LocaleManager>();
+                LocaleManager.ChangeLocale(1);
+            }
+        }
     }
    
     void Update()
@@ -157,14 +186,9 @@ public class GameManager : MonoBehaviour
     public void SetKorean()
     {
 
-        //PlayerData playerData = new PlayerData();
+       
         PlayerData.isEnglish = false;
-       /* playerData.isEng = false;
-
-
-        string json = JsonUtility.ToJson(playerData);
-        File.WriteAllText("playerData.json", json);
-*/
+       
     }
     public void SetEnglish()
     {
@@ -257,6 +281,7 @@ public class GameManager : MonoBehaviour
   
     public void GameExit()
     {
+
         Application.Quit();
     }
     public void Enter()
@@ -316,7 +341,7 @@ public class GameManager : MonoBehaviour
     }
     public void StartScene2()
     {
-        //ClickButtonAudio.Play();
+        
         Invoke("StartRealScene2", 0.35f);
         
     }
@@ -324,30 +349,46 @@ public class GameManager : MonoBehaviour
     {
         if (File.Exists("PlayerData.json"))
         {
-            string jsonData = File.ReadAllText("playerData.json");
+            /*string jsonData = File.ReadAllText("playerData.json");
             PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
             is2D = loadedData.isStartEnd;
             if (is2D)
-            {
+            {*/
 
                 LoadSceneInfo.is2DEnterScene = true;
                 PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
                 LoadSceneInfo.LevelCnt = 2;
 
                 SceneManager.LoadScene("LoadingScene");
-            }
-            else if (!is2D)
+            //}
+           /* else if (!is2D)
             {
-                
+
                 LoadSceneInfo.isStartScene = true;
                 PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
                 LoadSceneInfo.LevelCnt = 1;
                 SceneManager.LoadScene("LoadingScene");
-            }
+            }*/
         }
         else
         {
-           
+
+            if (isEnglish)
+            {
+                if (LocaleManager != null)
+                {
+                    LocaleManager = GetComponent<LocaleManager>();
+                    LocaleManager.ChangeLocale(0);
+                }
+            }
+            else if (!isEnglish)
+            {
+                if (LocaleManager != null)
+                {
+                    LocaleManager = GetComponent<LocaleManager>();
+                    LocaleManager.ChangeLocale(1);
+                }
+            }
             LoadSceneInfo.isStartScene = true;
             PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
             LoadSceneInfo.LevelCnt = 1;
@@ -358,12 +399,12 @@ public class GameManager : MonoBehaviour
     {
         PlayerData playerData = new PlayerData();
         playerData.LevelChk = GameSave.Level;
-        playerData.isStartEnd = true;
+        //playerData.isStartEnd = true;
         if (PlayerData.isEnglish)
         {
             playerData.isEng = true;
         }
-        else
+        else if(!PlayerData.isEnglish)   
         {
             playerData.isEng = false;
         }
@@ -376,8 +417,21 @@ public class GameManager : MonoBehaviour
     }
     public void ReSetEveryThing()
     {
+        isEnglish = true;
+
+        if (LocaleManager != null)
+        {
+            LocaleManager = GetComponent<LocaleManager>();
+            LocaleManager.ChangeLocale(0);
+            PlayerData.isEnglish = true;
+        }
+
+
+       
         File.Delete("playerData.json");
 
+        Debug.Log(isEnglish);
+        Debug.Log("PlayerData" + PlayerData.isEnglish);
     }
    
     public void Controls()

@@ -91,7 +91,7 @@ public class CityScenePlayer : MonoBehaviour
         }
         if (this.transform.position.y < -5f &&!isAllStop &&!isDie)
         {
-            isAllStop = true;
+            //isAllStop = true;
             TagisObj();
         }
         

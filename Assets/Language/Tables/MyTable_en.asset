@@ -252,6 +252,10 @@ MonoBehaviour:
       other. . Now stop and follow everyone!'
     m_Metadata:
       m_Items: []
+  - m_Id: 1430859594706944
+    m_Localized: "There's a car over there!\r\nLet\u2019s get in the car right now!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

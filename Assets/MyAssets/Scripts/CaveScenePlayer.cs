@@ -88,15 +88,32 @@ public class CaveScenePlayer : MonoBehaviour
     [Header("UI")]  
     CaveSceneTalkManager talkManager;
     public GameObject image1;
+    public GameObject image1_K;
+    public GameObject image1_E;
+
     public GameObject image2;
+    public GameObject image2_K;
+    public GameObject image2_E;
+
     public GameObject image3;
+    public GameObject image3_K;
+    public GameObject image3_E;
+
     public GameObject image4;
+    public GameObject image4_K;
+    public GameObject image4_E;
+
     public GameObject image5;
+    public GameObject image5_K;
+    public GameObject image5_E;
+
     public bool isTalk;
     public GameObject StopPleaseUI;
     public GameObject GetUpgradeBox_text;
    
     public GameObject LastUI;
+    public GameObject Last_K;
+    public GameObject Last_E;
     public GameObject TimerUI;
     [Header("SavePoint")]
     
@@ -425,6 +442,14 @@ public class CaveScenePlayer : MonoBehaviour
         if(other.gameObject.name == "LastTalkPoint")
         {
             if(LastUI!=null) LastUI.SetActive(true);
+            if (PlayerData.isEnglish)
+            {
+                Last_E.SetActive(true);
+            }
+            else if(!PlayerData.isEnglish)
+            {
+                Last_K.SetActive(true);
+            }
         }
         if (other.gameObject.name == "UpgradeBox")
         {
@@ -475,7 +500,14 @@ public class CaveScenePlayer : MonoBehaviour
             image3.SetActive(false);
             image4.SetActive(false);
             image5.SetActive(false);
-
+            if (PlayerData.isEnglish)
+            {
+                image1_E.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                image1_K.SetActive(true);
+            }
             Talk_NPC1 = true;
         }
 
@@ -487,8 +519,15 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 1;
             this.gameObject.transform.LookAt(other.gameObject.transform.position);
             image5.SetActive(false);
-            
-            Talk_NPC2= true;
+            if (PlayerData.isEnglish)
+            {
+                image2_E.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                image2_K.SetActive(true);
+            }
+            Talk_NPC2 = true;
            
         }
 
@@ -500,7 +539,14 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 1;
             this.gameObject.transform.LookAt(other.gameObject.transform.position);
             TalkAudio.Play();
-            
+            if (PlayerData.isEnglish)
+            {
+                image3_E.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                image3_K.SetActive(true);
+            }
             image2.SetActive(false);
             image4.SetActive(false);
             image5.SetActive(false);
@@ -519,8 +565,15 @@ public class CaveScenePlayer : MonoBehaviour
             image2.SetActive(false);
            
             image5.SetActive(false);
-
-            Talk_NPC4= true;
+            if (PlayerData.isEnglish)
+            {
+                image4_E.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                image4_K.SetActive(true);
+            }
+            Talk_NPC4 = true;
         }
 
         if (other.gameObject.tag == "NPC5" && !Talk_NPC5)
@@ -530,7 +583,14 @@ public class CaveScenePlayer : MonoBehaviour
             mainCam.Priority = 1;
             
             TalkAudio.Play();
-
+            if (PlayerData.isEnglish)
+            {
+                image5_E.SetActive(true);
+            }
+            else if (!PlayerData.isEnglish)
+            {
+                image5_K.SetActive(true);
+            }
             Talk_NPC5 = true;
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System.IO;
 public class FirstScene_Typing : MonoBehaviour
 {
    
@@ -18,12 +18,42 @@ public class FirstScene_Typing : MonoBehaviour
     public float textFadeDuration = 2.0f; 
     public float waitBeforeLoad = 1.0f; 
 
-    public Image fadeImage; 
-   
+    public Image fadeImage;
+    public LocaleManager LocaleManager;
+    public bool isEnglish;
+    private void Awake()
+    {
+        LocaleManager = LocaleManager.GetComponent<LocaleManager>();
+    }
     void Start()
     {
         Cursor.visible = false;
-        for(int i = 0; i < targetText.Length; i++)
+        if (File.Exists("playerData.json"))
+        {
+            
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            isEnglish = loadedData.isEng;
+            Debug.Log(isEnglish);
+        }
+        if (isEnglish)
+        {
+            if (LocaleManager != null)
+            {
+               
+                LocaleManager.ChangeLocale(0);
+            }
+        }
+        else if (!isEnglish)
+        {
+            if (LocaleManager != null)
+            {
+               
+                LocaleManager.ChangeLocale(1);
+            }
+        }
+        for (int i = 0; i < targetText.Length; i++)
         {
            
             FirstSound.Play();
@@ -74,14 +104,6 @@ public class FirstScene_Typing : MonoBehaviour
         endTime = startTime + textFadeDuration;
         
 
-       /* for (int i = 0; i < targetText.Length; i++)
-        {
-            
-
-            targetText[i].gameObject.SetActive(false);
-           
-
-        }*/
            
         yield return new WaitForSeconds(waitBeforeLoad);
         Cursor.visible = true;

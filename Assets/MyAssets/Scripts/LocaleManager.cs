@@ -17,7 +17,8 @@ public class LocaleManager : MonoBehaviour
 
     IEnumerator ChangeRoutine(int index)
     {
-        isChanging= true;
+       
+        isChanging = true;
 
         yield return LocalizationSettings.InitializationOperation;
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];

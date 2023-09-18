@@ -227,6 +227,10 @@ MonoBehaviour:
     m_Key: CaveScene_StopPlease_Txt
     m_Metadata:
       m_Items: []
+  - m_Id: 1430859594706944
+    m_Key: CityScene_End_Txt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -235,6 +239,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 6879290519033217049
-      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
       data:
         m_CustomEpoch: 1694610880428

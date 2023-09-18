@@ -9080,7 +9080,6 @@ GameObject:
   - component: {fileID: 551839792}
   - component: {fileID: 551839791}
   - component: {fileID: 551839790}
-  - component: {fileID: 551839795}
   m_Layer: 0
   m_Name: HouseCharacter
   m_TagString: Player
@@ -9119,8 +9118,8 @@ MonoBehaviour:
   startDoor: {fileID: 803540913}
   DieCanvas: {fileID: 1793193930}
   NextSceneImage: {fileID: 2109328041}
-  startCanvas1: {fileID: 0}
-  startCanvas2: {fileID: 0}
+  startCanvas1: {fileID: 491378927}
+  startCanvas2: {fileID: 1032169198}
   isTalk: 0
   TalkEnd: 0
   SavePointImage: {fileID: 7042178874092922086}
@@ -9238,61 +9237,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &551839795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551839789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackedObjects:
-  - rid: 6879290542245281837
-  references:
-    version: 2
-    RefIds:
-    - rid: 6879290542245281837
-      type: {class: TrackedMonoBehaviourObject, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
-      data:
-        m_Target: {fileID: 551839790}
-        m_TrackedProperties:
-          items:
-          - rid: 6879290542245281838
-          - rid: 6879290542245281839
-        m_UpdateType: 0
-        m_Changed:
-          m_PersistentCalls:
-            m_Calls: []
-    - rid: 6879290542245281838
-      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
-      data:
-        m_PropertyPath: startCanvas1
-        m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        m_VariantData:
-        - localeIdentifier:
-            m_Code: ko
-          value: {fileID: 0}
-        - localeIdentifier:
-            m_Code: en
-          value: {fileID: 0}
-    - rid: 6879290542245281839
-      type: {class: UnityObjectProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
-      data:
-        m_PropertyPath: startCanvas2
-        m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        m_VariantData:
-        - localeIdentifier:
-            m_Code: ko
-          value: {fileID: 0}
-        - localeIdentifier:
-            m_Code: en
-          value: {fileID: 0}
 --- !u!4 &562917378 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5150418573016795124, guid: fe09b7e50ce887d46a0f0a576e545599, type: 3}
@@ -27234,7 +27178,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1032169198}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
@@ -31791,6 +31735,10 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5058249008956910202, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5095323319957836746, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
       propertyPath: newAudio
       value: 
@@ -31934,6 +31882,10 @@ PrefabInstance:
     - target: {fileID: 6037114966210110404, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050713657545476828, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6058265205266269056, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
       propertyPath: newAudio
@@ -32484,6 +32436,7 @@ PrefabInstance:
     - {fileID: 3310256434406542253, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 3302739639284002829, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 5873574891960969967, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+    - {fileID: 5058249008956910202, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5725887765058818079, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
     - {fileID: 3806470592136382770, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
@@ -32660,6 +32613,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1747695170}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1660847048299903624, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1573237142}
     - targetCorrespondingSourceObject: {fileID: 7486142143908349350, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1026958023}
@@ -32711,6 +32667,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3930230699043252472, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
   m_PrefabInstance: {fileID: 1573237139}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1573237141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1660847048299903624, guid: 955f9c0f0e24add47b4fd2d2f3d239d2, type: 3}
+  m_PrefabInstance: {fileID: 1573237139}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1573237142
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573237141}
+  m_Material: {fileID: 13400000, guid: 117da466b642ad34c973f7a2f5a80a41, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0985779, y: 0.41581234, z: 2.4245706}
+  m_Center: {x: -0.0021571775, y: 0.20790617, z: 0.25987175}
 --- !u!1001 &1594000276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56255,6 +56237,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2506461046550490332, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 3322396213063066335, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -56309,15 +56295,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3322396213063066335, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3322396213063066335, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3322396213063066335, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3322396213063066335, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -56350,6 +56336,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: e2774acbf1a98bb40a6583231445e208, type: 2}
     - target: {fileID: 7234388772351597114, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -5672783498229041432, guid: e2774acbf1a98bb40a6583231445e208, type: 2}
+    - target: {fileID: 7234388772351597114, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1
       objectReference: {fileID: 0}
@@ -56360,6 +56350,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1008207105671005153, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2103194289}
+    - targetCorrespondingSourceObject: {fileID: 1008207105671005153, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2103194292}
   m_SourcePrefab: {fileID: 100100000, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
 --- !u!224 &2103194286 stripped
 RectTransform:
@@ -56422,6 +56415,46 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!224 &2103194290 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2506461046550490332, guid: e246dd27c686b624db51f720fa99e7d0, type: 3}
+  m_PrefabInstance: {fileID: 2103194285}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2103194292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103194287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 6879290624322306054
+  references:
+    version: 2
+    RefIds:
+    - rid: 6879290624322306054
+      type: {class: TrackedRectTransform, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 2103194290}
+        m_TrackedProperties:
+          items:
+          - rid: 6879290624322306055
+    - rid: 6879290624322306055
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_SizeDelta.x
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: ko
+          value: 500
+        - localeIdentifier:
+            m_Code: en
+          value: 600
 --- !u!1 &2109328041 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4406740238230005024, guid: d9e225ef610cba347b37e86dc442f13c, type: 3}

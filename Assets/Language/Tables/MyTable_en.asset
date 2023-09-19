@@ -64,7 +64,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3619156803584
-    m_Localized: Ps. In the game, Exit and ReStart are the paths to hell!
+    m_Localized: Ps. In the game, 'Exit' and 'ReStart' are shortcuts to going back
+      to the beginning!
     m_Metadata:
       m_Items: []
   - m_Id: 4841817391104
@@ -111,10 +112,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 79090225659904
-    m_Localized: 'Ability to walk(SHIFT) + rotate the mouse!
+    m_Localized: 'Obtained Walking Ability (SHIFT) + Mouse Rotation Ability!
 
-      Let''s use this
-      ability to escape from the house!'
+      Use
+      these abilities to escape from the house!'
     m_Metadata:
       m_Items: []
   - m_Id: 80904698347520
@@ -130,15 +131,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 376270379433984
-    m_Localized: We need to go up!
+    m_Localized: I need to go up!
     m_Metadata:
       m_Items: []
   - m_Id: 378026081533952
-    m_Localized: cock-a-doodle-doo. . I've been caught. . .
+    m_Localized: Squawk. . .I got caught. . .
     m_Metadata:
       m_Items: []
   - m_Id: 379224163500032
-    m_Localized: "Good! \nI fooled the human well!"
+    m_Localized: 'Phew!
+
+      I fooled the humans nicely!'
     m_Metadata:
       m_Items: []
   - m_Id: 379971311648768
@@ -154,11 +157,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 381716880310272
-    m_Localized: I can transform into an owl!
+    m_Localized: I can transform into an egg!
     m_Metadata:
       m_Items: []
   - m_Id: 385053352673280
-    m_Localized: quack! The road is blocked. . .!
+    m_Localized: Squawk! The path is blocked. . .!
     m_Metadata:
       m_Items: []
   - m_Id: 385110818832384
@@ -166,19 +169,20 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 387206079201280
-    m_Localized: 'Choose a path(       key to change routes
+    m_Localized: 'Let''s create a path(       key to change the route
 
-      key to confirm'
+      key
+      to confirm'
     m_Metadata:
       m_Items: []
   - m_Id: 388575980830720
-    m_Localized: Confirmed!
+    m_Localized: Confirm!
     m_Metadata:
       m_Items: []
   - m_Id: 389411364552704
     m_Localized: 'Check the memory!
 
-      You need to have four memories to escape!'
+      You need 4 memories to escape!'
     m_Metadata:
       m_Items: []
   - m_Id: 391831670898688
@@ -216,7 +220,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 404525241221120
-    m_Localized: Found Dad! Let's go behind Dad and spread out to find Mom!
+    m_Localized: I saved Dad! Let's go behind Dad and spread out to find Mom!
     m_Metadata:
       m_Items: []
   - m_Id: 405629244948480
@@ -235,25 +239,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 407142650494976
-    m_Localized: "My son . . .With this slow pace, we won't make it out. . .! \nSquawk.
-      .!"
+    m_Localized: 'Son. . .at this slow pace, we won''t make it out. . .!
+
+      Squawk.
+      . .!'
     m_Metadata:
       m_Items: []
   - m_Id: 409696872579072
-    m_Localized: 'My son. . . leaving me behind. . .
+    m_Localized: 'Son. . . leaving me behind. . .
 
-      Squack!'
+      Squawk!'
     m_Metadata:
       m_Items: []
   - m_Id: 410448135340032
-    m_Localized: 'Oh my goodness. . .
+    m_Localized: 'Oh my. . .
 
-      everyone''s been giving kisses to each
-      other. . Now stop and follow everyone!'
+      They are kissing each other happily. . .Now,
+      both of you, stop kissing and come with me, please!'
     m_Metadata:
       m_Items: []
   - m_Id: 1430859594706944
-    m_Localized: "There's a car over there!\r\nLet\u2019s get in the car right now!"
+    m_Localized: "There's a car over there! \nLet's get on it right away!"
     m_Metadata:
       m_Items: []
   references:

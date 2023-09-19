@@ -220,7 +220,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 404525241221120
-    m_Localized: I saved Dad! Let's go behind Dad and spread out to find Mom!
+    m_Localized: "I saved Dad! \nLet's go behind Dad and spread out to find Mom!"
     m_Metadata:
       m_Items: []
   - m_Id: 405629244948480

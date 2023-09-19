@@ -79,12 +79,8 @@ public class HouseScenePlayer : MonoBehaviour
     public AudioSource BoxGetAudio;
 
     [Header("UI")]
-    public GameObject NearDoor_text;
-    public GameObject OpenDoor_text;
     public GameObject PushBell_text;
     public GameObject GetUpgradeBox_text;
-
-  
 
     private bool isRotating = false;
     private Quaternion originalCameraRotation;

@@ -349,26 +349,18 @@ public class GameManager : MonoBehaviour
     {
         if (File.Exists("PlayerData.json"))
         {
-            /*string jsonData = File.ReadAllText("playerData.json");
+            string jsonData = File.ReadAllText("playerData.json");
             PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
-            is2D = loadedData.isStartEnd;
-            if (is2D)
-            {*/
 
-                LoadSceneInfo.is2DEnterScene = true;
+            GameSave.Level = loadedData.LevelChk;
+
+
+            LoadSceneInfo.is2DEnterScene = true;
                 PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
                 LoadSceneInfo.LevelCnt = 2;
 
                 SceneManager.LoadScene("LoadingScene");
-            //}
-           /* else if (!is2D)
-            {
-
-                LoadSceneInfo.isStartScene = true;
-                PlayerPrefs.SetInt("SceneStart", LoadSceneInfo.isStartScene ? 1 : 0);
-                LoadSceneInfo.LevelCnt = 1;
-                SceneManager.LoadScene("LoadingScene");
-            }*/
+          
         }
         else
         {

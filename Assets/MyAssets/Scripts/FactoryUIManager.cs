@@ -108,7 +108,7 @@ public class FactoryUIManager : MonoBehaviour
             isTyping = false;
         }
 
-        if (Input.GetMouseButton(0)&&!isTyping)
+        if (Input.GetKeyDown(KeyCode.Space)|| Input.GetMouseButton(0) &&!isTyping )
         {
             if (!isTyping)
 

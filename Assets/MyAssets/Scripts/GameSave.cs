@@ -9,12 +9,13 @@ public class GameSave : MonoBehaviour
     public static bool isHouse;
     public static bool isCity;
     public static bool isCave;
-    public GameObject Factory;
-    public GameObject House;
-    public GameObject City;
-    public GameObject Cave;
+    public GameObject Factory; // 1
+    public GameObject House;   // 2
+    public GameObject City;   // 3
+    public GameObject Cave;   // 4
 
     public AudioSource ShowSound;
+    public GameObject[] Objects;
     public ParticleSystem ShowParticle_1;
     public ParticleSystem ShowParticle_2;
     public ParticleSystem ShowParticle_3;
@@ -24,120 +25,74 @@ public class GameSave : MonoBehaviour
     private void Start()
     {
         Cursor.visible = true;
-        if (File.Exists("playerData.json"))
+        /* if (File.Exists("playerData.json"))
+         {
+             isExist = true;
+             string jsonData = File.ReadAllText("playerData.json");
+             PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+             Level  = loadedData.LevelChk;
+
+         }*/
+        for (int i = 1; i < Level; i++)
         {
-            isExist = true;
-            string jsonData = File.ReadAllText("playerData.json");
-            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
-            
-            Level  = loadedData.LevelChk;
-           
+            Objects[i].SetActive(true);
         }
 
-       
     }
-    
-    
-    public void Load()
-    {
-        
-        int intHouse = PlayerPrefs.GetInt("GoHouse");
-        
-        if (intHouse == 1)
-        {
-            isHouse = true;
-            Level = 2;
-        }
-        else
-        {
-            isHouse = false;
-        }
-        
-        int intCity = PlayerPrefs.GetInt("GoCity");
 
-        if (intCity == 1)
-        {
-            isCity = true;
-            Level = 3;
-        }
-        else
-        {
-            isCity = false;
-        }
-       
-        int intCave = PlayerPrefs.GetInt("GoCave");
-        
-        if (intCave == 1)
-        {
-            isCave = true;
-            Level = 4;
-        }
-        else
-        {
-            isCave = false;
-        }
-        
-    }
+
+
     public void Update()
     {
-        if (isExist)
+
+        if (Level == 2 && !isChk)
         {
-            if (Level == 2 && !isChk)
-            {
-                House.SetActive(true);
-                ShowSound.Play();
+            House.SetActive(true);
+            ShowSound.Play();
 
-                ShowParticle_1.Play();
-
-                isChk = true;
-            }
-            if (Level == 3 && !isChk)
-            {
-                House.SetActive(true);
-                City.SetActive(true);
-                ShowSound.Play();
-
-                ShowParticle_2.Play();
-
-                isChk = true;
-            }
-            if (Level == 4 && !isChk)
-            {
-                House.SetActive(true);
-                City.SetActive(true);
-                Cave.SetActive(true);
-                ShowSound.Play();
-                ShowParticle_3.Play();
-                isChk = true;
-            }
+            ShowParticle_1.Play();
+            SetFile();
+            isChk = true;
         }
-        else
+        if (Level == 3 && !isChk)
         {
-            if (isHouse && !isChk && Level == 2)
-            {
-                House.SetActive(true);
-                ShowSound.Play();
+            House.SetActive(true);
+            City.SetActive(true);
+            ShowSound.Play();
 
-                ShowParticle_1.Play();
-
-                isChk = true;
-            }
-            if (isCity && !isChk && Level == 3)
-            {
-                City.SetActive(true);
-                ShowSound.Play();
-
-                ShowParticle_2.Play();
-
-                isChk = true;
-            }
-            if (isCave && !isChk && Level == 4)
-            {
-                Cave.SetActive(true);
-                ShowSound.Play();
-                ShowParticle_3.Play();
-                isChk = true;
-            }
+            ShowParticle_2.Play();
+            SetFile();
+            isChk = true;
         }
+        if (Level == 4 && !isChk)
+        {
+            House.SetActive(true);
+            City.SetActive(true);
+            Cave.SetActive(true);
+            ShowSound.Play();
+            ShowParticle_3.Play();
+            SetFile();
+            isChk = true;
+        }
+    }
+    public void SetFile()
+    {
+        PlayerData playerData = new PlayerData();
+        playerData.LevelChk = Level;
+
+        if (PlayerData.isEnglish)
+        {
+            playerData.isEng = true;
+        }
+        else if (!PlayerData.isEnglish)
+        {
+            playerData.isEng = false;
+        }
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText("playerData.json", json);
+        Debug.Log(Level + "현재저장");
+        Debug.Log(playerData.LevelChk + "파일저장");
     }
 }

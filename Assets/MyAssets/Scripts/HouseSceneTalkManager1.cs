@@ -108,7 +108,7 @@ public class HouseSceneTalkManager1 : MonoBehaviour
             isTyping = false;
         }
 
-        if (Input.GetMouseButton(0) && !isTyping)
+        if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space) && !isTyping)
         {
             if (!isTyping)
             {

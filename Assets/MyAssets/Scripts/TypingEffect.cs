@@ -40,7 +40,10 @@ public class TypingEffect : MonoBehaviour
         
        
     }
-
+    public void Skip()
+    {
+        SceneManager.LoadScene(nextSceneName);
+    }
     private IEnumerator InitialDelayCoroutine1()
     {
         yield return new WaitForSeconds(initialDelay);
@@ -67,7 +70,7 @@ public class TypingEffect : MonoBehaviour
             waitForClick = true; 
             while (waitForClick)
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     ButtonClickSound.Play();
                     waitForClick = false;

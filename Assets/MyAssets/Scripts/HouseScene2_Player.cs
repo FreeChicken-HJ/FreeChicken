@@ -146,7 +146,7 @@ public class HouseScene2_Player : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetButtonDown("Jump") && !isJump && !Dead)
+        if (Input.GetButtonDown("Jump") && !isJump && !Dead && !isTalk1 && !isTalk2)
         {
             jumpAudio.Play();
             isJump = true;

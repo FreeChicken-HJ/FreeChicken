@@ -145,19 +145,26 @@ public class FactoryPlayer_3 : MonoBehaviour
     }
     void Finish()
     {
-        GameSave.isHouse = true;
-       
-        PlayerPrefs.SetInt("GoHouse", GameSave.isHouse ? 1 : 0);
-
         GameSave.Level = 2;
-        PlayerData playerData = new PlayerData();
-        playerData.LevelChk = GameSave.Level;
-        string json = JsonUtility.ToJson(playerData);
+        if (File.Exists("PlayerData.json"))
+        {
 
-        File.WriteAllText("playerData.json", json);
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
 
-       //playerData.isEnglish = true;
-
+            if (loadedData.LevelChk >= GameSave.Level)
+            {
+                GameSave.Level = loadedData.LevelChk;
+            }
+            else
+            {
+                GameSave.Level = 2;
+            }
+        }
+        else
+        {
+            GameSave.Level = 2;
+        }
         LoadSceneInfo.is2DEnterScene = true;
         PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
         LoadSceneInfo.LevelCnt = 2;

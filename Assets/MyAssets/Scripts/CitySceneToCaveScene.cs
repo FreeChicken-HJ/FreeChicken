@@ -49,15 +49,27 @@ public class CitySceneToCaveScene : MonoBehaviour
     void LoadCaveScene()
     {
 
-        GameSave.isCave = true;
-        PlayerPrefs.SetInt("GoCave", GameSave.isCave ? 1 : 0);
         GameSave.Level = 4;
-        PlayerData playerData = new PlayerData();
-        playerData.LevelChk = GameSave.Level;
-        string json = JsonUtility.ToJson(playerData);
+        if (File.Exists("PlayerData.json"))
+        {
 
-        File.WriteAllText("playerData.json", json);
-        
+            string jsonData = File.ReadAllText("playerData.json");
+            PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            if (loadedData.LevelChk >= GameSave.Level)
+            {
+                GameSave.Level = loadedData.LevelChk;
+            }
+            else
+            {
+                GameSave.Level = 4;
+            }
+        }
+        else
+        {
+            GameSave.Level = 4;
+        }
+
         LoadSceneInfo.is2DEnterScene = true;
         PlayerPrefs.SetInt("SceneFactory_2", LoadSceneInfo.is2DEnterScene ? 1 : 0);
         LoadSceneInfo.LevelCnt = 2;

@@ -126,7 +126,7 @@ public class EvloutionPlayer : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetButtonDown("Jump") && !isJump && !Dead)
+        if (Input.GetButtonDown("Jump") && !isJump && !Dead && !isTalk2)
         {
             jumpAudio.Play();
             isJump = true;
@@ -171,7 +171,7 @@ public class EvloutionPlayer : MonoBehaviour
         if (other.gameObject.name == "GoCitySense")
         {
             isTalk2 = true;
-            GameSave.Level = 3;
+            /*GameSave.Level = 3;
             GameSave.isCity = true;
             PlayerData playerData = new PlayerData();
             playerData.LevelChk = GameSave.Level;
@@ -181,7 +181,27 @@ public class EvloutionPlayer : MonoBehaviour
 
             PlayerPrefs.SetInt("GoCity", GameSave.isCity ? 1 : 0);
 
+*/
+            GameSave.Level = 3;
+            if (File.Exists("PlayerData.json"))
+            {
 
+                string jsonData = File.ReadAllText("playerData.json");
+                PlayerData loadedData = JsonUtility.FromJson<PlayerData>(jsonData);
+
+                if (loadedData.LevelChk >= GameSave.Level)
+                {
+                    GameSave.Level = loadedData.LevelChk;
+                }
+                else
+                {
+                    GameSave.Level = 3;
+                }
+            }
+            else
+            {
+                GameSave.Level = 3;
+            }
 
             LoadSceneInfo.is2DEnterScene = true;
             PlayerPrefs.SetInt("Scene2D", LoadSceneInfo.is2DEnterScene ? 1 : 0);
